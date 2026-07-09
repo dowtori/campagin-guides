@@ -90,13 +90,6 @@
     .section-title { font-size: 21px; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.36; letter-spacing: -0.01em; }
     .section-body { font-size: 14.5px; color: var(--ink-mid); line-height: 1.75; margin-bottom: var(--space-md); }
 
-    /* ---------- info cards ---------- */
-    .info-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 4px; }
-    .info-card { display: flex; align-items: center; gap: 12px; padding: 14px 15px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); }
-    .info-card-icon { font-size: 20px; line-height: 1; flex-shrink: 0; }
-    .info-card-label { font-family: var(--font-display); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 3px; }
-    .info-card-value { font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
-
     /* ============================================================
        TITLE PICKS
     ============================================================ */
@@ -177,22 +170,6 @@
     .pill-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 
     /* ============================================================
-       DO / DON'T
-    ============================================================ */
-    .dd { display: flex; flex-direction: column; gap: 10px; }
-    .dd-col { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; }
-    .dd-head { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
-    .dd-mark { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--white); }
-    .dd-col.do    .dd-mark { background: var(--blue); }
-    .dd-col.avoid .dd-mark { background: #c23a2e; }
-    .dd-title { font-size: 15.5px; font-weight: 700; }
-    .dd-sub { font-family: var(--font-display); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); }
-    .dd ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
-    .dd li { position: relative; padding-left: 18px; font-size: 13.8px; color: var(--ink-mid); line-height: 1.6; }
-    .dd li::before { content:''; position: absolute; left: 0; top: 9px; width: 9px; height: 1px; background: var(--ink-light); }
-    .dd-col.do li::before { background: var(--blue); }
-
-    /* ============================================================
        KEYWORDS
     ============================================================ */
     .kw-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -251,9 +228,6 @@
     .reveal.in { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } .acc-panel { transition: none; } }
     @media (min-width: 600px) {
-      .info-cards { grid-template-columns: repeat(4, 1fr); }
-      .dd { flex-direction: row; }
-      .dd-col { flex: 1; }
       .section { padding: 52px 0; }
     }
   </style>
@@ -279,20 +253,6 @@
       <p class="hero-subtitle">코펜하겐에서 로스킬레·오프너 페스티벌까지. 브랜드 규모가 아니라 취향으로 룩을 완성하는 제니의 유럽 일정을, 실제 동선 그대로 정리하는 블로그 가이드입니다.</p>
       <div class="hero-route">
         <span class="on">코펜하겐</span><span>공연 준비</span><span>로스킬레</span><span>오프너</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 개요 -->
-  <section class="section">
-    <div class="container">
-      <p class="section-eyebrow">Overview</p>
-      <h2 class="section-title">한눈에 보는 콘텐츠 개요</h2>
-      <div class="info-cards reveal">
-        <div class="info-card"><span class="info-card-icon">👤</span><div><div class="info-card-label">Subject</div><div class="info-card-value">제니 · 유럽 일정</div></div></div>
-        <div class="info-card"><span class="info-card-icon">📝</span><div><div class="info-card-label">Format</div><div class="info-card-value">블로그 아카이브</div></div></div>
-        <div class="info-card"><span class="info-card-icon">📍</span><div><div class="info-card-label">Route</div><div class="info-card-value">코펜하겐→오프너</div></div></div>
-        <div class="info-card"><span class="info-card-icon">🎨</span><div><div class="info-card-label">Tone</div><div class="info-card-value">그레이·차콜·블랙</div></div></div>
       </div>
     </div>
   </section>
@@ -476,42 +436,10 @@
     </div>
   </section>
 
-  <!-- 지향 / 지양 -->
+  <!-- 키워드 -->
   <section class="section">
     <div class="container">
-      <p class="section-eyebrow"><span class="no">04</span> Checklist</p>
-      <h2 class="section-title">쓰기 전 한 번 더 확인</h2>
-      <div class="dd">
-        <div class="dd-col do reveal">
-          <div class="dd-head"><span class="dd-mark">＋</span><div><div class="dd-title">지향</div><div class="dd-sub">Do</div></div></div>
-          <ul>
-            <li>취향(그레이·차콜·블랙, 슬림/크롭)으로 룩을 완성하는 아카이브 관점</li>
-            <li>실제 동선(코펜하겐→공연 준비→로스킬레→오프너) 순서대로 서술</li>
-            <li>‘상대적 접근성이 좋은 아이템’이라는 표현 사용</li>
-            <li>각 브랜드를 해당 일정 안에서 독립적으로 소개</li>
-            <li>레이벤 공식 앰버서더 사실은 명시</li>
-            <li>블루 슈즈·블랙 액세서리를 ‘포인트’로 설명</li>
-          </ul>
-        </div>
-        <div class="dd-col avoid reveal">
-          <div class="dd-head"><span class="dd-mark">✕</span><div><div class="dd-title">지양</div><div class="dd-sub">Avoid</div></div></div>
-          <ul>
-            <li>명품 대 저가의 대립 구도, 가격 우열 비교</li>
-            <li>‘저렴이’, ‘저가 브랜드’ 등의 표현</li>
-            <li>이니어 ↔ 스컬프터 후디의 핏·소재 직접 비교</li>
-            <li>착용 브랜드를 임의로 ‘앰버서더’라 단정(레이벤 제외)</li>
-            <li>제목에 제품명을 길게 나열</li>
-            <li>“누구나 소화 가능”처럼 단정하는 표현</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 키워드 -->
-  <section class="section alt">
-    <div class="container">
-      <p class="section-eyebrow"><span class="no">05</span> Keywords</p>
+      <p class="section-eyebrow"><span class="no">04</span> Keywords</p>
       <h2 class="section-title">본문에 자연스럽게 분산 배치</h2>
       <p class="section-body">한 문단에 몰아넣지 말고, 각 일정과 제품 설명 맥락에 맞춰 고르게 배치해 주세요.</p>
       <div class="kw-wrap reveal">
@@ -536,7 +464,7 @@
   <section class="section">
     <div class="container">
       <div class="closing-card reveal">
-        <p class="section-eyebrow"><span class="no">06</span> Closing</p>
+        <p class="section-eyebrow"><span class="no">05</span> Closing</p>
         <p class="txt">그레이·차콜·블랙의 차분한 톤 위에, 블랙 액세서리와 선명한 <b>블루</b> 슈즈를 포인트로. 그대로 복제하지 않더라도, 슬림한 상의와 컬러 조합 방식은 일상에서 충분히 참고할 수 있습니다.</p>
         <div class="tones">
           <span class="tone"><i style="background:#8f8d86"></i> Grey</span>
