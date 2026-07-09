@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>제니 유럽 사복 젠민수 아이템 — 블로그 콘텐츠 가이드 | SIRIAI</title>
+  <meta name="description" content="제니 유럽 페스티벌 일정(코펜하겐·로스킬레·오프너) 사복 아카이브 블로그 콘텐츠 가이드라인.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS  ·  SIRIAI house style
+    ============================================================ */
+    :root {
+      --blue:        #2740d6;
+      --blue-soft:   #eef0fc;
+      --blue-dark:   #1c2fa6;
+
+      --white:       #ffffff;
+      --bg:          #f7f6f5;
+      --bg-2:        #f1efec;
+      --ink:         #1c1b1a;
+      --ink-mid:     #57544e;
+      --ink-light:   #9a968c;
+      --border:      #e5e3de;
+
+      --font-display: 'Instrument Sans', 'Noto Sans KR', sans-serif;
+      --font-body:    'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+
+      --space-md:  24px;
+      --space-lg:  40px;
+
+      --radius-sm:   8px;
+      --radius-md:   12px;
+      --radius-lg:   20px;
+      --radius-pill: 999px;
+
+      --ease:     cubic-bezier(0.4, 0, 0.2, 1);
+      --dur-fast: 160ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 15px; color: var(--ink); background: var(--white);
+      -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: break-word;
+    }
+    body.no-scroll { overflow: hidden; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; }
+    .container { width: 100%; max-width: 560px; margin: 0 auto; padding: 0 20px; }
+
+    /* ============================================================
+       PROGRESS + HEADER
+    ============================================================ */
+    .read-bar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: var(--blue); z-index: 200; transition: width 120ms linear; }
+    .site-header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+    .site-header .container { display: flex; align-items: center; justify-content: space-between; height: 54px; }
+    .brand-wordmark { font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; color: var(--ink); text-transform: uppercase; }
+    .brand-wordmark span { color: var(--blue); }
+    .header-badge { font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--ink-mid); text-transform: uppercase; }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero-section { position: relative; overflow: hidden; background: var(--ink); }
+    .hero-image { width: 100%; height: 78vh; max-height: 620px; min-height: 460px; object-fit: cover; object-position: center 32%; opacity: 0.9; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(20,19,17,0.15) 0%, rgba(20,19,17,0.35) 45%, rgba(20,19,17,0.9) 100%); }
+    .hero-content { position: absolute; left: 0; right: 0; bottom: 0; padding: 34px 24px; color: var(--white); }
+    .hero-eyebrow { font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.72); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .hero-eyebrow::before { content:''; width: 22px; height: 1px; background: currentColor; opacity: .7; }
+    .hero-title { font-size: clamp(27px, 7.5vw, 38px); font-weight: 700; line-height: 1.28; letter-spacing: -0.02em; margin-bottom: 14px; }
+    .hero-title b { color: #9fb0ff; font-weight: 700; }
+    .hero-subtitle { font-size: 14px; color: rgba(255,255,255,0.82); line-height: 1.7; max-width: 30em; }
+    .hero-route { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
+    .hero-route span { font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.28); border-radius: var(--radius-pill); padding: 5px 12px; }
+    .hero-route span.on { background: var(--white); color: var(--ink); border-color: var(--white); }
+
+    /* ============================================================
+       SECTION PRIMITIVES
+    ============================================================ */
+    .section { padding: var(--space-lg) 0; }
+    .section.alt { background: var(--bg); }
+    .section-eyebrow { font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .section-eyebrow .no { font-variant-numeric: tabular-nums; color: var(--ink-light); }
+    .section-title { font-size: 21px; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.36; letter-spacing: -0.01em; }
+    .section-body { font-size: 14.5px; color: var(--ink-mid); line-height: 1.75; margin-bottom: var(--space-md); }
+
+    /* ---------- info cards ---------- */
+    .info-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 4px; }
+    .info-card { display: flex; align-items: center; gap: 12px; padding: 14px 15px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); }
+    .info-card-icon { font-size: 20px; line-height: 1; flex-shrink: 0; }
+    .info-card-label { font-family: var(--font-display); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 3px; }
+    .info-card-value { font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+
+    /* ============================================================
+       TITLE PICKS
+    ============================================================ */
+    .pick-rec { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 22px 20px; }
+    .pick-rec .flag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9fb0ff; background: rgba(159,176,255,0.14); border-radius: var(--radius-pill); padding: 5px 11px; margin-bottom: 14px; }
+    .pick-rec .txt { font-size: 17px; font-weight: 600; line-height: 1.5; letter-spacing: -0.01em; }
+    .pick-alt { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 18px; margin-top: 10px; display: flex; gap: 13px; align-items: flex-start; }
+    .pick-alt .k { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--ink-light); flex-shrink: 0; padding-top: 2px; }
+    .pick-alt .v { font-size: 14.5px; font-weight: 500; color: var(--ink-mid); line-height: 1.55; }
+
+    .note { display: flex; gap: 12px; margin-top: 16px; background: var(--blue-soft); border: 1px solid rgba(39,64,214,0.16); border-radius: var(--radius-md); padding: 15px 16px; }
+    .note .tag { font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-dark); flex-shrink: 0; padding-top: 2px; }
+    .note .body { font-size: 13.5px; color: var(--ink); line-height: 1.7; }
+
+    /* ============================================================
+       ACCORDION  (핵심 관점)
+    ============================================================ */
+    .acc { background: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: var(--radius-md); overflow: hidden; }
+    .acc + .acc { margin-top: 10px; }
+    .acc-trigger { width: 100%; display: flex; align-items: center; gap: 11px; padding: 16px; background: none; border: none; cursor: pointer; text-align: left; }
+    .acc-no { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--blue); background: var(--blue-soft); border-radius: var(--radius-pill); width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .acc-label { flex: 1; font-size: 15.5px; font-weight: 700; color: var(--ink); }
+    .acc-ico { position: relative; width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.32s var(--ease); }
+    .acc-ico::before, .acc-ico::after { content: ''; position: absolute; background: var(--blue); border-radius: 2px; }
+    .acc-ico::before { top: 8px; left: 2px; right: 2px; height: 2px; }
+    .acc-ico::after  { left: 8px; top: 2px; bottom: 2px; width: 2px; }
+    .acc.open .acc-ico { transform: rotate(135deg); }
+    .acc-panel { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease); }
+    .acc.open .acc-panel { max-height: 520px; }
+    .acc-inner { padding: 0 16px 17px 53px; font-size: 14px; color: var(--ink-mid); line-height: 1.72; }
+    .acc-inner b { color: var(--ink); font-weight: 600; }
+    .acc-inner .hl { color: var(--blue-dark); font-weight: 600; }
+    @media (max-width: 400px){ .acc-inner { padding-left: 16px; } }
+
+    /* ============================================================
+       ITINERARY / LOOK CARDS
+    ============================================================ */
+    .stop { margin-bottom: 30px; }
+    .stop:last-child { margin-bottom: 0; }
+    .stop-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1.5px solid var(--ink); }
+    .stop-step { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+    .stop-city { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+    .stop-place { font-family: var(--font-display); font-size: 12px; font-weight: 500; color: var(--ink-light); letter-spacing: 0.02em; margin-left: auto; }
+
+    /* ---------- recommended-sentence card (opens modal) ---------- */
+    .refq { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; }
+    .section.alt .refq { background: var(--white); }
+    .refq-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 11px; }
+    .qtag { display: inline-block; font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-dark); background: var(--blue-soft); border-radius: var(--radius-pill); padding: 5px 10px; }
+    .refq-open { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--blue-dark); background: var(--blue-soft); border: none; border-radius: var(--radius-pill); padding: 7px 13px; cursor: pointer; white-space: nowrap; transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
+    .refq-open svg { width: 12px; height: 12px; }
+    .refq-open:hover { background: var(--blue); color: var(--white); }
+    .refq-lead { font-size: 13.5px; color: var(--ink-mid); line-height: 1.72; }
+
+    /* ---------- look cards ---------- */
+    .look { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 12px; }
+    .look:last-child { margin-bottom: 0; }
+    .look-media { display: grid; grid-template-columns: 1fr; gap: 2px; background: var(--border); }
+    .look-media.two { grid-template-columns: 1fr 1fr; }
+    .look-media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/5; background: var(--bg-2); }
+    .look-body { padding: 18px; }
+    .look-brand { display: inline-flex; align-items: center; font-family: var(--font-display); font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--ink); color: var(--white); border-radius: var(--radius-pill); padding: 5px 11px; margin-bottom: 12px; }
+    .look-name { font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; }
+    .look-name .lat { font-family: var(--font-display); font-weight: 600; }
+    .look-meta { font-family: var(--font-display); font-size: 11.5px; color: var(--ink-light); margin-top: 6px; letter-spacing: 0.02em; }
+    .look-desc { font-size: 14px; color: var(--ink-mid); line-height: 1.72; margin-top: 13px; }
+    .look-desc b { color: var(--ink); font-weight: 600; }
+    .look-desc.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .more-btn { margin-top: 9px; font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: var(--blue-dark); background: none; border: none; padding: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+    .more-btn::after { content: '＋'; font-size: 11px; }
+    .more-btn.open::after { content: '－'; }
+    .pill { display: inline-flex; align-items: center; gap: 7px; margin-top: 15px; font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; border-radius: var(--radius-pill); padding: 7px 13px; }
+    .pill::before { content:''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .pill.ref   { color: var(--blue-dark); background: var(--blue-soft); }
+    .pill.amb   { color: #8a5a10; background: #fbf1dc; }
+    .pill.wish  { color: var(--ink-mid); background: var(--bg-2); }
+    .pill.daily { color: #1f6a3b; background: #e6f4ea; }
+    .pill-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+    /* ============================================================
+       DO / DON'T
+    ============================================================ */
+    .dd { display: flex; flex-direction: column; gap: 10px; }
+    .dd-col { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; }
+    .dd-head { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+    .dd-mark { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--white); }
+    .dd-col.do    .dd-mark { background: var(--blue); }
+    .dd-col.avoid .dd-mark { background: #c23a2e; }
+    .dd-title { font-size: 15.5px; font-weight: 700; }
+    .dd-sub { font-family: var(--font-display); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); }
+    .dd ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .dd li { position: relative; padding-left: 18px; font-size: 13.8px; color: var(--ink-mid); line-height: 1.6; }
+    .dd li::before { content:''; position: absolute; left: 0; top: 9px; width: 9px; height: 1px; background: var(--ink-light); }
+    .dd-col.do li::before { background: var(--blue); }
+
+    /* ============================================================
+       KEYWORDS
+    ============================================================ */
+    .kw-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .kw { font-size: 13.5px; color: var(--ink-mid); background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 9px 14px; transition: all var(--dur-fast) var(--ease); }
+    .kw .n { font-family: var(--font-display); font-size: 10px; color: var(--ink-light); margin-right: 6px; }
+    .kw:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .kw:hover .n { color: rgba(255,255,255,0.6); }
+
+    /* ============================================================
+       CLOSING
+    ============================================================ */
+    .closing-card { background: var(--ink); color: var(--white); border-radius: var(--radius-lg); padding: 26px 22px; }
+    .closing-card .section-eyebrow { color: #9fb0ff; }
+    .closing-card .txt { font-size: 17px; line-height: 1.62; font-weight: 500; letter-spacing: -0.01em; }
+    .closing-card .txt b { color: #9fb0ff; font-weight: 700; }
+    .tones { display: flex; gap: 14px; margin-top: 22px; flex-wrap: wrap; }
+    .tone { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 11px; letter-spacing: 0.04em; color: rgba(255,255,255,0.75); text-transform: uppercase; }
+    .tone i { width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer { padding: var(--space-lg) 0; background: var(--bg); border-top: 1px solid var(--border); }
+    .site-footer .container { display: flex; flex-direction: column; gap: 10px; }
+    .footer-brand { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+    .footer-copy { font-size: 12px; color: var(--ink-light); line-height: 1.7; }
+
+    /* ============================================================
+       MODAL (문장 전문 · 복사)
+    ============================================================ */
+    .modal-overlay { position: fixed; inset: 0; z-index: 500; display: flex; align-items: flex-end; justify-content: center; background: rgba(20,19,17,0.5); backdrop-filter: blur(3px); opacity: 0; visibility: hidden; transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease); }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal { background: var(--white); width: 100%; max-width: 560px; max-height: 88vh; border-radius: 20px 20px 0 0; display: flex; flex-direction: column; transform: translateY(24px); transition: transform 0.35s var(--ease); }
+    .modal-overlay.open .modal { transform: none; }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 20px 14px; border-bottom: 1px solid var(--border); }
+    .modal-title { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+    .modal-x { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: none; cursor: pointer; font-size: 13px; color: var(--ink-mid); flex-shrink: 0; transition: background var(--dur-fast) var(--ease); }
+    .modal-x:hover { background: var(--border); }
+    .modal-body { padding: 18px 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .modal-body .lead { font-size: 13px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px dashed var(--border); }
+    .modal-body p.q { font-size: 15px; line-height: 1.88; color: var(--ink); }
+    .modal-body p.q + p.q { margin-top: 1em; }
+    .modal-foot { padding: 14px 20px 20px; border-top: 1px solid var(--border); }
+    .btn-copy { width: 100%; padding: 15px; background: var(--ink); color: var(--white); border: none; border-radius: var(--radius-md); font-family: var(--font-display); font-size: 14px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; transition: background 0.2s var(--ease); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-copy:hover { background: #000; }
+    .btn-copy.done { background: var(--blue); }
+    @media (min-width: 600px) {
+      .modal-overlay { align-items: center; padding: 24px; }
+      .modal { border-radius: var(--radius-lg); }
+    }
+
+    /* ============================================================
+       REVEAL + RESPONSIVE
+    ============================================================ */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } .acc-panel { transition: none; } }
+    @media (min-width: 600px) {
+      .info-cards { grid-template-columns: repeat(4, 1fr); }
+      .dd { flex-direction: row; }
+      .dd-col { flex: 1; }
+      .section { padding: 52px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="read-bar" id="readbar"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="brand-wordmark">JENNIE<span> × </span>SIRIAI</div>
+      <div class="header-badge">Content Guide</div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-section">
+    <img class="hero-image" src="assets/images/therow-1.jpg" alt="코펜하겐 거리를 걷는 제니">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Blog Content Guideline</p>
+      <h1 class="hero-title">제니 유럽 사복,<br><b>젠민수</b> 아이템 아카이브</h1>
+      <p class="hero-subtitle">코펜하겐에서 로스킬레·오프너 페스티벌까지. 브랜드 규모가 아니라 취향으로 룩을 완성하는 제니의 유럽 일정을, 실제 동선 그대로 정리하는 블로그 가이드입니다.</p>
+      <div class="hero-route">
+        <span class="on">코펜하겐</span><span>공연 준비</span><span>로스킬레</span><span>오프너</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 개요 -->
+  <section class="section">
+    <div class="container">
+      <p class="section-eyebrow">Overview</p>
+      <h2 class="section-title">한눈에 보는 콘텐츠 개요</h2>
+      <div class="info-cards reveal">
+        <div class="info-card"><span class="info-card-icon">👤</span><div><div class="info-card-label">Subject</div><div class="info-card-value">제니 · 유럽 일정</div></div></div>
+        <div class="info-card"><span class="info-card-icon">📝</span><div><div class="info-card-label">Format</div><div class="info-card-value">블로그 아카이브</div></div></div>
+        <div class="info-card"><span class="info-card-icon">📍</span><div><div class="info-card-label">Route</div><div class="info-card-value">코펜하겐→오프너</div></div></div>
+        <div class="info-card"><span class="info-card-icon">🎨</span><div><div class="info-card-label">Tone</div><div class="info-card-value">그레이·차콜·블랙</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 제목 -->
+  <section class="section alt">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">01</span> Title</p>
+      <h2 class="section-title">제목은 ‘유럽 일정’을 앞세워 주세요</h2>
+      <p class="section-body">제품명을 나열하기보다, 코펜하겐·로스킬레·오프너로 이어지는 유럽 일정을 전면에 두고 구체적인 제품 정보는 본문 문맥에서 자연스럽게 노출되도록 구성해 주세요.</p>
+      <div class="pick-rec reveal">
+        <span class="flag">★ 추천</span>
+        <div class="txt">제니 유럽 사복 어디꺼? 코펜하겐부터 로스킬레·오프너까지 젠민수 아이템</div>
+      </div>
+      <div class="pick-alt reveal"><span class="k">ALT 1</span><span class="v">제니 코펜하겐 사복부터 유럽 페스티벌 패션까지</span></div>
+      <div class="pick-alt reveal"><span class="k">ALT 2</span><span class="v">제니 유럽 사복 속 젠민수 아이템, 후드집업부터 레이벤까지</span></div>
+      <div class="note reveal">
+        <span class="tag">작성 방향</span>
+        <span class="body">제목에서는 ‘유럽 일정(코펜하겐·로스킬레·오프너)’을 강조하고, 제품명은 본문 안에서 자연스럽게 풀어내 주세요. 나열형보다 여정 중심 제목이 전체 흐름과 잘 맞습니다.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 관점 (accordion) -->
+  <section class="section">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">02</span> Direction</p>
+      <h2 class="section-title">글 전체를 관통하는 다섯 관점</h2>
+      <p class="section-body">항목을 눌러 펼쳐보세요. 개별 제품 설명보다 이 톤이 먼저입니다.</p>
+
+      <div class="reveal">
+        <div class="acc open">
+          <button class="acc-trigger" aria-expanded="true"><span class="acc-no">1</span><span class="acc-label">메인 테마</span><span class="acc-ico" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div><div class="acc-inner">명품과 저가 브랜드의 <b>대립 구도</b>가 아니라, “제니는 브랜드 규모와 상관없이 자신의 취향(<span class="hl">그레이·차콜·블랙</span> 중심, 슬림/크롭 실루엣)에 맞춰 믹스매치를 잘한다”는 <b>패션 아카이브 관점</b>에 초점을 맞춰 주세요.</div></div></div>
+        </div>
+        <div class="acc">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-no">2</span><span class="acc-label">‘젠민수’의 정의</span><span class="acc-ico" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div><div class="acc-inner">‘저렴이 패션’, ‘저가 브랜드’ 같은 표현 대신, 제품 정보가 명확하고 일상에서 실루엣과 컬러를 참고해 재해석해 볼 수 있는 <span class="hl">‘상대적 접근성이 좋은 아이템’</span>으로 표현해 주세요.</div></div></div>
+        </div>
+        <div class="acc">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-no">3</span><span class="acc-label">콘텐츠 순서</span><span class="acc-ico" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div><div class="acc-inner">제목의 흐름과 동일하게 <b>실제 시간 순서</b>로 서술해 주세요. 코펜하겐 사복 → 덴마크 공연 준비 → 로스킬레 페스티벌 → 폴란드 오프너 페스티벌.</div></div></div>
+        </div>
+        <div class="acc">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-no">4</span><span class="acc-label">브랜드 소개 방식</span><span class="acc-ico" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div><div class="acc-inner">이니어(INNIR)와 스컬프터(SCULPTOR) 후드집업을 나란히 두고 우열을 가리거나 핏·소재를 직접 비교하는 구성은 <b>지양</b>해 주세요. 각 제품은 해당 일정 안에서 <span class="hl">독립적으로</span> 소개합니다.</div></div></div>
+        </div>
+        <div class="acc">
+          <button class="acc-trigger" aria-expanded="false"><span class="acc-no">5</span><span class="acc-label">앰버서더 언급</span><span class="acc-ico" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div><div class="acc-inner">브랜드 모델인 것처럼 임의로 단정하지 말고 자연스러운 착장으로 소개해 주세요. 단, <span class="hl">레이벤(Ray-Ban)은 공식 앰버서더</span>이므로 해당 사실을 함께 언급해 주세요.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 본문 구성 -->
+  <section class="section alt">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">03</span> Body</p>
+      <h2 class="section-title">일정 순서대로 따라가는 룩 아카이브</h2>
+      <p class="section-body">‘전문 보기’로 권장 문장을 확인·복사하고, 룩 카드의 ‘가이드 더보기’로 상세 톤을 참고하세요.</p>
+
+      <!-- 도입부 -->
+      <div class="stop reveal">
+        <div class="stop-head"><span class="stop-step">Part 00</span><span class="stop-city">도입부</span><span class="stop-place">Build-up</span></div>
+        <div class="refq"
+             data-title="도입부 · 권장 문장"
+             data-lead="대형 음악 축제(로스킬레·오프너) 헤드라이너 출격 소식과, 무대 밖 자연스러운 사복 패션을 함께 조명해 주세요.">
+          <div class="refq-bar">
+            <span class="qtag">권장 문장</span>
+            <button class="refq-open" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>전문 보기 · 복사</button>
+          </div>
+          <p class="refq-lead">대형 음악 축제(로스킬레·오프너) 헤드라이너 출격 소식과, 무대 밖 자연스러운 사복 패션을 함께 조명해 주세요.</p>
+          <div class="refq-full" hidden>
+            <p class="q">제니는 최근 코펜하겐을 시작으로 덴마크 로스킬레 페스티벌과 폴란드 오프너 페스티벌까지 유럽 일정을 이어갔다. 유럽을 대표하는 대형 음악 축제의 헤드라이너로 무대에 오른 모습뿐 아니라, 도시를 이동하고 공연을 준비하는 과정에서 보여준 자연스러운 사복 스타일도 함께 눈길을 끌었다. 코펜하겐에서는 구조적인 그레이 톱과 블랙 액세서리를 매치했고, 덴마크 공연을 준비하는 과정에서는 선명한 블루 컬러의 슈즈로 포인트를 더했다. 이후 페스티벌 일정에서는 짧고 가벼운 후드집업을 편안하게 활용했다.</p>
+            <p class="q">제니의 사복이 흥미로운 이유는 럭셔리 브랜드와 비교적 접근 가능한 브랜드 사이에 특별한 경계를 두지 않는다는 점이다. 가격이나 브랜드의 규모보다 자신의 취향에 맞는 실루엣과 컬러를 선택하고, 그것을 자연스럽게 섞어 입는 모습에서 제니의 스타일이 조금 더 현실적이고 친근하게 다가온다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 코펜하겐 -->
+      <div class="stop reveal">
+        <div class="stop-head"><span class="stop-step">Part 01</span><span class="stop-city">코펜하겐 사복</span><span class="stop-place">Copenhagen</span></div>
+        <div class="refq"
+             data-title="코펜하겐 · 연결 문장"
+             data-lead="구조적인 그레이 톱에 블랙 선글라스와 볼링백을 매치한 절제된 룩으로 자연스럽게 연결해 주세요.">
+          <div class="refq-bar">
+            <span class="qtag">연결 문장</span>
+            <button class="refq-open" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>전문 보기 · 복사</button>
+          </div>
+          <p class="refq-lead">구조적인 그레이 톱에 블랙 선글라스와 볼링백을 매치한 절제된 룩으로 자연스럽게 연결해 주세요.</p>
+          <div class="refq-full" hidden>
+            <p class="q">제니의 이번 유럽 일정에서 가장 먼저 눈에 들어온 것은 코펜하겐에서 보여준 사복 스타일이었다. 구조적인 그레이 톱에 블랙 선글라스와 볼링백을 매치해, 컬러는 절제하면서도 각 아이템의 실루엣이 분명하게 드러나는 룩을 완성했다.</p>
+          </div>
+        </div>
+
+        <div class="look">
+          <div class="look-media two"><img src="assets/images/gimaguas-1.jpg" alt="제니 기마구아스 그레이 아모르 톱"><img src="assets/images/gimaguas-3.jpg" alt="제니 그레이 톱 코펜하겐 사복"></div>
+          <div class="look-body">
+            <span class="look-brand">Gimaguas · 기마구아스</span>
+            <div class="look-name">Amor Top <span class="lat">(Grey)</span></div>
+            <div class="look-meta">테일러드 베스트 · 슬리브리스</div>
+            <p class="look-desc clamp">테일러드 베스트 디자인에 깊고 둥근 네크라인이 특징인 구조적인 슬리브리스 톱. 데님이나 슬랙스 같은 기본 하의에 매치해 볼 만한 제품으로, 누구나 소화하기 쉽다고 단정하기보다 <b>스타일 참고용</b>으로 기술해 주세요.</p>
+            <button class="more-btn" type="button">가이드 더보기</button>
+            <div class="pill-row"><span class="pill ref">스타일 참고용</span></div>
+          </div>
+        </div>
+
+        <div class="look">
+          <div class="look-media"><img src="assets/images/rayban-1.png" alt="제니 레이벤 대디오 선글라스 착용"></div>
+          <div class="look-body">
+            <span class="look-brand">Ray-Ban · 레이벤</span>
+            <div class="look-name">Daddy-O <span class="lat">(RB2016)</span></div>
+            <div class="look-meta">직사각형 · 스포티 클래식</div>
+            <p class="look-desc clamp">스포티하면서도 클래식한 직사각형 선글라스. 앰버서더 합류 후 일상과 공연에서 반복 착용 중인 점을 강조해 주시고, 사이즈 영향을 덜 받아 <b>가장 시도하기 좋은 현실적인 젠민수 아이템</b>으로 소개해 주세요.</p>
+            <button class="more-btn" type="button">가이드 더보기</button>
+            <div class="pill-row"><span class="pill amb">공식 앰버서더 · 착용</span></div>
+          </div>
+        </div>
+
+        <div class="look">
+          <div class="look-media"><img src="assets/images/gimaguas-2.jpg" alt="제니 더 로우 아스트라 볼링백 블랙"></div>
+          <div class="look-body">
+            <span class="look-brand">The Row · 더 로우</span>
+            <div class="look-name">Astra Bowling Bag <span class="lat">(Black)</span></div>
+            <div class="look-meta">럭셔리 · 번외 위시리스트</div>
+            <p class="look-desc clamp">높은 가격대의 럭셔리 가방인 만큼 <b>번외 위시리스트</b>로 분류해 주세요. “기마구아스와 레이벤까지는 현실적으로 찾아볼 수 있지만, 더 로우 아스트라 백은 일단 위시리스트에 조용히 넣어두는 것으로”처럼 위트 있게 마무리하면 좋습니다.</p>
+            <button class="more-btn" type="button">가이드 더보기</button>
+            <div class="pill-row"><span class="pill wish">번외 위시리스트</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 공연 준비 -->
+      <div class="stop reveal">
+        <div class="stop-head"><span class="stop-step">Part 02</span><span class="stop-city">덴마크 공연 준비</span><span class="stop-place">Rehearsal</span></div>
+        <div class="look">
+          <div class="look-media two"><img src="assets/images/adidas-2.jpg" alt="제니 아디다스 퍼렐 바리오 플랫 어서 블루 전신"><img src="assets/images/adidas-1.jpg" alt="아디다스 퍼렐 블루 플랫 슈즈 디테일"></div>
+          <div class="look-body">
+            <span class="look-brand">adidas × Pharrell</span>
+            <div class="look-name">바리오 플랫 어서 <span class="lat">(KJ9380 / Blue)</span></div>
+            <div class="look-meta">by Pharrell · 20만 원 이하</div>
+            <p class="look-desc clamp">외부 끈이 없는 간결한 구조의 플랫 슈즈 형태 스니커즈. 리허설 및 공연 준비 과정에서 신은 편안한 슈즈로, <b>선명한 블루 컬러가 착장의 확실한 포인트</b>가 된다는 점을 언급해 주세요. 20만 원 이하로, 협업 제품 중 상대적 접근성이 좋은 가격대임을 함께 확인 부탁드립니다.</p>
+            <button class="more-btn" type="button">가이드 더보기</button>
+            <div class="pill-row"><span class="pill ref">접근성 좋은 협업</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 로스킬레 -->
+      <div class="stop reveal">
+        <div class="stop-head"><span class="stop-step">Part 03</span><span class="stop-city">로스킬레 페스티벌</span><span class="stop-place">Roskilde</span></div>
+        <div class="look">
+          <div class="look-media two"><img src="assets/images/innir-1.jpg" alt="제니 이니어 헤더 그레이 크롭 후디"><img src="assets/images/innir-2.jpg" alt="제니 인스타 스토리 그레이 후디"></div>
+          <div class="look-body">
+            <span class="look-brand">INNIR · 이니어</span>
+            <div class="look-name">Eyelet Rib Lightweight Ivel Hoodie <span class="lat">(Heather Grey)</span></div>
+            <div class="look-meta">100% 코튼 아일렛 · 크롭</div>
+            <p class="look-desc clamp">100% 코튼 아일렛 조직으로 가볍고 통기성이 좋은 크롭 후디. 티셔츠나 가벼운 카디건처럼 활용하는 형태이며, 제니 인스타 스토리에 등장했습니다. 앞선 <b>뉴욕 리허설 당시에도 이니어 제품을 착용</b>했던 흐름을, 동일 제품이 아닌 <b>브랜드 선호 흐름</b>으로 매끄럽게 연결해 주세요.</p>
+            <button class="more-btn" type="button">가이드 더보기</button>
+            <div class="pill-row"><span class="pill daily">브랜드 선호 흐름</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 오프너 -->
+      <div class="stop reveal">
+        <div class="stop-head"><span class="stop-step">Part 04</span><span class="stop-city">오프너 페스티벌</span><span class="stop-place">Open'er · Poland</span></div>
+        <div class="look">
+          <div class="look-media two"><img src="assets/images/sculptor-1.png" alt="제니 스컬프터 실루엣 니트 집업 후디 차콜"><img src="assets/images/sculptor-2.png" alt="제니 차콜 니트 크롭 후디 데일리 착장"></div>
+          <div class="look-body">
+            <span class="look-brand">SCULPTOR · 스컬프터</span>
+            <div class="look-name">Silhouette Knit Zip-Up Hoodie <span class="lat">(Charcoal)</span></div>
+            <div class="look-meta">니트 소재 · 슬림 크롭</div>
+            <p class="look-desc clamp">얇고 몸에 가깝게 떨어지는 니트 소재의 크롭 후디. 제니 공식 틱톡 영상과 이전 공항 패션에서도 포착된 아이템으로, 일상에서 여러 차례 반복적으로 활용하는 <b>데일리 후디</b>로 소개해 주세요.</p>
+            <button class="more-btn" type="button">가이드 더보기</button>
+            <div class="pill-row"><span class="pill daily">데일리 후디</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 지향 / 지양 -->
+  <section class="section">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">04</span> Checklist</p>
+      <h2 class="section-title">쓰기 전 한 번 더 확인</h2>
+      <div class="dd">
+        <div class="dd-col do reveal">
+          <div class="dd-head"><span class="dd-mark">＋</span><div><div class="dd-title">지향</div><div class="dd-sub">Do</div></div></div>
+          <ul>
+            <li>취향(그레이·차콜·블랙, 슬림/크롭)으로 룩을 완성하는 아카이브 관점</li>
+            <li>실제 동선(코펜하겐→공연 준비→로스킬레→오프너) 순서대로 서술</li>
+            <li>‘상대적 접근성이 좋은 아이템’이라는 표현 사용</li>
+            <li>각 브랜드를 해당 일정 안에서 독립적으로 소개</li>
+            <li>레이벤 공식 앰버서더 사실은 명시</li>
+            <li>블루 슈즈·블랙 액세서리를 ‘포인트’로 설명</li>
+          </ul>
+        </div>
+        <div class="dd-col avoid reveal">
+          <div class="dd-head"><span class="dd-mark">✕</span><div><div class="dd-title">지양</div><div class="dd-sub">Avoid</div></div></div>
+          <ul>
+            <li>명품 대 저가의 대립 구도, 가격 우열 비교</li>
+            <li>‘저렴이’, ‘저가 브랜드’ 등의 표현</li>
+            <li>이니어 ↔ 스컬프터 후디의 핏·소재 직접 비교</li>
+            <li>착용 브랜드를 임의로 ‘앰버서더’라 단정(레이벤 제외)</li>
+            <li>제목에 제품명을 길게 나열</li>
+            <li>“누구나 소화 가능”처럼 단정하는 표현</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 키워드 -->
+  <section class="section alt">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">05</span> Keywords</p>
+      <h2 class="section-title">본문에 자연스럽게 분산 배치</h2>
+      <p class="section-body">한 문단에 몰아넣지 말고, 각 일정과 제품 설명 맥락에 맞춰 고르게 배치해 주세요.</p>
+      <div class="kw-wrap reveal">
+        <span class="kw"><span class="n">01</span>제니 유럽 페스티벌</span>
+        <span class="kw"><span class="n">02</span>제니 코펜하겐</span>
+        <span class="kw"><span class="n">03</span>제니 로스킬레</span>
+        <span class="kw"><span class="n">04</span>제니 오프너 페스티벌</span>
+        <span class="kw"><span class="n">05</span>제니 유럽 사복</span>
+        <span class="kw"><span class="n">06</span>젠민수</span>
+        <span class="kw"><span class="n">07</span>이니어</span>
+        <span class="kw"><span class="n">08</span>스컬프터</span>
+        <span class="kw"><span class="n">09</span>기마구아스</span>
+        <span class="kw"><span class="n">10</span>레이벤 대디오</span>
+        <span class="kw"><span class="n">11</span>아디다스 퍼렐 신발</span>
+        <span class="kw"><span class="n">12</span>더로우 아스트라 볼링백</span>
+        <span class="kw"><span class="n">13</span>크롭 후드집업</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 결론 -->
+  <section class="section">
+    <div class="container">
+      <div class="closing-card reveal">
+        <p class="section-eyebrow"><span class="no">06</span> Closing</p>
+        <p class="txt">그레이·차콜·블랙의 차분한 톤 위에, 블랙 액세서리와 선명한 <b>블루</b> 슈즈를 포인트로. 그대로 복제하지 않더라도, 슬림한 상의와 컬러 조합 방식은 일상에서 충분히 참고할 수 있습니다.</p>
+        <div class="tones">
+          <span class="tone"><i style="background:#8f8d86"></i> Grey</span>
+          <span class="tone"><i style="background:#403f3b"></i> Charcoal</span>
+          <span class="tone"><i style="background:#16150f"></i> Black</span>
+          <span class="tone"><i style="background:#2740d6"></i> Blue · Point</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-brand">JENNIE × SIRIAI</div>
+      <p class="footer-copy">블로그 콘텐츠 가이드라인 · Blog Edition v1<br>본 문서는 인플루언서 협업 콘텐츠 제작을 위한 내부 참고 자료입니다. 게시 전 제품명·모델명·가격 등 세부 정보는 최신 기준으로 한 번 더 확인해 주세요.</p>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <h3 class="modal-title" id="modal-title"></h3>
+        <button class="modal-x" id="modal-x" type="button" aria-label="닫기">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-foot">
+        <button class="btn-copy" id="modal-copy" type="button">문장 복사하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- reading progress ----------
+    var rb = document.getElementById('readbar');
+    function onScroll(){ var h = document.documentElement.scrollHeight - window.innerHeight; rb.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%'; }
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    // ---------- reveal ----------
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+    // ---------- accordion (pure CSS class toggle) ----------
+    document.querySelectorAll('.acc-trigger').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var open = btn.closest('.acc').classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
+
+    // ---------- look "가이드 더보기" ----------
+    document.querySelectorAll('.more-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var desc = btn.parentElement.querySelector('.look-desc');
+        var clamped = desc.classList.toggle('clamp');
+        btn.classList.toggle('open', !clamped);
+        btn.textContent = clamped ? '가이드 더보기' : '접기';
+      });
+    });
+
+    // ---------- modal ----------
+    var modal = document.getElementById('modal');
+    var mTitle = document.getElementById('modal-title');
+    var mBody = document.getElementById('modal-body');
+    var mCopy = document.getElementById('modal-copy');
+    var lastFocus = null;
+
+    function openModal(refq){
+      var title = refq.getAttribute('data-title') || '권장 문장';
+      var lead = refq.getAttribute('data-lead') || '';
+      var full = refq.querySelector('.refq-full').innerHTML;
+      mTitle.textContent = title;
+      mBody.innerHTML = (lead ? '<p class="lead">' + lead + '</p>' : '') + full;
+      mCopy.textContent = '문장 복사하기';
+      mCopy.classList.remove('done');
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+      lastFocus = document.activeElement;
+      document.getElementById('modal-x').focus();
+    }
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+      if (lastFocus) lastFocus.focus();
+    }
+    document.querySelectorAll('.refq-open').forEach(function(btn){
+      btn.addEventListener('click', function(){ openModal(btn.closest('.refq')); });
+    });
+    document.getElementById('modal-x').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+    mCopy.addEventListener('click', function(){
+      var text = Array.from(mBody.querySelectorAll('p.q')).map(function(p){ return p.textContent.trim(); }).join('\n\n');
+      function done(){ mCopy.textContent = '✓ 복사되었습니다'; mCopy.classList.add('done'); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function(){ fallbackCopy(text); done(); });
+      } else { fallbackCopy(text); done(); }
+    });
+    function fallbackCopy(text){
+      var ta = document.createElement('textarea'); ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch(e){}
+      document.body.removeChild(ta);
+    }
+  </script>
+
+</body>
+</html>
