@@ -20,15 +20,44 @@ python -m http.server 4599
 # → http://localhost:4599/jennie-europe/     (제니 가이드)
 ```
 
+## 관리 페이지 비밀번호
+
+루트 [`index.html`](index.html) 은 전체 가이드 목록이 보이는 **내부 관리 페이지**라
+열람 비밀번호가 걸려 있습니다. 개별 가이드 페이지는 파트너에게 그대로 공유하므로
+비밀번호가 없습니다.
+
+| 주소 | 비밀번호 |
+|---|---|
+| `/` (관리 인덱스) | 필요 |
+| `/deep-divers-club/` | 없음 — 공유용 |
+| `/jennie-europe/` | 없음 — 공유용 |
+
+한 번 입력하면 브라우저가 기억합니다 (`localStorage` 키 `siriai-guides-admin`).
+
+> 정적 사이트의 클라이언트 사이드 게이트입니다. 링크를 아는 사람이 우연히 목록을
+> 열어보는 것을 막는 용도이며, 개발자도구로 우회할 수 있습니다. 실제 접근 통제가
+> 필요하면 Vercel Project → Settings → **Deployment Protection** 의
+> Password Protection(유료 플랜)을 사용해야 합니다.
+
+비밀번호를 바꾸려면 새 값의 SHA-256 해시를 구해 `index.html` 의
+`var HASH = '...'` 를 교체합니다.
+
+```bash
+printf '새비밀번호' | sha256sum
+```
+
+`crypto.subtle` 은 보안 컨텍스트에서만 동작하므로 로컬 확인 시 `file://` 이 아니라
+`localhost` 로 열어야 합니다.
+
 ## 배포 (Vercel)
 
 Vercel Git 연동으로 배포됩니다. `main` 에 푸시하면 자동 재배포되고,
 다른 브랜치는 프리뷰 URL이 생성됩니다.
 
 ```
-https://campagin-guides-un3g.vercel.app/                    (인덱스)
-https://campagin-guides-un3g.vercel.app/deep-divers-club/   (Deep Divers Club 가이드)
-https://campagin-guides-un3g.vercel.app/jennie-europe/      (제니 가이드)
+https://campagin-guides-un3g.vercel.app/                    (관리 인덱스 · 비밀번호)
+https://campagin-guides-un3g.vercel.app/deep-divers-club/   (Deep Divers Club 가이드 · 공유용)
+https://campagin-guides-un3g.vercel.app/jennie-europe/      (제니 가이드 · 공유용)
 ```
 
 빌드가 없는 정적 레포라 `vercel.json` 을 두지 않습니다. Vercel 기본 동작이
