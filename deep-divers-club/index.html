@@ -160,6 +160,7 @@
       background:rgba(20,16,18,.74);backdrop-filter:blur(4px);color:var(--white);border-radius:var(--radius-pill);padding:5px 10px}
     .bun-body{padding:14px 14px 16px}
     .bun-nm{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+    .bun-kr{font-size:13px;font-weight:600;color:var(--ink);margin-top:4px;letter-spacing:-.01em}
     .bun-sub{font-family:var(--font-display);font-size:11.5px;font-weight:600;color:var(--pink-dark);margin-top:5px;letter-spacing:.01em}
     .bun-stat{font-family:var(--font-display);font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--ink-light);margin-top:8px;
       padding-top:8px;border-top:1px dashed var(--border);text-transform:uppercase}
@@ -167,6 +168,24 @@
     .figure{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--white);margin-top:16px}
     .figure img{width:100%}
     .figure figcaption{padding:12px 15px;font-size:12.5px;color:var(--ink-mid);line-height:1.6;border-top:1px solid var(--border);background:var(--bg)}
+
+    /* ---------- product naming ---------- */
+    .naming{background:var(--ink);color:var(--white);border-radius:var(--radius-lg);padding:22px 20px;margin-top:12px}
+    .naming .flag{display:inline-flex;font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:#ffa8cd;background:rgba(255,168,205,.14);border-radius:var(--radius-pill);padding:5px 11px;margin-bottom:14px}
+    .naming .full{font-size:19px;font-weight:700;line-height:1.42;letter-spacing:-.01em}
+    .naming .full .en{font-family:var(--font-display);color:#ffa8cd}
+    .naming .say{font-size:13px;color:rgba(255,255,255,.72);line-height:1.7;margin-top:10px}
+    .naming .act{margin-top:14px}
+    .naming .rule{margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.14)}
+    .naming .rule .lbl{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+    .naming .rule p{font-size:13px;color:rgba(255,255,255,.75);line-height:1.7;margin-top:7px}
+    .naming .names{margin-top:12px;display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.16);border-radius:var(--radius-sm);overflow:hidden}
+    .naming .names li{list-style:none;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);
+      padding:10px 13px;font-size:14px;font-weight:600;letter-spacing:-.01em}
+    .naming .names li em{font-style:normal;font-family:var(--font-display);font-size:11.5px;font-weight:700;
+      letter-spacing:.04em;color:#ffa8cd;flex-shrink:0;min-width:30px}
 
     /* ---------- USP ---------- */
     .usp{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--pink);border-radius:var(--radius-md);padding:17px 17px 18px}
@@ -371,14 +390,38 @@
     <div class="container">
       <p class="section-eyebrow"><span class="no">03</span> Product</p>
       <h2 class="section-title">제품 정보 &amp; 5종 라인업</h2>
-      <p class="section-body">전 종에 캐릭터 콘셉트와 넘버가 부여되어 있습니다. 콘텐츠에서 소개할 때 넘버와 이름을 함께 불러 주시면 컬렉션 느낌이 살아납니다.</p>
+      <p class="section-body">이번 콘텐츠에서 가장 중요한 것은 <b>제품명이 정확히 각인되는 것</b>입니다. 자막·음성·캡션 중 최소 두 곳에서 아래 제품명을 그대로 불러 주세요.</p>
 
-      <div class="spec reveal">
-        <div class="spec-row"><div class="k">제품명</div><div class="v">Deep Divers Club 봉제 키링</div></div>
+      <div class="naming reveal">
+        <span class="flag">Product Name · 정확히 불러 주세요</span>
+        <div class="full">에스더버니 × 틈결<br><span class="en">Deep Divers Club</span> 봉제 키링</div>
+        <p class="say">읽을 때는 <b>“에스더버니 × 틈결 딥 다이버스 클럽 봉제 키링”</b>. ‘버니 키링’, ‘인형 키링’ 같은 임의 축약 표현은 사용하지 말아 주세요.</p>
+        <div class="act"><button class="mini-copy" type="button" data-copy="에스더버니 × 틈결 Deep Divers Club 봉제 키링">제품명 복사</button></div>
+        <div class="rule">
+          <div class="lbl">개별 제품 정식 명칭</div>
+          <p>5종 각각은 <b>넘버 + 정식 명칭</b>으로 불러 주세요. 넘버를 붙여야 “모으는 컬렉션”이라는 인식이 생깁니다.</p>
+          <ul class="names">
+            <li><em>No.1</em> 다크 로맨스 라벤더 버니</li>
+            <li><em>No.2</em> 갸루 리본 버니</li>
+            <li><em>No.3</em> 디저트 콜렉터 크림 버니</li>
+            <li><em>No.4</em> 사이버 아케이드 스위티 버니</li>
+            <li><em>No.5</em> 베케이션 리본 버니</li>
+          </ul>
+          <button class="mini-copy" type="button" style="margin-top:12px" data-copy="No.1 다크 로맨스 라벤더 버니
+No.2 갸루 리본 버니
+No.3 디저트 콜렉터 크림 버니
+No.4 사이버 아케이드 스위티 버니
+No.5 베케이션 리본 버니">5종 명칭 복사</button>
+        </div>
+      </div>
+
+      <div class="spec reveal" style="margin-top:16px">
+        <div class="spec-row"><div class="k">제품명</div><div class="v">에스더버니 × 틈결 Deep Divers Club 봉제 키링</div></div>
         <div class="spec-row"><div class="k">종류</div><div class="v">총 5종 <small>No.1 – No.5</small></div></div>
         <div class="spec-row"><div class="k">판매가</div><div class="v">34,900원</div></div>
         <div class="spec-row"><div class="k">출시일</div><div class="v">2026.08.14 <small>FRI</small></div></div>
         <div class="spec-row"><div class="k">수량</div><div class="v">전 세계 30,000개 <small>한정</small></div></div>
+        <div class="spec-row"><div class="k">패키지</div><div class="v">개별 박스 + 5홀 패키지 <small>5종 전체 수납 · 출시 예정</small></div></div>
       </div>
     </div>
 
@@ -386,31 +429,36 @@
       <div class="rail reveal">
         <div class="bun">
           <div class="bun-media"><img loading="lazy" src="assets/images/no1-dark-romance.webp" alt="No.1 Dark Romance 라벤더 버니"><span class="bun-no">No.1</span></div>
-          <div class="bun-body"><div class="bun-nm">Dark Romance</div><div class="bun-sub">Lavender Bunny</div><div class="bun-stat">Love Level ★★★★★</div></div>
+          <div class="bun-body"><div class="bun-nm">Dark Romance</div><div class="bun-kr">다크 로맨스 라벤더 버니</div><div class="bun-sub">Lavender Bunny</div><div class="bun-stat">Love Level ★★★★★</div></div>
         </div>
         <div class="bun">
           <div class="bun-media"><img loading="lazy" src="assets/images/no2-gyaru.webp" alt="No.2 GYARU 리본 버니"><span class="bun-no">No.2</span></div>
-          <div class="bun-body"><div class="bun-nm">GYARU</div><div class="bun-sub">Ribbon Bunny</div><div class="bun-stat">Fashion Level ★★★★★</div></div>
+          <div class="bun-body"><div class="bun-nm">GYARU</div><div class="bun-kr">갸루 리본 버니</div><div class="bun-sub">Ribbon Bunny</div><div class="bun-stat">Fashion Level ★★★★★</div></div>
         </div>
         <div class="bun">
           <div class="bun-media"><img loading="lazy" src="assets/images/no3-dessert-collector.jpg" alt="No.3 Dessert Collector 크림 버니"><span class="bun-no">No.3</span></div>
-          <div class="bun-body"><div class="bun-nm">Dessert Collector</div><div class="bun-sub">Cream Bunny</div><div class="bun-stat">Sweetness ★★★★★</div></div>
+          <div class="bun-body"><div class="bun-nm">Dessert Collector</div><div class="bun-kr">디저트 콜렉터 크림 버니</div><div class="bun-sub">Cream Bunny</div><div class="bun-stat">Sweetness ★★★★★</div></div>
         </div>
         <div class="bun">
           <div class="bun-media"><img loading="lazy" src="assets/images/no4-cyber-arcade.jpg" alt="No.4 Cyber Arcade"><span class="bun-no">No.4</span></div>
-          <div class="bun-body"><div class="bun-nm">Cyber Arcade</div><div class="bun-sub">CBC Hoodie</div><div class="bun-stat">EXP MAX</div></div>
+          <div class="bun-body"><div class="bun-nm">Cyber Arcade</div><div class="bun-kr">사이버 아케이드 스위티 버니</div><div class="bun-sub">Sweety Bunny</div><div class="bun-stat">EXP MAX</div></div>
         </div>
         <div class="bun">
           <div class="bun-media"><img loading="lazy" src="assets/images/no5-vacation.webp" alt="No.5 Vacation 리본 버니"><span class="bun-no">No.5</span></div>
-          <div class="bun-body"><div class="bun-nm">Vacation</div><div class="bun-sub">Ribbon Bunny</div><div class="bun-stat">Energy MAX</div></div>
+          <div class="bun-body"><div class="bun-nm">Vacation</div><div class="bun-kr">베케이션 리본 버니</div><div class="bun-sub">Ribbon Bunny</div><div class="bun-stat">Energy MAX</div></div>
         </div>
       </div>
       <p class="rail-hint">옆으로 밀어서 5종 모두 보기 →</p>
 
       <figure class="figure reveal">
         <img loading="lazy" src="assets/images/package-5.jpg" alt="Deep Divers Club 5종 패키지">
-        <figcaption>5종 모두 Limited Edition 패키지로 제작됩니다. 언박싱 컷을 활용하실 경우 패키지 전면의 넘버·콘셉트명이 함께 보이도록 잡아 주세요.</figcaption>
+        <figcaption>5종 모두 Limited Edition 개별 패키지로 제작됩니다. 언박싱 컷을 활용하실 경우 <b>패키지 전면의 넘버·콘셉트명이 또렷하게 읽히도록</b> 잡아 주세요. 제품명을 각인시키는 가장 좋은 장면입니다.</figcaption>
       </figure>
+
+      <div class="note" style="margin-top:16px">
+        <span class="tag">5-Hole</span>
+        <span class="body">개별 박스와 별개로 <b>5종이 모두 들어가는 5홀 패키지</b>가 출시될 예정입니다. 필수 문구의 “컬렉터 전용 스페셜 패키지”가 이 5홀 패키지를 가리킵니다. 아직 실물 공개 전이므로 <b>구체적인 출시일이나 형태는 단정하지 말고</b> “5종을 한 번에 담을 수 있는 패키지도 나올 예정”으로 안내해 주세요.</span>
+      </div>
     </div>
   </section>
 
@@ -454,7 +502,7 @@
         </div>
         <div class="line"><span class="box"></span><span class="line-t">국내 최초 런칭 이후 <b>13개국 동시 발매 with MUSINSA</b></span></div>
         <div class="line"><span class="box"></span><span class="line-t">전 세계 <b>30,000개 한정</b> 리미티드 컬렉션</span></div>
-        <div class="line"><span class="box"></span><span class="line-t">5종 모두 모으면 <b>컬렉터 전용 스페셜 패키지 제공</b></span></div>
+        <div class="line"><span class="box"></span><span class="line-t">5종 모두 모으면 <b>컬렉터 전용 스페셜 패키지 제공</b> <span style="color:var(--ink-light);font-size:12.5px">(5홀 패키지)</span></span></div>
         <div class="line"><span class="box"></span><span class="line-t">아뜰리에 시리즈 I 리오더 물량도 곧 품절 예정, <b>이후 재발매 없음</b></span></div>
         <div class="line"><span class="box"></span><span class="line-t">출시일 <b>2026.08.14</b></span></div>
         <div class="must-foot"><button class="btn-copy" id="mustCopy" type="button">필수 문구 5개 모두 복사</button></div>
@@ -516,7 +564,8 @@
         <div class="beat">
           <div class="beat-h"><span class="beat-k">중간</span><span class="t">제품 소개 · 스타일링</span></div>
           <div class="beat-b"><ul class="seq">
-            <li>가장 마음에 드는 <b>원픽 버니 소개</b></li>
+            <li><b>제품명 자막 고정 노출</b> — “에스더버니 × 틈결 Deep Divers Club 봉제 키링”</li>
+            <li>가장 마음에 드는 <b>원픽 버니 소개</b> — 넘버 + 콘셉트명으로</li>
             <li><b>레이어드 참 키링</b> 보여주기</li>
             <li>가방 스타일링</li>
             <li>착용 컷</li>
@@ -550,6 +599,8 @@
       <h2 class="section-title">발행 전 확인해 주세요</h2>
       <p class="section-body">업로드 직전에 한 번씩 체크해 주시면 좋습니다.</p>
       <div class="reveal">
+        <div class="check"><span class="box"></span><span class="check-t">제품명 <b>“에스더버니 × 틈결 Deep Divers Club 봉제 키링”</b>을 최소 두 곳(자막·음성·캡션)에서 언급했나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">5종을 소개할 때 <b>넘버(No.1~No.5)와 콘셉트명</b>을 함께 불렀나요?</span></div>
         <div class="check"><span class="box"></span><span class="check-t">출시일 <b>2026.08.14</b>이 자막 또는 캡션에 들어갔나요?</span></div>
         <div class="check"><span class="box"></span><span class="check-t">필수 문구를 <b>4개 이상</b> 포함했나요?</span></div>
         <div class="check"><span class="box"></span><span class="check-t">구매 채널(무신사 또는 틈결 온라인몰)을 안내했나요?</span></div>
