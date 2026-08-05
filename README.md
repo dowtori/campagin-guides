@@ -6,6 +6,7 @@ SIRIAI 인플루언서 협업 콘텐츠 가이드 모음. 각 캠페인은 하�
 
 | 캠페인 | 형식 | 경로 |
 |---|---|---|
+| Deep Divers Club 런칭 (틈결 × 에스더버니) | 릴스 / 런칭 캠페인 | [`deep-divers-club/`](deep-divers-club/) |
 | 제니 유럽 사복 · 젠민수 아이템 | 블로그 / 패션 | [`jennie-europe/`](jennie-europe/) |
 
 루트 [`index.html`](index.html) 은 전체 가이드 인덱스입니다.
@@ -14,8 +15,9 @@ SIRIAI 인플루언서 협업 콘텐츠 가이드 모음. 각 캠페인은 하�
 
 ```bash
 python -m http.server 4599
-# → http://localhost:4599            (인덱스)
-# → http://localhost:4599/jennie-europe/   (제니 가이드)
+# → http://localhost:4599                    (인덱스)
+# → http://localhost:4599/deep-divers-club/  (Deep Divers Club 가이드)
+# → http://localhost:4599/jennie-europe/     (제니 가이드)
 ```
 
 ## GitHub Pages
