@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="locked">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -230,9 +230,53 @@
     @media (min-width: 600px) {
       .section { padding: 52px 0; }
     }
+  
+    /* ============================================================
+       ACCESS GATE
+    ============================================================ */
+    html.locked, html.locked body { overflow: hidden !important; }
+    .gate { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
+      padding: 24px; background: #1c1b1a; color: #fff;
+      font-family: 'Noto Sans KR','Apple SD Gothic Neo',sans-serif; }
+    html:not(.locked) .gate { display: none; }
+    .gate-box { width: 100%; max-width: 340px; text-align: center; }
+    .gate-brand { font-family: 'Instrument Sans','Noto Sans KR',sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase; color: #ffa8cd; margin-bottom: 18px; }
+    .gate-t { font-size: 20px; font-weight: 700; letter-spacing: -.01em; line-height: 1.4; }
+    .gate-d { font-size: 13.5px; color: rgba(255,255,255,.62); line-height: 1.7; margin-top: 10px; }
+    .gate-f { display: flex; gap: 8px; margin-top: 22px; }
+    .gate-f input { flex: 1; min-width: 0; font-family: inherit; font-size: 16px; font-weight: 600;
+      letter-spacing: .12em; text-align: center; color: #fff; background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.2); border-radius: 12px; padding: 14px 12px; outline: none;
+      transition: border-color .16s cubic-bezier(.4,0,.2,1); }
+    .gate-f input::placeholder { color: rgba(255,255,255,.35); letter-spacing: normal; font-weight: 400; }
+    .gate-f input:focus { border-color: #ff3d8b; }
+    .gate-f button { flex-shrink: 0; font-family: 'Instrument Sans','Noto Sans KR',sans-serif; font-size: 14px;
+      font-weight: 700; color: #fff; background: #ff3d8b; border: none; border-radius: 12px; padding: 14px 20px;
+      cursor: pointer; transition: background .16s cubic-bezier(.4,0,.2,1); }
+    .gate-f button:hover { background: #cf1e69; }
+    .gate-err { font-size: 12.5px; color: #ff8fb8; margin-top: 12px; min-height: 1.2em; }
+    .gate.shake .gate-box { animation: gshake .32s cubic-bezier(.36,.07,.19,.97); }
+    @keyframes gshake { 10%,90%{transform:translateX(-2px)} 30%,70%{transform:translateX(4px)} 50%{transform:translateX(-6px)} }
+    @media (prefers-reduced-motion: reduce) { .gate.shake .gate-box { animation: none; } }
   </style>
 </head>
 <body>
+
+  <!-- ACCESS GATE -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-label="열람 비밀번호">
+    <div class="gate-box">
+      <div class="gate-brand">SIRIAI · Campaign Guide</div>
+      <div class="gate-t">열람 비밀번호를 입력해 주세요</div>
+      <p class="gate-d">협업 파트너 전용 가이드입니다.<br>전달받으신 비밀번호를 입력하시면 열립니다.</p>
+      <form class="gate-f" id="gateForm" autocomplete="off">
+        <input type="password" id="gatePw" inputmode="numeric" placeholder="비밀번호" aria-label="비밀번호" autocomplete="off">
+        <button type="submit">확인</button>
+      </form>
+      <p class="gate-err" id="gateErr" aria-live="polite"></p>
+    </div>
+  </div>
+
 
   <div class="read-bar" id="readbar"></div>
 
@@ -574,6 +618,58 @@
       try { document.execCommand('copy'); } catch(e){}
       document.body.removeChild(ta);
     }
+  </script>
+
+
+  <script>
+    // ---------- access gate ----------
+    (function () {
+      var HASH = '1b879216dc17755c07c11fd2b7e15dd8df5ef7f8c0a3f27e1c6f0ddb4d2c03b6';
+      var KEY = 'siriai-guide-unlock';
+      var root = document.documentElement;
+
+      function unlock() { root.classList.remove('locked'); try { localStorage.setItem(KEY, HASH); } catch (e) {} }
+
+      try { if (localStorage.getItem(KEY) === HASH) { root.classList.remove('locked'); return; } } catch (e) {}
+
+      function digest(text) {
+        if (window.crypto && crypto.subtle && crypto.subtle.digest) {
+          return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
+            return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+              return b.toString(16).padStart(2, '0');
+            }).join('');
+          });
+        }
+        return Promise.resolve(null);
+      }
+
+      var form = document.getElementById('gateForm');
+      var input = document.getElementById('gatePw');
+      var err = document.getElementById('gateErr');
+      var gate = document.getElementById('gate');
+
+      function fail() {
+        err.textContent = '비밀번호가 올바르지 않습니다.';
+        gate.classList.add('shake');
+        setTimeout(function () { gate.classList.remove('shake'); }, 400);
+        input.value = ''; input.focus();
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        err.textContent = '';
+        var v = input.value.trim();
+        if (!v) return;
+        digest(v).then(function (h) {
+          if (h === null) { if (v === '0907') unlock(); else fail(); return; }
+          if (h === HASH) unlock(); else fail();
+        });
+      });
+
+      if (window.matchMedia && window.matchMedia('(min-width: 700px)').matches) {
+        setTimeout(function () { input.focus(); }, 60);
+      }
+    })();
   </script>
 
 </body>

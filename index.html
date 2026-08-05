@@ -1,78 +1,825 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="locked">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIRIAI — Campaign Content Guides</title>
-  <meta name="description" content="SIRIAI 인플루언서 콘텐츠 가이드 모음.">
+  <title>Deep Divers Club 런칭 캠페인 가이드 | TEUMGYUL × ESTHER BUNNY</title>
+  <meta name="description" content="틈결 × 에스더버니 Deep Divers Club 봉제 키링 5종 런칭 캠페인 가이드. 출시 일정, 판매 채널, 제품 소구점, 참여 혜택 안내.">
+  <meta property="og:title" content="Deep Divers Club 런칭 캠페인 가이드">
+  <meta property="og:description" content="2026.08.14 출시 · 무신사 스페셜 드롭 · 전 세계 30,000개 한정 컬렉션">
+  <meta property="og:image" content="assets/images/group-5.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff3d8b'/%3E%3Ctext x='16' y='23' font-size='18' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='700'%3ED%3C/text%3E%3C/svg%3E">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    /* ============================================================
+       DESIGN TOKENS · SIRIAI house style / Deep Divers campaign tint
+    ============================================================ */
     :root{
-      --blue:#2740d6; --white:#fff; --bg:#f7f6f5; --ink:#1c1b1a; --ink-mid:#57544e; --ink-light:#9a968c; --border:#e5e3de;
-      --fd:'Instrument Sans','Noto Sans KR',sans-serif; --fb:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
-      --ease:cubic-bezier(0.4,0,0.2,1);
+      --pink:      #ff3d8b;
+      --pink-dark: #cf1e69;
+      --pink-soft: #ffecf3;
+      --lav:       #6a5acd;
+      --lav-soft:  #eeebfb;
+      --cream:     #fff6e8;
+      --amber:     #a06a10;
+
+      --white:     #ffffff;
+      --bg:        #f7f6f5;
+      --bg-2:      #f1efec;
+      --ink:       #1c1b1a;
+      --ink-mid:   #57544e;
+      --ink-light: #9a968c;
+      --border:    #e5e3de;
+
+      --font-display:'Instrument Sans','Noto Sans KR',sans-serif;
+      --font-body:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
+
+      --space-md:24px; --space-lg:40px;
+      --radius-sm:8px; --radius-md:12px; --radius-lg:20px; --radius-pill:999px;
+      --ease:cubic-bezier(0.4,0,0.2,1); --dur-fast:160ms;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--fb);background:var(--white);color:var(--ink);-webkit-font-smoothing:antialiased;word-break:keep-all;min-height:100vh;}
-    .wrap{max-width:560px;margin:0 auto;padding:0 20px;}
-    .top{border-bottom:1px solid var(--border);}
-    .top .wrap{display:flex;align-items:center;justify-content:space-between;height:54px;}
-    .brand{font-family:var(--fd);font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-    .brand span{color:var(--blue);}
-    .badge{font-family:var(--fd);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mid);}
-    .hero{padding:56px 0 34px;}
-    .eyebrow{font-family:var(--fd);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-    .eyebrow::before{content:'';width:22px;height:1px;background:currentColor;opacity:.6;}
-    h1{font-size:30px;font-weight:700;line-height:1.3;letter-spacing:-.02em;}
-    .sub{margin-top:14px;color:var(--ink-mid);font-size:14.5px;line-height:1.7;}
-    .list{padding-bottom:60px;display:flex;flex-direction:column;gap:12px;}
-    .card{display:block;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--white);transition:box-shadow .25s var(--ease),transform .25s var(--ease);}
-    .card:hover{box-shadow:0 8px 30px rgba(20,19,17,.1);transform:translateY(-2px);}
-    .card-img{position:relative;aspect-ratio:16/10;background:var(--bg);overflow:hidden;}
-    .card-img img{width:100%;height:100%;object-fit:cover;object-position:center 30%;}
-    .card-tag{position:absolute;top:12px;left:12px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(20,19,17,.72);backdrop-filter:blur(4px);color:#fff;border-radius:999px;padding:6px 12px;}
-    .card-body{padding:18px 18px 20px;}
-    .card-title{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.35;}
-    .card-desc{margin-top:8px;color:var(--ink-mid);font-size:13.5px;line-height:1.65;}
-    .card-go{margin-top:14px;font-family:var(--fd);font-size:12.5px;font-weight:600;color:var(--blue);display:inline-flex;align-items:center;gap:6px;}
-    .soon{opacity:.5;pointer-events:none;}
-    .soon .card-go{color:var(--ink-light);}
-    .foot{border-top:1px solid var(--border);background:var(--bg);}
-    .foot .wrap{padding:32px 20px;}
-    .foot b{font-family:var(--fd);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-    .foot p{margin-top:8px;font-size:12px;color:var(--ink-light);line-height:1.7;}
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);font-size:15px;color:var(--ink);background:var(--white);
+      -webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
+    img{display:block;max-width:100%}
+    button{font-family:inherit}
+    .container{width:100%;max-width:560px;margin:0 auto;padding:0 20px}
+
+    /* ---------- progress + header ---------- */
+    .read-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--pink);z-index:200;transition:width 120ms linear}
+    .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .site-header .container{display:flex;align-items:center;justify-content:space-between;height:54px;gap:12px}
+    .brand-wordmark{font-family:var(--font-display);font-size:14.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+    .brand-wordmark span{color:var(--pink)}
+    .header-dday{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--white);
+      background:var(--ink);border-radius:var(--radius-pill);padding:5px 11px;white-space:nowrap}
+
+    /* ---------- hero ---------- */
+    .hero{position:relative;overflow:hidden;background:#f5d9e4}
+    .hero-image{width:100%;height:62vh;max-height:520px;min-height:380px;object-fit:cover;object-position:center 62%}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(28,20,24,.06) 0%,rgba(28,20,24,.34) 46%,rgba(24,16,20,.9) 100%)}
+    .hero-content{position:absolute;left:0;right:0;bottom:0;padding:30px 24px 26px;color:var(--white)}
+    .hero-eyebrow{font-family:var(--font-display);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+      color:rgba(255,255,255,.76);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+    .hero-eyebrow::before{content:'';width:22px;height:1px;background:currentColor;opacity:.7}
+    .hero-title{font-size:clamp(26px,7.2vw,36px);font-weight:700;line-height:1.26;letter-spacing:-.02em;margin-bottom:12px}
+    .hero-title .en{font-family:var(--font-display);color:#ffa8cd}
+    .hero-sub{font-size:13.5px;color:rgba(255,255,255,.84);line-height:1.72;max-width:32em}
+    .hero-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:20px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-md);overflow:hidden}
+    .fact{background:rgba(22,15,18,.42);backdrop-filter:blur(3px);padding:11px 13px}
+    .fact .k{font-family:var(--font-display);font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+    .fact .v{font-size:14px;font-weight:700;margin-top:3px;letter-spacing:-.01em}
+    .fact .v small{font-size:11px;font-weight:500;color:rgba(255,255,255,.7);margin-left:3px}
+
+    /* ---------- section primitives ---------- */
+    .section{padding:var(--space-lg) 0}
+    .section.alt{background:var(--bg)}
+    .section.tint{background:var(--pink-soft)}
+    .section-eyebrow{font-family:var(--font-display);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--pink-dark);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+    .section-eyebrow .no{font-variant-numeric:tabular-nums;color:var(--ink-light)}
+    .section-title{font-size:21px;font-weight:700;margin-bottom:12px;line-height:1.36;letter-spacing:-.01em}
+    .section-body{font-size:14.5px;color:var(--ink-mid);line-height:1.75;margin-bottom:var(--space-md)}
+
+    .note{display:flex;gap:12px;margin-top:16px;background:var(--lav-soft);border:1px solid rgba(106,90,205,.18);border-radius:var(--radius-md);padding:15px 16px}
+    .note.warn{background:var(--cream);border-color:rgba(160,106,16,.2)}
+    .note .tag{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--lav);flex-shrink:0;padding-top:2px}
+    .note.warn .tag{color:var(--amber)}
+    .note .body{font-size:13.5px;color:var(--ink);line-height:1.7}
+    .note .body b{font-weight:600}
+
+    /* ---------- timeline ---------- */
+    .tl{position:relative;padding-left:26px}
+    .tl::before{content:'';position:absolute;left:6px;top:8px;bottom:10px;width:2px;background:var(--border)}
+    .tl-item{position:relative;padding-bottom:22px}
+    .tl-item:last-child{padding-bottom:0}
+    .tl-item::before{content:'';position:absolute;left:-26px;top:5px;width:14px;height:14px;border-radius:50%;
+      background:var(--white);border:2px solid var(--border);z-index:1}
+    .tl-item.done::before{background:var(--ink-light);border-color:var(--ink-light)}
+    .tl-item.now::before{background:var(--pink);border-color:var(--pink);box-shadow:0 0 0 4px rgba(255,61,139,.18)}
+    .tl-item.key::before{background:var(--pink);border-color:var(--pink)}
+    .tl-date{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+    .tl-date .d{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:-.01em}
+    .tl-date .w{font-family:var(--font-display);font-size:10.5px;font-weight:600;letter-spacing:.08em;color:var(--ink-light);text-transform:uppercase}
+    .tl-chip{font-family:var(--font-display);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      border-radius:var(--radius-pill);padding:3px 9px;background:var(--bg-2);color:var(--ink-mid)}
+    .tl-item.key .tl-chip{background:var(--ink);color:var(--white)}
+    .tl-name{font-size:16px;font-weight:700;margin-top:6px;letter-spacing:-.01em}
+    .tl-desc{font-size:13.5px;color:var(--ink-mid);line-height:1.7;margin-top:5px}
+    .tl-desc b{color:var(--ink);font-weight:600}
+    .tl-item.light .tl-name{font-size:15px;font-weight:600}
+
+    /* ---------- channel ---------- */
+    .ch-head{display:flex;align-items:center;gap:9px;margin:0 0 12px}
+    .ch-head .lbl{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+      background:var(--ink);color:var(--white);border-radius:var(--radius-pill);padding:5px 12px}
+    .ch-head .rule{flex:1;height:1px;background:var(--border)}
+    .ch-list{display:flex;flex-direction:column;gap:8px}
+    .ch{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 15px}
+    .ch-n{font-family:var(--font-display);font-size:11px;font-weight:700;color:var(--pink-dark);background:var(--pink-soft);
+      border-radius:var(--radius-pill);min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ch-t{flex:1;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+    .ch-t em{display:block;font-style:normal;font-size:12.5px;font-weight:400;color:var(--ink-mid);margin-top:3px;line-height:1.55}
+    .ch-badge{font-family:var(--font-display);font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--lav);background:var(--lav-soft);border-radius:var(--radius-pill);padding:4px 9px;flex-shrink:0}
+    .store{background:var(--ink);color:var(--white);border-radius:var(--radius-lg);padding:22px 20px;margin-top:12px}
+    .store .flag{display:inline-flex;font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:#ffa8cd;background:rgba(255,168,205,.14);border-radius:var(--radius-pill);padding:5px 11px;margin-bottom:13px}
+    .store .nm{font-size:17px;font-weight:700;line-height:1.45;letter-spacing:-.01em}
+    .store .addr{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14)}
+    .store .addr span{flex:1;font-size:13.5px;color:rgba(255,255,255,.78);line-height:1.6}
+    .store .quote{font-size:13.5px;color:rgba(255,255,255,.72);line-height:1.7;margin-top:12px;padding-left:12px;border-left:2px solid rgba(255,168,205,.5)}
+    .mini-copy{font-family:var(--font-display);font-size:10.5px;font-weight:700;letter-spacing:.04em;color:var(--ink);background:var(--white);
+      border:none;border-radius:var(--radius-pill);padding:7px 12px;cursor:pointer;flex-shrink:0;transition:background var(--dur-fast) var(--ease)}
+    .mini-copy:hover{background:#ffd9e8}
+    .mini-copy.done{background:var(--pink);color:var(--white)}
+
+    /* ---------- product spec ---------- */
+    .spec{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--white)}
+    .spec-row{display:flex;border-bottom:1px solid var(--border)}
+    .spec-row:last-child{border-bottom:none}
+    .spec-row .k{width:96px;flex-shrink:0;background:var(--bg);padding:13px 14px;font-size:12.5px;font-weight:600;color:var(--ink-mid);
+      border-right:1px solid var(--border);display:flex;align-items:center}
+    .spec-row .v{flex:1;padding:13px 14px;font-size:14px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+    .spec-row .v small{font-size:12px;font-weight:400;color:var(--ink-light)}
+
+    /* ---------- lineup ---------- */
+    .rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+      padding:2px 20px 8px;margin:0 -20px;scrollbar-width:none}
+    .rail::-webkit-scrollbar{display:none}
+    .bun{flex:0 0 208px;scroll-snap-align:start;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    .bun-media{position:relative;aspect-ratio:4/5;background:var(--bg-2)}
+    .bun-media img{width:100%;height:100%;object-fit:cover;object-position:center 34%}
+    .bun-no{position:absolute;top:10px;left:10px;font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.08em;
+      background:rgba(20,16,18,.74);backdrop-filter:blur(4px);color:var(--white);border-radius:var(--radius-pill);padding:5px 10px}
+    .bun-body{padding:14px 14px 16px}
+    .bun-nm{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+    .bun-kr{font-size:13px;font-weight:600;color:var(--ink);margin-top:4px;letter-spacing:-.01em}
+    .bun-sub{font-family:var(--font-display);font-size:11.5px;font-weight:600;color:var(--pink-dark);margin-top:5px;letter-spacing:.01em}
+    .bun-stat{font-family:var(--font-display);font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--ink-light);margin-top:8px;
+      padding-top:8px;border-top:1px dashed var(--border);text-transform:uppercase}
+    .rail-hint{font-family:var(--font-display);font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--ink-light);margin-top:6px;text-align:right}
+    .figure{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--white);margin-top:16px}
+    .figure img{width:100%}
+    .figure figcaption{padding:12px 15px;font-size:12.5px;color:var(--ink-mid);line-height:1.6;border-top:1px solid var(--border);background:var(--bg)}
+
+    /* ---------- product naming ---------- */
+    .naming{background:var(--ink);color:var(--white);border-radius:var(--radius-lg);padding:22px 20px;margin-top:12px}
+    .naming .flag{display:inline-flex;font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:#ffa8cd;background:rgba(255,168,205,.14);border-radius:var(--radius-pill);padding:5px 11px;margin-bottom:14px}
+    .naming .full{font-size:19px;font-weight:700;line-height:1.42;letter-spacing:-.01em}
+    .naming .full .en{font-family:var(--font-display);color:#ffa8cd}
+    .naming .say{font-size:13px;color:rgba(255,255,255,.72);line-height:1.7;margin-top:10px}
+    .naming .act{margin-top:14px}
+    .naming .rule{margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.14)}
+    .naming .rule .lbl{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+    .naming .rule p{font-size:13px;color:rgba(255,255,255,.75);line-height:1.7;margin-top:7px}
+    .naming .names{margin-top:12px;display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.16);border-radius:var(--radius-sm);overflow:hidden}
+    .naming .names li{list-style:none;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);
+      padding:10px 13px;font-size:14px;font-weight:600;letter-spacing:-.01em}
+    .naming .names li em{font-style:normal;font-family:var(--font-display);font-size:11.5px;font-weight:700;
+      letter-spacing:.04em;color:#ffa8cd;flex-shrink:0;min-width:30px}
+
+    /* ---------- USP ---------- */
+    .usp{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--pink);border-radius:var(--radius-md);padding:17px 17px 18px}
+    .usp+.usp{margin-top:10px}
+    .usp-h{display:flex;align-items:center;gap:10px}
+    .usp-n{font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--pink-dark);background:var(--pink-soft);
+      border-radius:var(--radius-pill);width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .usp-t{font-size:15.5px;font-weight:700;letter-spacing:-.01em;line-height:1.35}
+    .usp-d{font-size:13.5px;color:var(--ink-mid);line-height:1.72;margin-top:10px;padding-left:36px}
+    .usp-d b{color:var(--ink);font-weight:600}
+    .usp-d .hl{color:var(--pink-dark);font-weight:600}
+    @media (max-width:380px){.usp-d{padding-left:0}}
+    .gift-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+    .gift-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border)}
+
+    /* ---------- must-say lines ---------- */
+    .must{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    .must-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;background:var(--ink);color:var(--white)}
+    .must-top .t{font-family:var(--font-display);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .must-count{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.16);
+      border-radius:var(--radius-pill);padding:5px 11px;transition:background .2s var(--ease)}
+    .must-count.ok{background:var(--pink)}
+    .line{display:flex;align-items:flex-start;gap:11px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;
+      transition:background var(--dur-fast) var(--ease)}
+    .line:last-of-type{border-bottom:none}
+    .line:hover{background:var(--bg)}
+    .box{width:19px;height:19px;border:1.5px solid var(--border);border-radius:5px;flex-shrink:0;margin-top:1px;position:relative;
+      transition:all var(--dur-fast) var(--ease)}
+    .box::after{content:'';position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--white);border-width:0 2px 2px 0;
+      transform:rotate(45deg) scale(.4);opacity:0;transition:all var(--dur-fast) var(--ease)}
+    .line.on .box,.check.on .box{background:var(--pink);border-color:var(--pink)}
+    .line.on .box::after,.check.on .box::after{opacity:1;transform:rotate(45deg) scale(1)}
+    .line-t{flex:1;font-size:14px;line-height:1.65;color:var(--ink)}
+    .line.on .line-t{color:var(--ink-mid)}
+    .line-t b{font-weight:700}
+    .must-foot{padding:13px 16px;border-top:1px solid var(--border);background:var(--bg)}
+    .btn-copy{width:100%;padding:13px;background:var(--ink);color:var(--white);border:none;border-radius:var(--radius-md);
+      font-family:var(--font-display);font-size:13.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .2s var(--ease)}
+    .btn-copy:hover{background:#000}
+    .btn-copy.done{background:var(--pink)}
+
+    /* ---------- benefit ---------- */
+    .ben{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:relative;overflow:hidden}
+    .ben+.ben{margin-top:10px}
+    .ben-ico{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      display:inline-flex;border-radius:var(--radius-pill);padding:5px 11px;margin-bottom:12px}
+    .ben.draw .ben-ico{color:var(--pink-dark);background:var(--pink-soft)}
+    .ben.coupon .ben-ico{color:var(--lav);background:var(--lav-soft)}
+    .ben-t{font-size:17px;font-weight:700;letter-spacing:-.01em;line-height:1.4}
+    .ben-d{font-size:13.5px;color:var(--ink-mid);line-height:1.72;margin-top:9px}
+    .ben-d b{color:var(--ink);font-weight:600}
+    .flow{display:flex;flex-direction:column;gap:0;margin-top:16px}
+    .flow-step{display:flex;align-items:flex-start;gap:12px;position:relative;padding-bottom:14px}
+    .flow-step:last-child{padding-bottom:0}
+    .flow-step::before{content:'';position:absolute;left:13px;top:28px;bottom:0;width:2px;background:var(--border)}
+    .flow-step:last-child::before{display:none}
+    .flow-n{width:28px;height:28px;border-radius:50%;background:var(--pink-soft);color:var(--pink-dark);flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:12px;font-weight:700;z-index:1}
+    .flow-step.last .flow-n{background:var(--ink);color:var(--white)}
+    .flow-b{flex:1;padding-top:3px}
+    .flow-b .t{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+    .flow-b .d{font-size:13px;color:var(--ink-mid);line-height:1.65;margin-top:4px}
+
+    /* ---------- direction ---------- */
+    .beat{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+    .beat+.beat{margin-top:10px}
+    .beat-h{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--border);background:var(--bg)}
+    .beat-k{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--white);background:var(--pink);border-radius:var(--radius-pill);padding:4px 10px}
+    .beat-h .t{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+    .beat-b{padding:15px}
+    .seq{display:flex;flex-direction:column;gap:7px}
+    .seq li{list-style:none;font-size:13.5px;color:var(--ink-mid);line-height:1.6;display:flex;gap:9px;align-items:flex-start}
+    .seq li::before{content:'▸';color:var(--pink);font-size:11px;line-height:1.5;flex-shrink:0}
+    .seq li b{color:var(--ink);font-weight:600}
+    .quote-card{background:var(--bg);border:1px dashed var(--border);border-radius:var(--radius-md);padding:15px 16px;margin-top:12px}
+    .quote-card p{font-size:14px;color:var(--ink);line-height:1.8}
+    .quote-card p+p{margin-top:6px}
+
+    /* ---------- checklist ---------- */
+    .check{display:flex;align-items:flex-start;gap:11px;background:var(--white);border:1px solid var(--border);
+      border-radius:var(--radius-md);padding:14px 15px;cursor:pointer;transition:all var(--dur-fast) var(--ease)}
+    .check+.check{margin-top:8px}
+    .check:hover{border-color:var(--ink-light)}
+    .check.on{background:var(--bg);border-color:var(--border)}
+    .check.on .check-t{color:var(--ink-light);text-decoration:line-through}
+    .check-t{flex:1;font-size:14px;line-height:1.6}
+
+    /* ---------- closing / footer ---------- */
+    .closing{background:var(--ink);color:var(--white);border-radius:var(--radius-lg);padding:26px 22px}
+    .closing .section-eyebrow{color:#ffa8cd}
+    .closing .txt{font-size:16.5px;line-height:1.62;font-weight:500;letter-spacing:-.01em}
+    .closing .txt b{color:#ffa8cd;font-weight:700}
+    .closing .row{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap}
+    .closing .row span{display:flex;align-items:center;gap:7px;font-family:var(--font-display);font-size:11px;letter-spacing:.04em;
+      color:rgba(255,255,255,.75);text-transform:uppercase}
+    .closing .row i{width:14px;height:14px;border-radius:50%}
+    .site-footer{padding:var(--space-lg) 0;background:var(--bg);border-top:1px solid var(--border)}
+    .site-footer .container{display:flex;flex-direction:column;gap:10px}
+    .footer-brand{font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+    .footer-copy{font-size:12px;color:var(--ink-light);line-height:1.7}
+    .footer-copy a{color:var(--ink-mid)}
+
+    /* ---------- reveal ---------- */
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+    .reveal.in{opacity:1;transform:none}
+    @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+    @media (min-width:600px){.section{padding:52px 0}}
+  
+    /* ============================================================
+       ACCESS GATE
+    ============================================================ */
+    html.locked, html.locked body { overflow: hidden !important; }
+    .gate { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
+      padding: 24px; background: #1c1b1a; color: #fff;
+      font-family: 'Noto Sans KR','Apple SD Gothic Neo',sans-serif; }
+    html:not(.locked) .gate { display: none; }
+    .gate-box { width: 100%; max-width: 340px; text-align: center; }
+    .gate-brand { font-family: 'Instrument Sans','Noto Sans KR',sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase; color: #ffa8cd; margin-bottom: 18px; }
+    .gate-t { font-size: 20px; font-weight: 700; letter-spacing: -.01em; line-height: 1.4; }
+    .gate-d { font-size: 13.5px; color: rgba(255,255,255,.62); line-height: 1.7; margin-top: 10px; }
+    .gate-f { display: flex; gap: 8px; margin-top: 22px; }
+    .gate-f input { flex: 1; min-width: 0; font-family: inherit; font-size: 16px; font-weight: 600;
+      letter-spacing: .12em; text-align: center; color: #fff; background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.2); border-radius: 12px; padding: 14px 12px; outline: none;
+      transition: border-color .16s cubic-bezier(.4,0,.2,1); }
+    .gate-f input::placeholder { color: rgba(255,255,255,.35); letter-spacing: normal; font-weight: 400; }
+    .gate-f input:focus { border-color: #ff3d8b; }
+    .gate-f button { flex-shrink: 0; font-family: 'Instrument Sans','Noto Sans KR',sans-serif; font-size: 14px;
+      font-weight: 700; color: #fff; background: #ff3d8b; border: none; border-radius: 12px; padding: 14px 20px;
+      cursor: pointer; transition: background .16s cubic-bezier(.4,0,.2,1); }
+    .gate-f button:hover { background: #cf1e69; }
+    .gate-err { font-size: 12.5px; color: #ff8fb8; margin-top: 12px; min-height: 1.2em; }
+    .gate.shake .gate-box { animation: gshake .32s cubic-bezier(.36,.07,.19,.97); }
+    @keyframes gshake { 10%,90%{transform:translateX(-2px)} 30%,70%{transform:translateX(4px)} 50%{transform:translateX(-6px)} }
+    @media (prefers-reduced-motion: reduce) { .gate.shake .gate-box { animation: none; } }
   </style>
 </head>
 <body>
-  <header class="top"><div class="wrap"><div class="brand">SIRIAI<span> · </span>GUIDES</div><div class="badge">Campaign Content</div></div></header>
 
-  <section class="hero"><div class="wrap">
-    <p class="eyebrow">Content Guidelines</p>
-    <h1>캠페인 콘텐츠 가이드</h1>
-    <p class="sub">인플루언서 협업 콘텐츠 제작을 위한 SIRIAI 가이드 모음입니다.</p>
-  </div></section>
+  <!-- ACCESS GATE -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-label="열람 비밀번호">
+    <div class="gate-box">
+      <div class="gate-brand">SIRIAI · Campaign Guide</div>
+      <div class="gate-t">열람 비밀번호를 입력해 주세요</div>
+      <p class="gate-d">협업 파트너 전용 가이드입니다.<br>전달받으신 비밀번호를 입력하시면 열립니다.</p>
+      <form class="gate-f" id="gateForm" autocomplete="off">
+        <input type="password" id="gatePw" inputmode="numeric" placeholder="비밀번호" aria-label="비밀번호" autocomplete="off">
+        <button type="submit">확인</button>
+      </form>
+      <p class="gate-err" id="gateErr" aria-live="polite"></p>
+    </div>
+  </div>
 
-  <section class="list"><div class="wrap" style="display:flex;flex-direction:column;gap:12px;">
-    <a class="card" href="deep-divers-club/">
-      <div class="card-img"><img src="deep-divers-club/assets/images/group-5.jpg" alt="Deep Divers Club 봉제 키링 5종" style="object-position:center 60%"><span class="card-tag">Reels · Launch</span></div>
-      <div class="card-body">
-        <div class="card-title">Deep Divers Club 런칭 캠페인</div>
-        <div class="card-desc">틈결 × 에스더버니 키링 5종. 출시 일정·판매 채널·소구점·참여 혜택 캠페인 가이드.</div>
-        <span class="card-go">가이드 열기 →</span>
+
+  <div class="read-bar" id="readbar"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="brand-wordmark">DEEP DIVERS<span> · </span>CLUB</div>
+      <div class="header-dday" id="dday">D-9</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-image" src="assets/images/group-5.jpg" alt="Deep Divers Club 봉제 키링 5종">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Launch Campaign Guide</p>
+      <h1 class="hero-title"><span class="en">Deep Divers Club</span><br>런칭 캠페인 가이드</h1>
+      <p class="hero-sub">틈결 × 에스더버니 봉제 키링 5종. 무신사 스페셜 드롭으로 국내 최초 런칭 후 13개국에 동시 발매되는 한정 컬렉션입니다.</p>
+      <div class="hero-facts">
+        <div class="fact"><div class="k">Launch</div><div class="v">2026.08.14 <small>FRI</small></div></div>
+        <div class="fact"><div class="k">Price</div><div class="v">34,900원</div></div>
+        <div class="fact"><div class="k">Lineup</div><div class="v">총 5종 <small>키링</small></div></div>
+        <div class="fact"><div class="k">Limited</div><div class="v">30,000개 <small>한정</small></div></div>
       </div>
-    </a>
-    <a class="card" href="jennie-europe/">
-      <div class="card-img"><img src="jennie-europe/assets/images/therow-1.jpg" alt="제니 유럽 사복"><span class="card-tag">Blog · Fashion</span></div>
-      <div class="card-body">
-        <div class="card-title">제니 유럽 사복 · 젠민수 아이템</div>
-        <div class="card-desc">코펜하겐·로스킬레·오프너 유럽 일정 사복 아카이브 블로그 가이드.</div>
-        <span class="card-go">가이드 열기 →</span>
-      </div>
-    </a>
-  </div></section>
+    </div>
+  </section>
 
-  <footer class="foot"><div class="wrap"><b>SIRIAI</b><p>인플루언서 마케팅 · 콘텐츠 가이드라인<br>본 저장소의 문서는 협업 콘텐츠 제작용 내부 참고 자료입니다.</p></div></footer>
+  <!-- 01 SCHEDULE -->
+  <section class="section alt">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">01</span> Schedule</p>
+      <h2 class="section-title">출시까지 3단계로 이어집니다</h2>
+      <p class="section-body">사전 빌드업 두 번(8/6·8/7)과 출시일 본편(8/14)으로 구성됩니다. 앞의 두 일정은 가볍게, 마지막 8/14에 힘을 실어 주세요.</p>
+
+      <div class="tl reveal">
+        <div class="tl-item light" data-date="2026-08-06">
+          <div class="tl-date"><span class="d">08.06</span><span class="w">Thu</span><span class="tl-chip">Teaser</span></div>
+          <div class="tl-name">티저 콘텐츠 발행</div>
+          <p class="tl-desc">제품 전체를 다 보여주기보다 <b>컬렉션 무드와 출시 예고</b> 중심으로 짧게. 스토리 한 컷이나 짧은 클립 정도면 충분합니다.</p>
+        </div>
+        <div class="tl-item light" data-date="2026-08-07">
+          <div class="tl-date"><span class="d">08.07</span><span class="w">Fri</span><span class="tl-chip">Regram</span></div>
+          <div class="tl-name">무신사 콘텐츠 리그램</div>
+          <p class="tl-desc">무신사 공식 채널에 업로드되는 컬렉션 콘텐츠를 <b>스토리로 리그램</b>해 주세요. 별도 촬영 없이 공유만 하시면 됩니다.</p>
+        </div>
+        <div class="tl-item key" data-date="2026-08-14">
+          <div class="tl-date"><span class="d">08.14</span><span class="w">Fri</span><span class="tl-chip">D-DAY · 출시</span></div>
+          <div class="tl-name">정식 출시 · 메인 콘텐츠 발행</div>
+          <p class="tl-desc">온·오프라인 판매가 동시에 시작됩니다. 이 날에 맞춰 <b>메인 릴스를 업로드</b>하고, 댓글 유도 → 자동 DM 이벤트로 연결해 주세요.</p>
+        </div>
+      </div>
+
+      <div class="note reveal">
+        <span class="tag">Note</span>
+        <span class="body">메인 릴스는 <b>8월 14일 출시일 기준</b>으로 발행해 주세요. 8/6·8/7은 사전 빌드업 성격이라 제작 부담 없이 진행하셔도 됩니다.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 CHANNEL -->
+  <section class="section">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">02</span> Where to Buy</p>
+      <h2 class="section-title">구매 가능한 채널</h2>
+      <p class="section-body">콘텐츠 마지막에는 아래 채널 중 최소 한 곳 이상을 안내해 주세요. 해외 유입이 있는 채널이라면 무신사 글로벌을 함께 언급하면 좋습니다.</p>
+
+      <div class="ch-head"><span class="lbl">Online</span><span class="rule"></span></div>
+      <div class="ch-list reveal">
+        <div class="ch"><span class="ch-n">01</span><span class="ch-t">TEUMGYUL 공식 온라인몰</span></div>
+        <div class="ch"><span class="ch-n">02</span><span class="ch-t">MUSINSA KOREA</span></div>
+        <div class="ch"><span class="ch-n">03</span><span class="ch-t">MUSINSA GLOBAL<em>일본·미국 포함 13개국 동시 발매</em></span><span class="ch-badge">13개국</span></div>
+        <div class="ch"><span class="ch-n">04</span><span class="ch-t">ZOZOTOWN by MUSINSA</span><span class="ch-badge">일본</span></div>
+        <div class="ch"><span class="ch-n">05</span><span class="ch-t">TMALL GLOBAL by MUSINSA</span><span class="ch-badge">중국</span></div>
+      </div>
+
+      <div class="ch-head" style="margin-top:26px"><span class="lbl">Offline</span><span class="rule"></span></div>
+      <div class="store reveal">
+        <span class="flag">Flagship Store</span>
+        <div class="nm">TEUMGYUL 서울숲 플래그십 스토어</div>
+        <div class="addr">
+          <span>서울 성동구 서울숲4길 22-13</span>
+          <button class="mini-copy" type="button" data-copy="서울 성동구 서울숲4길 22-13">주소 복사</button>
+        </div>
+        <p class="quote">Deep Divers Club을 오프라인에서 직접 만나볼 수 있는 유일한 공간</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 PRODUCT -->
+  <section class="section alt">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">03</span> Product</p>
+      <h2 class="section-title">제품 정보 &amp; 5종 라인업</h2>
+      <p class="section-body">이번 콘텐츠에서 가장 중요한 것은 <b>제품명이 정확히 각인되는 것</b>입니다. 자막·음성·캡션 중 최소 두 곳에서 아래 제품명을 그대로 불러 주세요.</p>
+
+      <div class="naming reveal">
+        <span class="flag">Product Name · 정확히 불러 주세요</span>
+        <div class="full">에스더버니 × 틈결<br><span class="en">Deep Divers Club</span> 봉제 키링</div>
+        <p class="say">읽을 때는 <b>“에스더버니 × 틈결 딥 다이버스 클럽 봉제 키링”</b>. ‘버니 키링’, ‘인형 키링’ 같은 임의 축약 표현은 사용하지 말아 주세요.</p>
+        <div class="act"><button class="mini-copy" type="button" data-copy="에스더버니 × 틈결 Deep Divers Club 봉제 키링">제품명 복사</button></div>
+        <div class="rule">
+          <div class="lbl">개별 제품 정식 명칭</div>
+          <p>5종 각각은 <b>넘버 + 정식 명칭</b>으로 불러 주세요. 넘버를 붙여야 “모으는 컬렉션”이라는 인식이 생깁니다.</p>
+          <ul class="names">
+            <li><em>No.1</em> 다크 로맨스 라벤더 버니</li>
+            <li><em>No.2</em> 갸루 리본 버니</li>
+            <li><em>No.3</em> 디저트 콜렉터 크림 버니</li>
+            <li><em>No.4</em> 사이버 아케이드 스위티 버니</li>
+            <li><em>No.5</em> 베케이션 리본 버니</li>
+          </ul>
+          <button class="mini-copy" type="button" style="margin-top:12px" data-copy="No.1 다크 로맨스 라벤더 버니
+No.2 갸루 리본 버니
+No.3 디저트 콜렉터 크림 버니
+No.4 사이버 아케이드 스위티 버니
+No.5 베케이션 리본 버니">5종 명칭 복사</button>
+        </div>
+      </div>
+
+      <div class="spec reveal" style="margin-top:16px">
+        <div class="spec-row"><div class="k">제품명</div><div class="v">에스더버니 × 틈결 Deep Divers Club 봉제 키링</div></div>
+        <div class="spec-row"><div class="k">종류</div><div class="v">총 5종 <small>No.1 – No.5</small></div></div>
+        <div class="spec-row"><div class="k">판매가</div><div class="v">34,900원</div></div>
+        <div class="spec-row"><div class="k">출시일</div><div class="v">2026.08.14 <small>FRI</small></div></div>
+        <div class="spec-row"><div class="k">수량</div><div class="v">전 세계 30,000개 <small>한정</small></div></div>
+        <div class="spec-row"><div class="k">패키지</div><div class="v">개별 박스 + 5홀 패키지 <small>5종 전체 수납 · 출시 예정</small></div></div>
+      </div>
+    </div>
+
+    <div style="max-width:560px;margin:20px auto 0;padding:0 20px">
+      <div class="rail reveal">
+        <div class="bun">
+          <div class="bun-media"><img loading="lazy" src="assets/images/no1-dark-romance.webp" alt="No.1 Dark Romance 라벤더 버니"><span class="bun-no">No.1</span></div>
+          <div class="bun-body"><div class="bun-nm">Dark Romance</div><div class="bun-kr">다크 로맨스 라벤더 버니</div><div class="bun-sub">Lavender Bunny</div><div class="bun-stat">Love Level ★★★★★</div></div>
+        </div>
+        <div class="bun">
+          <div class="bun-media"><img loading="lazy" src="assets/images/no2-gyaru.webp" alt="No.2 GYARU 리본 버니"><span class="bun-no">No.2</span></div>
+          <div class="bun-body"><div class="bun-nm">GYARU</div><div class="bun-kr">갸루 리본 버니</div><div class="bun-sub">Ribbon Bunny</div><div class="bun-stat">Fashion Level ★★★★★</div></div>
+        </div>
+        <div class="bun">
+          <div class="bun-media"><img loading="lazy" src="assets/images/no3-dessert-collector.jpg" alt="No.3 Dessert Collector 크림 버니"><span class="bun-no">No.3</span></div>
+          <div class="bun-body"><div class="bun-nm">Dessert Collector</div><div class="bun-kr">디저트 콜렉터 크림 버니</div><div class="bun-sub">Cream Bunny</div><div class="bun-stat">Sweetness ★★★★★</div></div>
+        </div>
+        <div class="bun">
+          <div class="bun-media"><img loading="lazy" src="assets/images/no4-cyber-arcade.jpg" alt="No.4 Cyber Arcade"><span class="bun-no">No.4</span></div>
+          <div class="bun-body"><div class="bun-nm">Cyber Arcade</div><div class="bun-kr">사이버 아케이드 스위티 버니</div><div class="bun-sub">Sweety Bunny</div><div class="bun-stat">EXP MAX</div></div>
+        </div>
+        <div class="bun">
+          <div class="bun-media"><img loading="lazy" src="assets/images/no5-vacation.webp" alt="No.5 Vacation 리본 버니"><span class="bun-no">No.5</span></div>
+          <div class="bun-body"><div class="bun-nm">Vacation</div><div class="bun-kr">베케이션 리본 버니</div><div class="bun-sub">Ribbon Bunny</div><div class="bun-stat">Energy MAX</div></div>
+        </div>
+      </div>
+      <p class="rail-hint">옆으로 밀어서 5종 모두 보기 →</p>
+
+      <figure class="figure reveal">
+        <img loading="lazy" src="assets/images/package-5.jpg" alt="Deep Divers Club 5종 패키지">
+        <figcaption>5종 모두 Limited Edition 개별 패키지로 제작됩니다. 언박싱 컷을 활용하실 경우 <b>패키지 전면의 넘버·콘셉트명이 또렷하게 읽히도록</b> 잡아 주세요. 제품명을 각인시키는 가장 좋은 장면입니다.</figcaption>
+      </figure>
+
+      <div class="note" style="margin-top:16px">
+        <span class="tag">5-Hole</span>
+        <span class="body">개별 박스와 별개로 <b>5종이 모두 들어가는 5홀 패키지</b>가 출시될 예정입니다. 필수 문구의 “컬렉터 전용 스페셜 패키지”가 이 5홀 패키지를 가리킵니다. 아직 실물 공개 전이므로 <b>구체적인 출시일이나 형태는 단정하지 말고</b> “5종을 한 번에 담을 수 있는 패키지도 나올 예정”으로 안내해 주세요.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 USP -->
+  <section class="section">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">04</span> Selling Points</p>
+      <h2 class="section-title">이번 컬렉션의 소구점 4가지</h2>
+      <p class="section-body">제품 설명을 길게 나열하기보다, 아래 네 가지 중 <b>왜 지금 사야 하는지</b>가 드러나는 포인트를 골라 강조해 주세요.</p>
+
+      <div class="reveal">
+        <div class="usp">
+          <div class="usp-h"><span class="usp-n">1</span><span class="usp-t">30,000개 한정 리미티드 컬렉션</span></div>
+          <p class="usp-d">이번 컬렉션은 <span class="hl">전 세계 총 30,000개만 제작</span>되는 한정판입니다. 5종 × 13개국 물량이라는 점을 함께 짚으면 희소성이 더 잘 전달됩니다.</p>
+        </div>
+        <div class="usp">
+          <div class="usp-h"><span class="usp-n">2</span><span class="usp-t">하나의 키링으로 두 가지 스타일</span></div>
+          <p class="usp-d">모든 제품에 <b>레이어드 참 키링(Special Gift)</b>이 함께 들어 있습니다. 하나만 달아도 레이어드 스타일 연출이 가능하다는 점을 <span class="hl">실제 가방에 달아 보여주는 컷</span>으로 풀어 주세요.</p>
+          <div class="gift-grid">
+            <img loading="lazy" src="assets/images/gift-charm.jpg" alt="레이어드 참 키링 스페셜 기프트">
+            <img loading="lazy" src="assets/images/gift-charm-2.jpg" alt="레이어드 참 키링 구성">
+          </div>
+        </div>
+        <div class="usp">
+          <div class="usp-h"><span class="usp-n">3</span><span class="usp-t">시리즈 I 후속 컬렉션</span></div>
+          <p class="usp-d">이전 <b>아뜰리에 시리즈 I</b> 봉제 키링이 조기 품절된 이후 기다려온 후속 컬렉션입니다. 시리즈 I 리오더 물량도 곧 소진 예정이며 <span class="hl">이후 재발매 계획이 없다</span>는 점을 함께 안내해 주세요.</p>
+        </div>
+        <div class="usp">
+          <div class="usp-h"><span class="usp-n">4</span><span class="usp-t">MUSINSA Special Drop</span></div>
+          <p class="usp-d">무신사 × 틈결 <b>공동 런칭 스페셜 드롭</b> 제품입니다. 국내 최초 런칭 이후 무신사를 통해 13개국에 동시 발매된다는 흐름으로 설명하면 자연스럽습니다.</p>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="margin-top:32px;font-size:18px">콘텐츠에 꼭 포함해야 하는 문구</h3>
+      <p class="section-body">아래 다섯 개 중 <b>최소 4개 이상</b>을 콘텐츠(자막 또는 캡션)에 포함해 주세요. 눌러서 체크하며 확인하실 수 있습니다.</p>
+
+      <div class="must reveal" id="must">
+        <div class="must-top">
+          <span class="t">Must-say · 최소 4개</span>
+          <span class="must-count" id="mustCount">0 / 5</span>
+        </div>
+        <div class="line"><span class="box"></span><span class="line-t">국내 최초 런칭 이후 <b>13개국 동시 발매 with MUSINSA</b></span></div>
+        <div class="line"><span class="box"></span><span class="line-t">전 세계 <b>30,000개 한정</b> 리미티드 컬렉션</span></div>
+        <div class="line"><span class="box"></span><span class="line-t">5종 모두 모으면 <b>컬렉터 전용 스페셜 패키지 제공</b> <span style="color:var(--ink-light);font-size:12.5px">(5홀 패키지)</span></span></div>
+        <div class="line"><span class="box"></span><span class="line-t">아뜰리에 시리즈 I 리오더 물량도 곧 품절 예정, <b>이후 재발매 없음</b></span></div>
+        <div class="line"><span class="box"></span><span class="line-t">출시일 <b>2026.08.14</b></span></div>
+        <div class="must-foot"><button class="btn-copy" id="mustCopy" type="button">필수 문구 5개 모두 복사</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 BENEFIT -->
+  <section class="section tint">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">05</span> Benefit</p>
+      <h2 class="section-title">시청자에게 돌아가는 혜택</h2>
+      <p class="section-body">콘텐츠에 댓글을 남긴 분에게 <b>자동 DM</b>이 발송됩니다. 혜택이 있다는 사실을 콘텐츠 안에서 반드시 언급해 주세요.</p>
+
+      <div class="ben draw reveal">
+        <span class="ben-ico">Event 01</span>
+        <div class="ben-t">추첨 이벤트</div>
+        <p class="ben-d">댓글 참여자를 대상으로 <b>추첨을 통해 경품을 제공</b>합니다. “댓글을 남기면 선물 받을 기회가 있다”는 점을 마지막 멘트에서 짚어 주세요.</p>
+      </div>
+      <div class="ben coupon reveal">
+        <span class="ben-ico">Event 02</span>
+        <div class="ben-t">할인 쿠폰 제공</div>
+        <p class="ben-d">자동 DM에는 <b>구매에 사용할 수 있는 할인 쿠폰</b>이 함께 발송됩니다. 댓글 → DM → 구매로 이어지는 흐름이라 “DM 확인해 주세요” 안내가 중요합니다.</p>
+      </div>
+
+      <div class="ben reveal" style="margin-top:14px">
+        <span class="ben-ico" style="color:var(--ink-mid);background:var(--bg-2)">Flow</span>
+        <div class="ben-t">참여 흐름</div>
+        <div class="flow">
+          <div class="flow-step"><span class="flow-n">1</span><div class="flow-b"><div class="t">콘텐츠 시청</div><div class="d">릴스에서 제품과 출시일을 확인</div></div></div>
+          <div class="flow-step"><span class="flow-n">2</span><div class="flow-b"><div class="t">댓글 참여</div><div class="d">원픽 버니를 댓글로 남기기</div></div></div>
+          <div class="flow-step"><span class="flow-n">3</span><div class="flow-b"><div class="t">자동 DM 수신</div><div class="d">할인 쿠폰 + 추첨 이벤트 안내가 발송</div></div></div>
+          <div class="flow-step last"><span class="flow-n">4</span><div class="flow-b"><div class="t">구매 전환</div><div class="d">무신사·틈결 온라인몰 또는 서울숲 플래그십에서 구매</div></div></div>
+        </div>
+      </div>
+
+      <div class="note warn reveal">
+        <span class="tag">확인 필요</span>
+        <span class="body">쿠폰 금액·사용 채널, 추첨 경품 및 당첨자 발표 일정은 확정되는 대로 별도 안내드립니다. 콘텐츠에는 <b>구체적인 금액·경품명을 단정해 표기하지 말고</b> “댓글 남기면 DM으로 혜택 발송” 수준으로 안내해 주세요.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 DIRECTION -->
+  <section class="section">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">06</span> Direction</p>
+      <h2 class="section-title">콘텐츠 연출 방향</h2>
+      <p class="section-body">Instagram Reels 기준입니다. 아래 흐름은 권장 구성이며, 채널 톤에 맞게 조정하셔도 됩니다.</p>
+
+      <div class="reveal">
+        <div class="beat">
+          <div class="beat-h"><span class="beat-k">첫 3초</span><span class="t">시선 잡기</span></div>
+          <div class="beat-b"><ul class="seq">
+            <li>가방에 달린 <b>키링을 자연스럽게</b> 보여주기</li>
+            <li>또는 <b>5종이 함께 있는 컷</b>으로 컬렉션 규모를 먼저 노출</li>
+          </ul></div>
+        </div>
+        <div class="beat">
+          <div class="beat-h"><span class="beat-k">중간</span><span class="t">제품 소개 · 스타일링</span></div>
+          <div class="beat-b"><ul class="seq">
+            <li><b>제품명 자막 고정 노출</b> — “에스더버니 × 틈결 Deep Divers Club 봉제 키링”</li>
+            <li>가장 마음에 드는 <b>원픽 버니 소개</b> — 넘버 + 콘셉트명으로</li>
+            <li><b>레이어드 참 키링</b> 보여주기</li>
+            <li>가방 스타일링</li>
+            <li>착용 컷</li>
+          </ul></div>
+        </div>
+        <div class="beat">
+          <div class="beat-h"><span class="beat-k">마지막</span><span class="t">전환 유도</span></div>
+          <div class="beat-b"><ul class="seq">
+            <li><b>출시일(2026.08.14)</b> 안내</li>
+            <li>댓글 유도</li>
+            <li>자동 DM 안내</li>
+          </ul></div>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="margin-top:32px;font-size:18px">댓글 유도가 가장 중요합니다</h3>
+      <p class="section-body">자동 DM은 댓글을 기준으로 발송되기 때문에, 댓글 유도 멘트가 없으면 이벤트 자체가 작동하지 않습니다. 아래 예시를 참고해 주세요.</p>
+      <div class="quote-card reveal" id="cta">
+        <p>여러분의 원픽 버니는 누구인가요?</p>
+        <p>가장 갖고 싶은 버니를 댓글로 남겨주세요.</p>
+        <p>댓글 남기면 특별한 선물이 기다리고 있어요.</p>
+      </div>
+      <div style="margin-top:10px"><button class="btn-copy" id="ctaCopy" type="button">댓글 유도 멘트 복사</button></div>
+    </div>
+  </section>
+
+  <!-- 07 CHECKLIST -->
+  <section class="section alt">
+    <div class="container">
+      <p class="section-eyebrow"><span class="no">07</span> Checklist</p>
+      <h2 class="section-title">발행 전 확인해 주세요</h2>
+      <p class="section-body">업로드 직전에 한 번씩 체크해 주시면 좋습니다.</p>
+      <div class="reveal">
+        <div class="check"><span class="box"></span><span class="check-t">제품명 <b>“에스더버니 × 틈결 Deep Divers Club 봉제 키링”</b>을 최소 두 곳(자막·음성·캡션)에서 언급했나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">5종을 소개할 때 <b>넘버(No.1~No.5)와 콘셉트명</b>을 함께 불렀나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">출시일 <b>2026.08.14</b>이 자막 또는 캡션에 들어갔나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">필수 문구를 <b>4개 이상</b> 포함했나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">구매 채널(무신사 또는 틈결 온라인몰)을 안내했나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">레이어드 참 키링(Special Gift)이 화면에 노출됐나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">댓글 유도 멘트와 DM 안내가 마지막에 들어갔나요?</span></div>
+        <div class="check"><span class="box"></span><span class="check-t">8/6 티저 · 8/7 무신사 리그램 일정을 반영했나요?</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="section">
+    <div class="container">
+      <div class="closing reveal">
+        <p class="section-eyebrow"><span class="no">08</span> Closing</p>
+        <p class="txt">키링 하나를 소개하는 콘텐츠가 아니라, <b>모으고 싶어지는 컬렉션</b>을 알리는 콘텐츠입니다. 5종이라는 규모, 30,000개라는 한계, 그리고 <b>8월 14일</b>이라는 시점이 함께 보이도록 구성해 주세요.</p>
+        <div class="row">
+          <span><i style="background:#b9a7e0"></i> Lavender</span>
+          <span><i style="background:#ff9ec4"></i> Pink</span>
+          <span><i style="background:#c69a6d"></i> Brown</span>
+          <span><i style="background:#f4f0ee"></i> Cream</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-brand">TEUMGYUL × ESTHER BUNNY</div>
+      <p class="footer-copy">
+        Deep Divers Club 런칭 캠페인 가이드 · Campaign Edition v1<br>
+        본 문서는 인플루언서 협업 콘텐츠 제작을 위한 내부 참고 자료입니다.<br>
+        게시 전 출시일·판매가·판매 채널 등 세부 정보는 최신 기준으로 한 번 더 확인해 주세요.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- reading progress ----------
+    var rb = document.getElementById('readbar');
+    function onScroll(){ var h = document.documentElement.scrollHeight - window.innerHeight; rb.style.width = (h>0 ? (window.scrollY/h)*100 : 0) + '%'; }
+    window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+
+    // ---------- reveal ----------
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:0.12, rootMargin:'0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+    // ---------- KST 기준 D-day + 타임라인 상태 ----------
+    function kstToday(){
+      var n = new Date();
+      var kst = new Date(n.getTime() + (n.getTimezoneOffset()*60000) + (9*3600000));
+      return new Date(kst.getFullYear(), kst.getMonth(), kst.getDate());
+    }
+    function parseYMD(s){ var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+    var today = kstToday();
+    var launch = parseYMD('2026-08-14');
+    var diff = Math.round((launch - today) / 86400000);
+    var el = document.getElementById('dday');
+    el.textContent = diff > 0 ? ('D-' + diff) : (diff === 0 ? 'D-DAY · 출시' : '출시 D+' + Math.abs(diff));
+
+    document.querySelectorAll('.tl-item').forEach(function(it){
+      var d = parseYMD(it.getAttribute('data-date'));
+      if (d < today) it.classList.add('done');
+      else if (+d === +today) it.classList.add('now');
+    });
+
+    // ---------- copy helper ----------
+    function copyText(text, btn, doneLabel){
+      var label = btn.textContent;
+      function ok(){
+        btn.textContent = doneLabel || '✓ 복사되었습니다';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = label; btn.classList.remove('done'); }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok).catch(function(){ fallback(text); ok(); });
+      } else { fallback(text); ok(); }
+    }
+    function fallback(text){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch(e){}
+      document.body.removeChild(ta);
+    }
+    document.querySelectorAll('.mini-copy').forEach(function(b){
+      b.addEventListener('click', function(){ copyText(b.getAttribute('data-copy'), b, '✓ 복사됨'); });
+    });
+
+    // ---------- must-say checklist ----------
+    var must = document.getElementById('must');
+    var countEl = document.getElementById('mustCount');
+    var lines = must.querySelectorAll('.line');
+    function syncCount(){
+      var n = must.querySelectorAll('.line.on').length;
+      countEl.textContent = n + ' / 5';
+      countEl.classList.toggle('ok', n >= 4);
+    }
+    lines.forEach(function(l){ l.addEventListener('click', function(){ l.classList.toggle('on'); syncCount(); }); });
+    syncCount();
+
+    document.getElementById('mustCopy').addEventListener('click', function(){
+      var text = Array.prototype.map.call(lines, function(l){
+        return '✔ ' + l.querySelector('.line-t').textContent.trim();
+      }).join('\n');
+      copyText(text, this);
+    });
+
+    // ---------- CTA copy ----------
+    document.getElementById('ctaCopy').addEventListener('click', function(){
+      var text = Array.prototype.map.call(document.querySelectorAll('#cta p'), function(p){
+        return p.textContent.trim();
+      }).join('\n');
+      copyText(text, this);
+    });
+
+    // ---------- publish checklist ----------
+    document.querySelectorAll('.check').forEach(function(c){
+      c.addEventListener('click', function(){ c.classList.toggle('on'); });
+    });
+  </script>
+
+
+  <script>
+    // ---------- access gate ----------
+    (function () {
+      var HASH = '1b879216dc17755c07c11fd2b7e15dd8df5ef7f8c0a3f27e1c6f0ddb4d2c03b6';
+      var KEY = 'siriai-guide-unlock';
+      var root = document.documentElement;
+
+      function unlock() { root.classList.remove('locked'); try { localStorage.setItem(KEY, HASH); } catch (e) {} }
+
+      try { if (localStorage.getItem(KEY) === HASH) { root.classList.remove('locked'); return; } } catch (e) {}
+
+      function digest(text) {
+        if (window.crypto && crypto.subtle && crypto.subtle.digest) {
+          return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
+            return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+              return b.toString(16).padStart(2, '0');
+            }).join('');
+          });
+        }
+        return Promise.resolve(null);
+      }
+
+      var form = document.getElementById('gateForm');
+      var input = document.getElementById('gatePw');
+      var err = document.getElementById('gateErr');
+      var gate = document.getElementById('gate');
+
+      function fail() {
+        err.textContent = '비밀번호가 올바르지 않습니다.';
+        gate.classList.add('shake');
+        setTimeout(function () { gate.classList.remove('shake'); }, 400);
+        input.value = ''; input.focus();
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        err.textContent = '';
+        var v = input.value.trim();
+        if (!v) return;
+        digest(v).then(function (h) {
+          if (h === null) { if (v === '0907') unlock(); else fail(); return; }
+          if (h === HASH) unlock(); else fail();
+        });
+      });
+
+      if (window.matchMedia && window.matchMedia('(min-width: 700px)').matches) {
+        setTimeout(function () { input.focus(); }, 60);
+      }
+    })();
+  </script>
+
 </body>
 </html>
