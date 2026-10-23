@@ -79,9 +79,15 @@
       profiles.delete(p.username); profiles.set(p.username,merged);persist();o.onData?.(p.username);return merged;
     }
     async function load() {
-      const s = await o.storage?.get(['iglsProfilesV15','iglsMediaV15','iglsNetState']) || {};
+      const s = await o.storage?.get(['iglsProfilesV15','iglsMediaV15','iglsNetState','briefCache']) || {};
       for (const [u,p] of Object.entries(s.iglsProfilesV15 || {})) if (validUser(u)) profiles.set(key(u),p);
       for (const [c,m] of Object.entries(s.iglsMediaV15 || {})) if (validUser(m?.username)) media.set(c,m);
+      for (const [u,legacy] of Object.entries(s.briefCache || {})) {
+        if(!validUser(u)||typeof legacy?.followers!=='number'||!legacy.at||now()-legacy.at>=TTL)continue;
+        const p=normalize({...legacy,username:u}),existing=profiles.get(key(u));
+        if(p&&typeof p.followers==='number'&&(!existing?.countAt||legacy.at>existing.countAt))
+          profiles.set(key(u),{...merge(existing,p),at:legacy.at,countAt:legacy.at,source:'legacy-cache'});
+      }
       if (s.iglsNetState?.until>now()) state=s.iglsNetState;
     }
     function accept(packet) {

@@ -18,6 +18,18 @@ async function callSheet(action,body,cfg){
 }
 let localChain=Promise.resolve();
 function serialLocal(fn){const p=localChain.catch(()=>{}).then(fn);localChain=p;return p;}
+// Preserve the unscoped 1.4 history once before any 1.5 cache mirror overwrites it.
+// Never assign old history to the current campaign without a server confirmation.
+async function prepareUpgrade(s){
+ const old=await chrome.storage.local.get(['iglsSchemaVersion','iglsLegacyHistoryV14','savedUsernames','knownUsernames','knownSyncedAt']);
+ if(old.iglsSchemaVersion>=15)return;
+ const patch={iglsSchemaVersion:15};
+ if(!old.iglsLegacyHistoryV14&&(Array.isArray(old.savedUsernames)||Array.isArray(old.knownUsernames))){
+  patch.iglsLegacyHistoryV14={at:Date.now(),source:'unscoped-pre-1.5',savedUsernames:old.savedUsernames||[],knownUsernames:old.knownUsernames||[],knownSyncedAt:old.knownSyncedAt||0,
+   observedEndpoint:s.webAppUrl,observedCampaign:s.sheetName};
+ }
+ await chrome.storage.local.set(patch);
+}
 function historyFor(h,s){return h?.endpoint===s.webAppUrl?h:{endpoint:s.webAppUrl,known:[],knownAt:0,campaigns:{},recentWrites:[]};}
 async function mirror(h,s){
  const latest=await getSettings();if(scope(latest)!==scope(s))return;
@@ -25,7 +37,7 @@ async function mirror(h,s){
  await chrome.storage.local.set({savedUsernames:c?.names||[],knownUsernames:h.known||[],savedScopeV15:scope(s),knownScopeV15:s.webAppUrl,
   knownSyncedAt:h.knownAt||0,historyStatusV15:{at:h.knownAt||0,ready:!!c?.at}});
 }
-async function selectCached(s){return serialLocal(async()=>{const st=await chrome.storage.local.get('iglsHistoryV15');const h=historyFor(st.iglsHistoryV15,s);await mirror(h,s);return h;});}
+async function selectCached(s){return serialLocal(async()=>{await prepareUpgrade(s);const st=await chrome.storage.local.get('iglsHistoryV15');const h=historyFor(st.iglsHistoryV15,s);await mirror(h,s);return h;});}
 const refreshing=new Map();
 async function refreshKnownIfStale(force){
  const s=await getSettings();if(!s.webAppUrl)return{ok:false,error:'연결 주소가 없습니다.'};
@@ -48,6 +60,7 @@ async function refreshKnownIfStale(force){
  })();refreshing.set(k,task);task.finally(()=>refreshing.delete(k)).catch(()=>{});return task;
 }
 async function markSaved(username,s,entry){return serialLocal(async()=>{
+ await prepareUpgrade(s);
  const st=await chrome.storage.local.get(['iglsHistoryV15','recent']);const latest=await getSettings();
  if(latest.webAppUrl===s.webAppUrl){
   const h=historyFor(st.iglsHistoryV15,s),c=h.campaigns[s.sheetName]||{names:[],at:0};
@@ -86,10 +99,13 @@ chrome.commands.onCommand.addListener(async command=>{
  if(tab?.id&&/^https:\/\/www\.instagram\.com\//.test(tab.url||''))chrome.tabs.sendMessage(tab.id,{type:'SAVE_CURRENT',source:'단축키'}).catch(()=>{});
 });
 chrome.runtime.onInstalled.addListener(()=>{
+ // Works on first installation and store upgrades; settings are never reset.
+ const startup=getSettings().then(s=>selectCached(s)).then(()=>refreshKnownIfStale(false)).catch(()=>{});
  chrome.contextMenus.removeAll(()=>{
   chrome.contextMenus.create({id:'igls-save-link',title:'이 프로필을 시트에 저장',contexts:['link'],documentUrlPatterns:['https://www.instagram.com/*'],targetUrlPatterns:['https://www.instagram.com/*']});
   chrome.contextMenus.create({id:'igls-save-page',title:'현재 프로필을 시트에 저장',contexts:['page'],documentUrlPatterns:['https://www.instagram.com/*']});
  });
+ return startup;
 });
 chrome.contextMenus.onClicked.addListener((info,tab)=>{
  if(!tab?.id)return;

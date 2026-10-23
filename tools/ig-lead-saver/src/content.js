@@ -3,6 +3,7 @@
  */
 (() => {
   'use strict';
+  const VERSION = chrome.runtime.getManifest().version;
 
   // ── 상수 ──────────────────────────────────────────────────────────────────
   // /explore/ 같은 예약 경로는 사용자명이 아니다.
@@ -1374,9 +1375,9 @@
       saveUsername(u, msg.source || '우클릭(링크)').then(sendResponse);
       return true;
     }
-    if (msg?.type === 'GET_DIAGNOSTICS') { sendResponse({ version: '1.5.0', ...profileClient.metrics, savedCount: savedSet.size, knownCount: knownSet.size, cooldownUntil, lastLimitStatus }); return true; }
+    if (msg?.type === 'GET_DIAGNOSTICS') { sendResponse({ version: VERSION, ...profileClient.metrics, savedCount: savedSet.size, knownCount: knownSet.size, cooldownUntil, lastLimitStatus }); return true; }
     if (msg?.type === 'GET_CURRENT_PROFILE') {
-      sendResponse({ username: currentTargetUsername(), campaign: config.sheetName, savedBy: config.savedBy });
+      sendResponse({ version: VERSION, username: currentTargetUsername(), campaign: config.sheetName, savedBy: config.savedBy });
       return true;
     }
     return false;

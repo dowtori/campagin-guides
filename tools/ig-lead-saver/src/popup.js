@@ -27,6 +27,11 @@ async function init() {
     return;
   }
 
+  if (res && res.version !== chrome.runtime.getManifest().version) {
+    $('status').textContent = '업데이트를 적용하려면 인스타그램 탭을 새로고침해주세요.';
+    return;
+  }
+
   if (res?.username) {
     $('status').textContent = '저장 준비 완료';
     $('who').textContent = `@${res.username}`;
