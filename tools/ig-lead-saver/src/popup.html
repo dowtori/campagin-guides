@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="ui.css" />
+</head>
+<body class="popup">
+  <div class="pwrap">
+    <h1>IG Lead Saver</h1>
+    <p id="status" class="pstatus">확인 중…</p>
+
+    <div id="target" class="ptarget" hidden>
+      <div id="who" class="who"></div>
+      <div class="where">이 프로필을 시트에 저장합니다</div>
+    </div>
+
+    <button id="saveBtn" class="btn btn--primary btn--wide" disabled>시트에 저장</button>
+
+    <div class="plist">
+      <h2>최근 저장</h2>
+      <div id="recent"><p class="empty" style="font-size:12px;color:var(--fg-faint);margin:0">없음</p></div>
+    </div>
+
+    <button id="openOptions" class="plink">설정 열기</button>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

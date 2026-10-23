@@ -1,0 +1,317 @@
+/* 옵션 페이지 + 팝업 공용 스타일 — SIRIAI 브랜드 기준
+   타이포: Inter Tight (사이트와 동일), 헬베티카 폴백, 타이트한 자간 */
+
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 300 700;              /* 가변 폰트 — 한 파일로 전 굵기 커버 */
+  font-display: swap;
+  src: url('fonts/inter-tight.woff2') format('woff2');
+}
+
+:root {
+  /* 라틴은 Inter Tight, 한글은 시스템 폰트로 폴백.
+     한글 웹폰트는 수백 KB라 확장에 싣지 않는다. */
+  --sans: 'Inter Tight', Helvetica, 'Helvetica Neue', Arial,
+    'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ink: #0a0a0a;
+  --bg: #ffffff;
+  --bg-sunk: #f7f7f6;
+  --fg: #1c1c1a;
+  --fg-dim: #6b6b66;
+  --fg-faint: #a3a39c;
+  --line: rgba(0, 0, 0, .1);
+
+  /* siriai.co.kr .l-bloom 실측값 */
+  --gold: #ffb83c;
+  --orange: #ff7830;
+  --magenta: #e63a6e;
+  --brand: linear-gradient(135deg, #ffb83c 0%, #ff7830 55%, #e63a6e 100%);
+  /* 라이트 배경에서 대비를 확보한 링크·포커스용 */
+  --accent: #d1520c;
+
+  /* 버튼은 잉크 베이스 — 사이트도 그라디언트를 배경에만 쓴다 */
+  --btn-ink: #0a0a0a;
+  --btn-ink-hover: #26251f;
+  --on-ink: #f4f4f3;
+
+  --ok: #1f7a45;
+  --err: #b3261e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0a0a;
+    --bg-sunk: #161615;
+    --fg: #f5f5f4;
+    --fg-dim: #a3a39c;
+    --fg-faint: #78786f;
+    --line: rgba(255, 255, 255, .12);
+    --ok: #4ecb7a;
+    --err: #ff6b60;
+    /* 어두운 바탕에서는 링크 대비를 위해 오렌지를 밝게 */
+    --accent: #ff7830;
+    /* 사이트도 어두운 화면에서는 솔리드 버튼을 밝게 반전시킨다 */
+    --btn-ink: #f4f4f3;
+    --btn-ink-hover: #ffffff;
+    --on-ink: #0a0a0a;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -.011em;
+  font-feature-settings: 'tnum' 1, 'cv05' 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+code, kbd {
+  font-family: var(--mono);
+  font-size: .86em;
+  letter-spacing: 0;
+  background: var(--bg-sunk);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+/* ── 옵션 페이지 ───────────────────────────────────────────────────────── */
+.options .wrap { max-width: 660px; margin: 0 auto; padding: 48px 24px 72px; }
+
+.head { margin-bottom: 34px; }
+.head h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -.032em;     /* 사이트 헤딩과 동일한 타이트 트래킹 */
+  line-height: 1.1;
+  color: var(--fg);
+}
+.head .sub {
+  margin: 0;
+  color: var(--fg-dim);
+  font-size: 13.5px;
+  font-weight: 400;
+  letter-spacing: -.012em;
+}
+
+.card {
+  background: var(--bg-sunk);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 14px;
+}
+/* 한글엔 대문자가 없어 uppercase 라벨 스타일이 안 먹는다.
+   위계는 크기·굵기·앰버 인디케이터로 잡는다. */
+.card h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -.022em;
+  color: var(--fg);
+}
+.card h2::before {
+  content: '';
+  width: 3px;
+  height: 13px;
+  border-radius: 2px;
+  background: var(--brand);
+  flex: 0 0 auto;
+}
+
+.field { display: block; margin-bottom: 18px; }
+.field:last-of-type { margin-bottom: 0; }
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -.014em;
+  color: var(--fg);
+  margin-bottom: 7px;
+}
+
+input[type='url'], input[type='text'], select {
+  width: 100%;
+  padding: 11px 13px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 400;
+  letter-spacing: -.011em;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  outline: none;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+input[type='url'] { font-family: var(--mono); font-size: 12px; letter-spacing: 0; }
+input:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(209, 82, 12, .2);
+}
+
+.help {
+  display: block;
+  margin-top: 7px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -.008em;
+  color: var(--fg-faint);
+  line-height: 1.6;
+}
+.help--block { margin-top: 14px; }
+.help b { color: var(--fg-dim); font-weight: 500; }
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 13.5px;
+  letter-spacing: -.012em;
+  cursor: pointer;
+}
+.check input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+.check b { color: var(--fg-dim); font-weight: 500; }
+.check--sub { margin-left: 26px; font-size: 12.5px; color: var(--fg-dim); }
+
+.row { display: flex; align-items: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+/* 셀렉트 + 버튼을 한 줄에 */
+.inline { display: flex; align-items: stretch; gap: 8px; }
+.inline > select, .inline > input { flex: 1 1 auto; min-width: 0; }
+.inline--new { margin-top: 8px; }
+.btn--icon {
+  flex: 0 0 auto;
+  padding: 0;
+  width: 40px;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -.014em;
+  padding: 10px 18px;
+  border-radius: 999px;              /* 사이트 CTA와 동일한 알약 */
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease, background .12s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: .5; cursor: progress; transform: none; }
+/* 솔리드 버튼은 잉크 베이스. 다크에서는 토큰이 반전된다 */
+.btn--primary {
+  background: var(--btn-ink);
+  color: var(--on-ink);
+  border-color: transparent;
+  font-weight: 600;
+}
+.btn--primary:hover { background: var(--btn-ink-hover); }
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.btn--wide { padding: 12px 28px; font-size: 13.5px; }
+
+.result { font-size: 12.5px; font-weight: 500; letter-spacing: -.01em; }
+.result--ok { color: var(--ok); }
+.result--err { color: var(--err); }
+
+.recent { display: flex; flex-direction: column; gap: 0; }
+.recent .empty { margin: 0; font-size: 13px; color: var(--fg-faint); }
+.rec {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  letter-spacing: -.012em;
+}
+.rec:last-child { border-bottom: none; }
+.rec a { color: var(--fg); text-decoration: none; font-weight: 500; }
+.rec a:hover { color: var(--accent); }
+.rec .meta {
+  color: var(--fg-faint);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.rec .dup { color: var(--fg-faint); font-size: 11.5px; }
+
+.foot { display: flex; align-items: center; gap: 12px; margin-top: 26px; }
+
+/* ── 팝업 ──────────────────────────────────────────────────────────────── */
+.popup { width: 328px; }
+.popup .pwrap { padding: 18px; }
+.popup h1 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -.028em;
+}
+.popup .pstatus {
+  font-size: 12px;
+  letter-spacing: -.01em;
+  color: var(--fg-dim);
+  margin: 0 0 15px;
+}
+.popup .pstatus--err { color: var(--err); }
+
+.ptarget {
+  background: var(--bg-sunk);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 13px;
+  margin-bottom: 11px;
+}
+.ptarget .who { font-size: 15px; font-weight: 600; letter-spacing: -.022em; margin-bottom: 3px; }
+.ptarget .where { font-size: 11.5px; letter-spacing: -.008em; color: var(--fg-faint); }
+
+.popup .btn--wide { width: 100%; text-align: center; }
+
+.plist { margin-top: 16px; }
+.plist h2 {
+  margin: 0 0 7px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--fg-faint);
+  letter-spacing: -.008em;
+}
+.plink {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: -.01em;
+  color: var(--fg-dim);
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  width: 100%;
+}
+.plink:hover { color: var(--accent); }
