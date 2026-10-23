@@ -6,6 +6,7 @@ SIRIAI 인플루언서 협업 콘텐츠 가이드 모음. 각 캠페인은 하�
 
 | 캠페인 | 형식 | 경로 |
 |---|---|---|
+| 인플루언서 모집 파트너 안내 | 신규 파트너 온보딩 / 8장 안내 및 PDF | [`dm-partner-guide/`](dm-partner-guide/) |
 | Deep Divers Club 런칭 (틈결 × 에스더버니) | 릴스 / 런칭 캠페인 | [`deep-divers-club/`](deep-divers-club/) |
 | 제니 유럽 사복 · 젠민수 아이템 | 블로그 / 패션 | [`jennie-europe/`](jennie-europe/) |
 
