@@ -1,0 +1,120 @@
+{
+  "name": "SIRIAI Recruiter Island v6",
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "$properties": {
+        "FallenPartsDestroyHeight": -4096,
+        "GlobalWind": [
+          4,
+          0,
+          1.5
+        ]
+      },
+      "TrainingMap": {
+        "$path": "map/TrainingMap.model.json"
+      },
+      "Terrain": {
+        "$className": "Terrain",
+        "Clouds": {
+          "$className": "Clouds",
+          "$properties": {
+            "Cover": 0.28,
+            "Density": 0.25,
+            "Color": [
+              0.8392156862745098,
+              0.7607843137254902,
+              0.8509803921568627
+            ]
+          }
+        }
+      }
+    },
+    "Lighting": {
+      "$properties": {
+        "Ambient": [
+          0.5607843137254902,
+          0.4823529411764706,
+          0.6196078431372549
+        ],
+        "OutdoorAmbient": [
+          0.6431372549019608,
+          0.5803921568627451,
+          0.7176470588235294
+        ],
+        "Brightness": 2,
+        "ClockTime": 18.05,
+        "GeographicLatitude": 28,
+        "GlobalShadows": true,
+        "ShadowSoftness": 0.7,
+        "ColorShift_Top": [
+          0.9647058823529412,
+          0.7411764705882353,
+          0.5764705882352941
+        ],
+        "EnvironmentDiffuseScale": 0.85,
+        "EnvironmentSpecularScale": 0.65
+      },
+      "Atmosphere": {
+        "$className": "Atmosphere",
+        "$properties": {
+          "Density": 0.21,
+          "Offset": 0.12,
+          "Color": [
+            0.803921568627451,
+            0.6941176470588235,
+            0.788235294117647
+          ],
+          "Decay": [
+            0.5137254901960784,
+            0.4588235294117647,
+            0.6431372549019608
+          ],
+          "Haze": 1.2,
+          "Glare": 0.15
+        }
+      },
+      "Sky": {
+        "$className": "Sky",
+        "$properties": {
+          "CelestialBodiesShown": false,
+          "StarCount": 0
+        }
+      },
+      "Bloom": {
+        "$className": "BloomEffect",
+        "$properties": {
+          "Intensity": 0.14,
+          "Size": 24,
+          "Threshold": 1.5
+        }
+      }
+    },
+    "StarterGui": {
+      "$className": "StarterGui",
+      "$path": "src/gui"
+    },
+    "ReplicatedStorage": {
+      "CampusEvent": {
+        "$className": "RemoteEvent"
+      },
+      "CampusShared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerScriptService": {
+      "$path": "src/server"
+    },
+    "StarterPlayer": {
+      "$properties": {
+        "CharacterWalkSpeed": 20,
+        "CameraMaxZoomDistance": 65,
+        "CameraMinZoomDistance": 5
+      },
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "$path": "src/client"
+      }
+    }
+  }
+}

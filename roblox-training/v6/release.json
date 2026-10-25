@@ -1,0 +1,22 @@
+{
+  "version": "6.0.0",
+  "date": "2026-10-25",
+  "status": "review-build",
+  "verification": {
+    "nativeClientAndServerCallbacks": "passed using exported-source adapters",
+    "nativeWaterServer": "passed API/compatibility/failure/rescue adapters",
+    "terrainAndGeometry": "passed",
+    "webViewsAndMobilePage": "passed",
+    "robloxStudioPlay": "not tested; Studio unavailable"
+  },
+  "files": {
+    "SIRIAI_Recruiter_Island_v6.rbxl": {
+      "bytes": 2721322,
+      "sha256": "fae7e2c7707e4864b09177a94c347d5d304883f6aafbd9eccb473eb36818d0a2"
+    },
+    "SIRIAI_Recruiter_Island_v6_Source.zip": {
+      "bytes": 12536439,
+      "sha256": "24086e2775dc71fb89eb6ed2163d4f4412631c230cc3b4e5c4e4ad5aaad99701"
+    }
+  }
+}

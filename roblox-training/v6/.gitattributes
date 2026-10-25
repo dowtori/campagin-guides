@@ -1,0 +1,3 @@
+src/shared/ThirdParty/WindShake/*.lua text eol=lf -whitespace
+assets/nature/kenney/** -text -whitespace
+vendor/** -whitespace

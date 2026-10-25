@@ -1,0 +1,3 @@
+local folder=script.Parent:WaitForChild('RasterData')
+local allowed={logo=true,logoWhite=true,wordmark=true,brand1=true,brand2=true,brand3=true,brand4=true,brand5=true,brand6=true,creator1=true,creator2=true,creator3=true,creator4=true,creator5=true,creator6=true,creator7=true,creator8=true,creator9=true}
+return setmetatable({},{__index=function(self,key)if not allowed[key]then return nil end local d=require(folder:WaitForChild(key));rawset(self,key,d);return d end})

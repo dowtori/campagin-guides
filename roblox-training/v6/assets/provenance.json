@@ -1,0 +1,98 @@
+{
+  "version": "6.0.0",
+  "date": "2026-10-25",
+  "companySource": "Original company assets supplied in this task and used by dm-partner-guide",
+  "companyAssets": {
+    "brand-profile-1.jpg": {
+      "sha256": "af91b95c35bd72fa42ccb6e5203706f9146fe16cc768f9a0f33e77084ae6d9c5",
+      "file": "brand-profile-1.jpg"
+    },
+    "brand-profile-2.jpg": {
+      "sha256": "e02c00eb12a0ee14e17d3f957bc2a84831319040f7c03877ff3b7901e9c94217",
+      "file": "brand-profile-2.jpg"
+    },
+    "brand-profile-3.jpg": {
+      "sha256": "1be869f4d4dac60ed8ab0b394a61d316b29fa96979269067e3e8e16a75cbf8ba",
+      "file": "brand-profile-3.jpg"
+    },
+    "brand-profile-4.jpg": {
+      "sha256": "c04c2168c4934401f0697c4fe6ac1b8e0243b91312145205f01b04ff002fda29",
+      "file": "brand-profile-4.jpg"
+    },
+    "brand-profile-5.jpg": {
+      "sha256": "eb9b41507ac89c549dce9c8de411a4bb217cc29d62b22e0b8f23f955a9e193b4",
+      "file": "brand-profile-5.jpg"
+    },
+    "brand-profile-6.jpg": {
+      "sha256": "47757e9bdbec52ea5f92de88239eab784b12e3e2fa12705eac6b9e7fc37e8d3e",
+      "file": "brand-profile-6.jpg"
+    },
+    "chrome-extension-options.png": {
+      "sha256": "42ebb000fb44e3259ba57ebb58ddea0605653c655cee4ee45b16b9c3d350fefb",
+      "file": "chrome-extension-options.png"
+    },
+    "ig-lead-saver-settings.png": {
+      "sha256": "9240ac636c40b3be1fc4bceb367856a175e96e420fc7e958fb6a44d9b184e943",
+      "file": "ig-lead-saver-settings.png"
+    },
+    "inter-tight.woff2": {
+      "sha256": "77fefe8ca19b9f69b5284832c519e0493127c1f091f0a8936884be7721c4e618",
+      "file": "inter-tight.woff2"
+    },
+    "Pretendard-Bold.otf": {
+      "sha256": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
+      "file": "Pretendard-Bold.otf"
+    },
+    "Pretendard-Regular.otf": {
+      "sha256": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93",
+      "file": "Pretendard-Regular.otf"
+    },
+    "siriai-symbol-white.png": {
+      "sha256": "e6aaf5e60a3bd484d336897c98546db9dae5fda58d53d209b4c429fdefa69f75",
+      "file": "siriai-symbol-white.png"
+    },
+    "siriai-symbol.png": {
+      "sha256": "274eadc69dd5aa4c024e054009342bb4339d5a2f4e03297dd52f6fb031dd8b3d",
+      "file": "siriai-symbol.png"
+    },
+    "siriai-wordmark-white.png": {
+      "sha256": "d68d856ae945d313b0f89852137dccc2e3b7c606e3052a88b8614846d2382a8a",
+      "file": "siriai-wordmark-white.png"
+    },
+    "siriai-wordmark.png": {
+      "sha256": "677401f9a449c9df53cbd0b5753ba6f25ed511c82270e6be58e990fac8029fdb",
+      "file": "siriai-wordmark.png"
+    }
+  },
+  "generated": {
+    "file": "creator-contact-sheet.jpg",
+    "tiles": [
+      "creator-1.jpg",
+      "creator-2.jpg",
+      "creator-3.jpg",
+      "creator-4.jpg",
+      "creator-5.jpg",
+      "creator-6.jpg",
+      "creator-7.jpg",
+      "creator-8.jpg",
+      "creator-9.jpg"
+    ],
+    "promptFile": "generation-prompt.json",
+    "purpose": "Fictional creator feed examples; not background scenery or replacement company branding"
+  },
+  "openSource": [
+    {
+      "name": "Kenney Nature Kit",
+      "url": "https://kenney.nl/assets/nature-kit",
+      "license": "CC0-1.0",
+      "implementation": "Original OBJ vertices/faces converted into native WedgePart geometry"
+    },
+    {
+      "name": "WindShake",
+      "url": "https://github.com/boatbomber/WindShake",
+      "license": "MIT",
+      "commit": "c2161ba08c1974fbb7716cb83b643097ba72f896"
+    }
+  ],
+  "runtimeScenery": "Actual heightfield terrain, native water, 3D sphere sun, 3D cloud models, engine atmosphere and Clouds. No image scenery walls."
+}

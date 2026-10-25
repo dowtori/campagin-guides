@@ -1,26 +1,30 @@
 {
-  "name": "SIRIAI Training Campus v4",
+  "name": "SIRIAI Recruiter Island v6",
   "tree": {
     "$className": "DataModel",
     "Workspace": {
       "$properties": {
-        "Gravity": 196.2,
-        "FallenPartsDestroyHeight": -35
+        "FallenPartsDestroyHeight": -4096,
+        "GlobalWind": [
+          4,
+          0,
+          1.5
+        ]
       },
       "TrainingMap": {
-        "$path": "map/TrainingMap.model.json"
+        "$path": "v6/map/TrainingMap.model.json"
       },
       "Terrain": {
         "$className": "Terrain",
         "Clouds": {
           "$className": "Clouds",
           "$properties": {
-            "Cover": 0.15,
-            "Density": 0.2,
+            "Cover": 0.28,
+            "Density": 0.25,
             "Color": [
-              0.9450980392156862,
-              0.7411764705882353,
-              0.8156862745098039
+              0.8392156862745098,
+              0.7607843137254902,
+              0.8509803921568627
             ]
           }
         }
@@ -39,35 +43,35 @@
           0.7176470588235294
         ],
         "Brightness": 2,
-        "ClockTime": 18.1,
+        "ClockTime": 18.05,
         "GeographicLatitude": 28,
         "GlobalShadows": true,
-        "ShadowSoftness": 0.65,
+        "ShadowSoftness": 0.7,
         "ColorShift_Top": [
           0.9647058823529412,
           0.7411764705882353,
           0.5764705882352941
         ],
-        "EnvironmentDiffuseScale": 0.8,
-        "EnvironmentSpecularScale": 0.7
+        "EnvironmentDiffuseScale": 0.85,
+        "EnvironmentSpecularScale": 0.65
       },
       "Atmosphere": {
         "$className": "Atmosphere",
         "$properties": {
-          "Density": 0.18,
-          "Offset": 0.05,
+          "Density": 0.21,
+          "Offset": 0.12,
           "Color": [
-            0.8235294117647058,
-            0.7019607843137254,
-            0.8117647058823529
+            0.803921568627451,
+            0.6941176470588235,
+            0.788235294117647
           ],
           "Decay": [
-            0.5490196078431373,
-            0.4823529411764706,
-            0.6784313725490196
+            0.5137254901960784,
+            0.4588235294117647,
+            0.6431372549019608
           ],
-          "Haze": 1.1,
-          "Glare": 0.4
+          "Haze": 1.2,
+          "Glare": 0.15
         }
       },
       "Sky": {
@@ -80,51 +84,36 @@
       "Bloom": {
         "$className": "BloomEffect",
         "$properties": {
-          "Intensity": 0.2,
-          "Size": 30,
-          "Threshold": 1.4
-        }
-      },
-      "WarmGrade": {
-        "$className": "ColorCorrectionEffect",
-        "$properties": {
-          "Brightness": 0.02,
-          "Contrast": 0.035,
-          "Saturation": 0.02,
-          "TintColor": [
-            1.0,
-            0.9450980392156862,
-            0.9372549019607843
-          ]
+          "Intensity": 0.14,
+          "Size": 24,
+          "Threshold": 1.5
         }
       }
     },
+    "StarterGui": {
+      "$className": "StarterGui",
+      "$path": "v6/src/gui"
+    },
     "ReplicatedStorage": {
-      "TrainingEvent": {
+      "CampusEvent": {
         "$className": "RemoteEvent"
       },
-      "TrainingShared": {
-        "$path": "src/shared"
+      "CampusShared": {
+        "$path": "v6/src/shared"
       }
     },
     "ServerScriptService": {
-      "$path": "src/server"
+      "$path": "v6/src/server"
     },
     "StarterPlayer": {
       "$properties": {
-        "CameraMaxZoomDistance": 90,
-        "CameraMinZoomDistance": 5,
         "CharacterWalkSpeed": 20,
-        "CharacterJumpPower": 50
+        "CameraMaxZoomDistance": 65,
+        "CameraMinZoomDistance": 5
       },
       "StarterPlayerScripts": {
         "$className": "StarterPlayerScripts",
-        "$path": "src/client"
-      }
-    },
-    "SoundService": {
-      "$properties": {
-        "RespectFilteringEnabled": true
+        "$path": "v6/src/client"
       }
     }
   }
