@@ -88,7 +88,7 @@ local function phone(player)
     tool.Equipped:Connect(function()send(player,'phone')end);tool.Parent=player.Backpack
 end
 local function envelope(player)
-    local a=targets.Mailbox.Position;local b=targets.beauty_sample.Position
+    local a=targets.Mailbox.Position;local b=targets.DiscoveryDesk.Position
     local p=Instance.new('Part');p.Name='Sent DM envelope';p.Size=Vector3.new(1.5,1,.25);p.Color=Color3.fromRGB(255,35,75);p.Material=Enum.Material.Neon;p.CanCollide=false;p.Anchored=true;p.Position=a+Vector3.new(0,5,0);p.Parent=workspace
     local middle=(a+b)*.5+Vector3.new(0,22,0)
     local first=Tween:Create(p,TweenInfo.new(.65,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Position=middle})
@@ -150,4 +150,4 @@ Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()if advanced then advanced.leave(player)end;task.wait(1);if state(player).phase>1 then phone(player)end;send(player,'state')end)
 end)
 Players.PlayerRemoving:Connect(function(player)if advanced then advanced.remove(player)end;states[player]=nil end)
-print('[SIRIAI v6.12] Recruiter Island ready: NPC quests, phone tool, one campaign')
+print('[SIRIAI v6.13] Recruiter Island ready: NPC quests, phone tool, one campaign')

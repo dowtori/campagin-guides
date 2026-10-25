@@ -1,10 +1,11 @@
--- SIRIAI v6.12: measured dialogs, explicit actions and consistent type roles.
+-- SIRIAI v6.13: measured dialogs, explicit actions and consistent type roles.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
 local RS=game:GetService('ReplicatedStorage')
 local UIS=game:GetService('UserInputService')
 local data=require(script.Parent:WaitForChild('CaseData'))
+local Discovery=require(script.Parent:WaitForChild('DiscoveryLesson'))
 local DialogLayout=require(script.Parent:WaitForChild('DialogLayout'))
 local T={title=30,body=22,note=18,label=16,action=20}
 local Raster=require(script.Parent:WaitForChild('RasterRenderer'))
@@ -55,15 +56,15 @@ local bodyLayout=make('UIListLayout',body,{Padding=UDim.new(0,12),SortOrder=Enum
 make('UIPadding',body,{PaddingRight=UDim.new(0,6),PaddingBottom=UDim.new(0,4)})
 local primary=btn(panel,'계속');primary.Name='PrimaryAction';primary.Size=UDim2.new(1,-48,0,52);primary.BackgroundColor3=C.pink;primary.TextColor3=C.white
 local secondary=btn(panel,'이미 완료했습니다');secondary.Name='SecondaryAction';secondary.Size=UDim2.new(1,-48,0,52);secondary.Visible=false
-local layoutDirty=true
+local layoutDirty=true;local dialogWidth=560;local centeredDialog=false
 local function requestLayout()layoutDirty=true end
 local function fitDialog()
  if mode=='phone' then return end
  local titleHeight=title.TextBounds and title.TextBounds.Y or 36
  local content=bodyLayout.AbsoluteContentSize and bodyLayout.AbsoluteContentSize.Y or 0
  if content>0 then content+=4 end
- local m=DialogLayout.measure(gui.AbsoluteSize.X,gui.AbsoluteSize.Y,titleHeight,content,secondary.Visible)
- if mode=='complete' then m.centered=true end
+ local m=DialogLayout.measure(gui.AbsoluteSize.X,gui.AbsoluteSize.Y,titleHeight,content,secondary.Visible,{width=dialogWidth,primary=primary.Visible})
+ if mode=='complete' or centeredDialog then m.centered=true end
  panel.Size=UDim2.fromOffset(m.width,m.height)
  panel.AnchorPoint=Vector2.new(m.centered and .5 or 1,.5)
  panel.Position=m.centered and UDim2.fromScale(.5,.5) or UDim2.new(1,-16,.5,0)
@@ -108,6 +109,7 @@ body.ChildAdded:Connect(function(o)if o:IsA('GuiObject')then order+=1;o.LayoutOr
 local function clear(heading,step)
  cancelAcknowledgement()
  tag.TextSize=T.label;tag.TextColor3=C.gray
+ dialogWidth=560;centeredDialog=false;primary.Visible=true
  panelLimit.MaxSize=Vector2.new(560,780);panel.BackgroundColor3=C.paper
  tag.Visible=true;title.TextSize=T.title;title.TextColor3=C.ink;primary.TextSize=T.action
  tag.Position=UDim2.fromOffset(24,24);title.Position=UDim2.fromOffset(24,56);title.Size=UDim2.new(1,-48,0,0);title.AutomaticSize=Enum.AutomaticSize.Y
@@ -203,6 +205,9 @@ end
 render=function(profileId)
  mode='work';pending=false
  local q=data.phases[state.phase]
+ local lead=data.lead;for _,p in ipairs(data.profiles)do if p.handle==state.record.handle then lead=p end end
+ local leadHandle=state.record.handle or data.lead.handle
+ local leadFollowers=string.format('%.1f만',lead.followers/10000)
  local d=drafts[q.id] or {step=1};drafts[q.id]=d
  local function screen(heading,step,total)clear(heading,q.place..(total and ('  ·  '..step..' / '..total) or ''))end
  if q.id=='brief'then
@@ -212,45 +217,37 @@ render=function(profileId)
  elseif q.id=='profile' or q.id=='connect'then
   setupLesson(q,d)
  elseif q.id=='discover'then
-  local p=data.profiles[1];for _,item in ipairs(data.profiles)do if item.id==profileId then p=item end end
-  d.profile=p.id;screen('@'..p.handle)
-  images({'creator'..p.posts[1],'creator'..p.posts[2],'creator'..p.posts[3]},138)
-  card(p.genre,tostring(p.followers)..' 팔로워')
-  txt(body,p.recent,T.body)
-  note('레퍼런스·브랜드 태그·해시태그에서 찾아요.')
-  if not p.fits then
-   txt(body,p.followers<data.minimumFollowers and '이번 기준은 팔로워 1천 명 이상이에요.' or '이번에는 스킨케어 광고 릴스 경험을 확인해요.',18,C.gray)
-   action('다른 계정 살펴보기',closePanel)
-  elseif d.checked then
-   note('✓ '..p.history,C.green)
-   action('시트에 저장',function()submit({handle=p.handle,reviewed=true,historyChecked=true})end)
-  else
-   action('기존 접촉 이력 확인',function()d.checked=true;render(p.id)end)
-  end
+  Discovery.render({make=make,txt=txt,btn=btn,round=round,body=body,colors=C,raster=Raster,
+   UDim2=UDim2,UDim=UDim,Vector2=Vector2,Enum=Enum,width=gui.AbsoluteSize.X,
+   clear=clear,card=card,action=action,alternate=alternate,submit=submit,render=function()render()end,
+   configure=function(width,footer)
+    dialogWidth=width;centeredDialog=true;panelLimit.MaxSize=Vector2.new(width,780);primary.Visible=footer
+    requestLayout();fitDialog()
+   end},data,d)
  elseif q.id=='send'then
   if d.step==1 then
    screen('DM 보낼 계정',1,3)
-   card('지정 캠페인 · 발송 대상','@beauty_sample\n실제 팔로워 1.8만 · 연락전')
+   card('지정 캠페인 · 발송 대상','@'..leadHandle..'\n실제 팔로워 '..leadFollowers..' · 연락전')
    note('인스타그램의 실제 팔로워 수로 문구를 골라요.')
    action('1만~5만 미만 문구 열기',function()d.step=2;render()end)
   elseif d.step==2 then
    screen('DM 미리보기',2,3)
-   card('@beauty_sample에게','안녕하세요, 시리아이입니다 :)\n스킨케어 릴스 캠페인 협업을 제안드립니다.\n제안 고료 10만 원\n관심 있으시면 지원 부탁드립니다.')
+   card('@'..leadHandle..'에게','안녕하세요, 시리아이입니다 :)\n스킨케어 릴스 캠페인 협업을 제안드립니다.\n제안 고료 10만 원\n관심 있으시면 지원 부탁드립니다.')
    action('DM 보내기',function()d.step=3;render()end)
   else
    screen('발송 기록',3,3)
-   card('시트 기록','@beauty_sample\n연락전 → DM 발송')
+   card('시트 기록','@'..leadHandle..'\n연락전 → DM 발송')
    card('완료 공유','연습 캠페인\n발송 1건 · 특이사항 없음')
-   action('DM 발송으로 저장',function()submit({handle=data.lead.handle,fee=data.lead.fee,sent=true,status='DM 발송'})end)
+   action('DM 발송으로 저장',function()submit({handle=leadHandle,fee=data.lead.fee,sent=true,status='DM 발송'})end)
   end
  elseif q.id=='reply'then
   screen('도착한 회신')
-  card('받은 메시지 · @beauty_sample','안내해주신 캠페인에 지원했어요!')
+  card('받은 메시지 · @'..leadHandle,'안내해주신 캠페인에 지원했어요!')
   card('보낼 답장','감사합니다! 최종 선정된 분께는\n담당자가 따로 안내드릴게요 :)')
   action('이렇게 답장하기',function()submit({replied=true,applicationRead=true})end)
  elseif q.id=='settle'then
   screen('정산 확인')
-  note('최종 선정 확인 · @beauty_sample',C.green)
+  note('최종 선정 확인 · @'..leadHandle,C.green)
   card('유효 DM 1건 + 최종 선정 1명','300원 + 2,000원')
   local _,total=card('세전 합계','2,300원',C.pink);total.TextSize=34;total.Font=Enum.Font.GothamBold
   note('월 1회, 계약서의 정산일에 지급해요.')
@@ -353,7 +350,7 @@ local function phone(refresh)
  local panelHeight=math.min(gui.AbsoluteSize.Y*.90,narrow and 740 or 680)
  local tileHeight=narrow and 196 or (short and 176 or math.max(176,math.min(212,math.floor((panelHeight-172-(hasExtras and 80 or 16))/2))))
  local grid=make('Frame',body,{Name='ChapterMenu',Size=UDim2.new(1,0,0,narrow and tileHeight*4+36 or tileHeight*2+12),BackgroundTransparency=1})
- local captions={'캠페인 받기','프로필 세팅','시트 연결','계정 찾기','DM 발송','회신 응대','정산 확인'}
+ local captions={'캠페인 받기','프로필 세팅','시트 연결','태그됨 수집','DM 발송','회신 응대','정산 확인'}
  for i,q in ipairs(data.phases)do
   local chapter=q;local current=not state.complete and state.phase==i;local done=completed[q.id]==true
   local tile=make('TextButton',grid,{Name='Chapter_'..q.id,Text='',AutoButtonColor=true,BackgroundColor3=done and C.green or C.paper,BorderSizePixel=0,ClipsDescendants=true})
@@ -421,7 +418,7 @@ local function finished()
  requestLayout();fitDialog()
 end
 phoneButton.Activated:Connect(phone)
-gui:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()if mode=='phone' and panel.Visible then phone(true)else requestLayout()end end)
+gui:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()if mode=='phone' and panel.Visible then phone(true)elseif mode=='work' and panel.Visible and data.phases[state.phase].id=='discover' then render()else requestLayout()end end)
 helpButton.Activated:Connect(function()
  if panel.Visible then return end
  mode='help';clear('조작 안내')

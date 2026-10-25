@@ -47,7 +47,7 @@ for model in models:
   origin=target.copy();origin[axis]=lo[axis]-4;direction=[0,0,0];direction[axis]=1
   check(any(hit_triangle(origin,direction,*(tri[j] for j in face)) for tri in mesh for face in faces),name+' lateral approach hits visible mesh')
 check(solid_models==46,'25 trees + 21 rocks covered')
-solid_names=['Monitor','Mailbox body','Mailbox sign','Agency wordmark','Work desk','Desk leg','Creator camera','Ring light stand','Ring light','Path lantern','ConditionBoard','ChoiceBoard1','ChoiceBoard2','ChoiceBoard3','ChallengeConsole','ThumbsUp pedestal','Agency side','Agency back wing','Challenge side wall']
+solid_names=['Monitor','Mailbox body','Mailbox sign','Agency wordmark','Work desk','Desk leg','Collection desk','Collection monitor','Collection keyboard','Path lantern','ConditionBoard','ChoiceBoard1','ChoiceBoard2','ChoiceBoard3','ChallengeConsole','ThumbsUp pedestal','Agency side','Agency back wing','Challenge side wall']
 for name in solid_names:
  group=[n for n in nodes if n.get('Name','')==name];check(bool(group),name+' fixture exists')
  for n in group:check(n['Properties']['CanCollide'],name+' is solid')
@@ -61,7 +61,7 @@ for n in nodes:
    if 'CanCollide' in p['Properties']:check(not p['Properties']['CanCollide'] and p['Properties']['Transparency']==1,'idle NPC cannot become invisible obstruction')
 import xml.etree.ElementTree as ET
 from collections import Counter
-xml=ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_12.rbxlx')
+xml=ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_13.rbxlx')
 exported=next(it for it in xml.iter('Item') if it.find("Properties/string[@name='Name']") is not None and it.find("Properties/string[@name='Name']").text=='TrainingMap')
 expected=Counter((n.get('Name',''),n['Properties']['CanCollide']) for n in nodes if 'CanCollide' in n.get('Properties',{}))
 actual=Counter()

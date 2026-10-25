@@ -11,7 +11,7 @@ for key in route['requiredStops']:
 stops=[]
 for q in data['phases']:
  if not stops or stops[-1]!=q['target']:stops.append(q['target'])
-assert stops==route['requiredStops']==['Manager','beauty_sample','Mailbox']
+assert stops==route['requiredStops']==['Manager','DiscoveryDesk','Mailbox']
 arrivals=[(route['spawn'][0],route['spawn'][1])]+[(route['targets'][k]['position'][0],route['targets'][k]['position'][2]+7) for k in stops]
 assert all(b[1]<a[1] for a,b in zip(arrivals,arrivals[1:]))
 distance=sum(math.dist(a,b) for a,b in zip(arrivals,arrivals[1:]));assert distance<150

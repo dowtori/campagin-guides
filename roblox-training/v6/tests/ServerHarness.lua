@@ -15,7 +15,7 @@ H.workspace=Mock.Instance.new('Workspace');local map=Mock.Instance.new('Model');
 local architecture=Mock.Instance.new('Folder');architecture.Name='Architecture';architecture.Parent=map
 H.objects=Mock.Instance.new('Folder');H.objects.Name='QuestObjects';H.objects.Parent=architecture
 H.targets={}
-for _,name in ipairs({'Manager','beauty_sample','Mailbox'})do
+for _,name in ipairs({'Manager','DiscoveryDesk','Mailbox'})do
  local p=Mock.Instance.new('Part');p.Name='Target_'..name;p.Position=H.Vector3.new(unpack(route.targets[name].position));p.Parent=H.objects
  local id=Mock.Instance.new('StringValue');id.Name='ActionID';id.Value=name;id.Parent=p
  local prompt=Mock.Instance.new('ProximityPrompt');prompt.Name='Interact';prompt.Triggered=event();prompt.Parent=p

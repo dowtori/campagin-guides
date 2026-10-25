@@ -1,4 +1,4 @@
-"""Build v6.12: native coastal terrain, clustered nature and original company visuals."""
+"""Build v6.13: native coastal terrain, clustered nature and original company visuals."""
 import json,math,random
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
@@ -38,7 +38,7 @@ curriculum={'stages':[{'position':[-34,4,66]},{'position':[-58,4,8]},{'position'
 env=build_environment(world,part,obj,rgb,cf,raster,curriculum)
 # A small roleplay village: an agency house, a creator garden and a message kiosk.
 # No numbered learning booths or landscape texture walls.
-for x,z,w,d,name in [(-34,66,57,43,'Agency terrace'),(-58,8,60,52,'Creator garden'),(-42,-44,48,39,'Message deck')]:
+for x,z,w,d,name in [(-34,66,57,43,'Agency terrace'),(-58,8,60,52,'Collection terrace'),(-42,-44,48,39,'Message deck')]:
     part(world,name,(x,.65,z),(w,.5,d),'C5AD8D','WoodPlanks')
 # Keep the main boardwalk continuous, including the preparation pavilion.
 def shift_since(start,dx,dz):
@@ -78,18 +78,15 @@ for x,z,title in [(-48,32,'프로필 준비'),(-19,32,'시트 연결')]:
     screen=sign(world,'Monitor',(x,6.1,z),(8,4.7,.45),title,'FFFFFF',INK)
     part(world,'Keyboard',(x,3.38,z+1.8),(5,.15,1.2),'5C5863')
 shift_since(house_start,0,24)
-# Creator platforms form a garden trail; recognizable block avatars, not panels as buildings.
-for x,z in [(-46,20),(-73,2),(-52,-13)]:
-    part(world,'Creator platform',(x,1.1,z),(13,.8,13),'B3AD9A','Sandstone')
-    part(world,'Garden back rail',(x,2,z-6),(12,.6,.5),'817B70','Wood')
-# A ring light and compact camera identify the beauty creator's working corner.
-part(world,'Ring light stand',(-52,3.7,17),(.22,6,.22),'494653')
-for i in range(16):
-    angle=i*math.pi/8
-    part(world,'Ring light',(-52+1.3*math.cos(angle),7.2+1.3*math.sin(angle),17),(.55,.18,.16),'F7E6C9','Neon',rot=(0,0,math.degrees(angle)+90))
-part(world,'Creator camera',(-51,4.3,23),(1.2,.9,.7),'37333F')
-part(world,'Camera tripod',(-51,2.4,23),(.2,3.1,.2),'494653')
-part(world,'Travel camera',(-49,3,-12),(1.3,1,.7),'59505A')
+# A collection workstation: the job is browsing a brand's Tagged posts, not meeting NPC candidates.
+part(world,'Collection platform',(-48,1.1,18),(22,.8,18),'B3AD9A','Sandstone')
+part(world,'Collection desk',(-48,3.1,18),(13,.6,5),'B6A18B','Wood')
+for dx in [-5,5]:part(world,'Collection desk leg',(-48+dx,1.8,18),(1,2.4,4),'655F5A')
+part(world,'Collection monitor foot',(-48,3.55,17),(4,.3,2),'38353C')
+part(world,'Collection monitor stalk',(-48,4.8,17),(.6,2.4,.6),'38353C')
+sign(world,'Collection monitor',(-48,6.3,17),(10,5.2,.45),'태그됨 → 저장','FFFFFF',INK)
+part(world,'Collection keyboard',(-48,3.5,19.7),(6,.15,1.3),'5C5863')
+sign(world,'Collection station title',(-48,10.5,16),(19,2.5,.3),'계정 수집','FFFFFF',INK)
 message_start=len(world)
 # A chunky mailbox is the job prop. A short pulse and flying envelope mark a send.
 part(world,'Mailbox post',(46,2.2,-47),(2,3.2,2),'67616E')
@@ -119,13 +116,10 @@ def actor(name,x,z,shirt,hair):
             if id(p) in part_records:part_records[id(p)]['answerNPC']=True
     return model
 actor('Manager',-44,79,'2D2B34','36333F')
-actor('beauty_sample',-46,20,'C7AA9B','51444A')
-actor('tiny_sample',-73,2,'A8B8C7','242632')
-actor('trip_sample',-52,-13,'839A84','6C594C')
 def target(name,pos,caption,parent=None):
     children=actors['Children'] if parent is None else parent
     p=part(children,'Target_'+name,pos,(4,5,4),trans=1,collide=False)
-    p['Children'].append(obj('Interact','ProximityPrompt',{'ActionText':caption,'ObjectText':({'Manager':'준비 테라스','ProfileDesk':'프로필 PC','ConnectDesk':'연결 PC','Mailbox':'DM 데스크','ReplyDesk':'회신 확인','beauty_sample':'뷰티 크리에이터','tiny_sample':'뷰티 크리에이터','trip_sample':'여행 크리에이터'}).get(name,name),'KeyboardKeyCode':'E','GamepadKeyCode':'ButtonX','HoldDuration':0,'MaxActivationDistance':14,'RequiresLineOfSight':False,'ClickablePrompt':True,'Enabled':True}))
+    p['Children'].append(obj('Interact','ProximityPrompt',{'ActionText':caption,'ObjectText':({'Manager':'준비 테라스','ProfileDesk':'프로필 PC','ConnectDesk':'연결 PC','Mailbox':'DM 데스크','ReplyDesk':'회신 확인','DiscoveryDesk':'수집 PC','tiny_sample':'뷰티 크리에이터','trip_sample':'여행 크리에이터'}).get(name,name),'KeyboardKeyCode':'E','GamepadKeyCode':'ButtonX','HoldDuration':0,'MaxActivationDistance':14,'RequiresLineOfSight':False,'ClickablePrompt':True,'Enabled':True}))
     p['Children'].append(obj('ActionID','StringValue',{'Value':name}))
     return p
 for name,entry in TARGETS.items():target(name,entry['position'],entry['caption'])
@@ -143,19 +137,19 @@ for primitive in thumb['Children']:
     record['thumbStage']=primitive['Children'][-1]['Properties']['Value'];record['thumb']=True
 from advanced_room import add_room
 add_room(world,part,obj,sign,actor)
-sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.12','FFFFFF',INK)
+sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.13','FFFFFF',INK)
 # Short inset chevrons mark forward travel without a screen-size route diagram.
 for z in [92,43,35,0,-19,-60]:
     for side in [-1,1]:part(world,'Forward route arrow',(-34+side*.5,1.03,z),(1.5,.055,.18),PINK,'SmoothPlastic',rot=(0,side*38,0),collide=False)
 # New-world data remains independent of every previous training implementation.
 env.update(version='6.11',views={'challenge':{'position':[60,9,-54],'target':[60,10,-89]},'challengeEntry':{'position':[60,6,-63],'target':[60,10,-89]},'pier':{'position':[-45,14,-280],'target':[-29,10,-328]},'pierClose':{'position':[-41,12,-295],'target':[-29,8,-328]},'meadow':{'position':[0,5,-230],'target':[15,4,-325]},'sunset':{'position':[0,6,-330],'target':[-120,80,-1120]},'overview':{'position':[164,143,172],'target':[0,3,-30]},'agency':{'position':[-10,19,113],'target':[-34,6,63]},'garden':{'position':[-4,11,25],'target':[-54,4,7]},'gardenOriginal':{'position':[-5,20,49],'target':[-47,5,8]}})
-route={'version':'6.11','spawn':list(SPAWN),'path':PATH,'targets':TARGETS,'requiredStops':['Manager','beauty_sample','Mailbox']}
+route={'version':'6.13','spawn':list(SPAWN),'path':PATH,'targets':TARGETS,'requiredStops':['Manager','DiscoveryDesk','Mailbox']}
 (ROOT/'route.json').write_text(json.dumps(route,ensure_ascii=False,indent=2),encoding='utf-8')
 (ROOT/'src/shared/RouteData.json').write_text(json.dumps(route,ensure_ascii=False,indent=2),encoding='utf-8')
 model=obj('TrainingMap','Model',children=[obj('Architecture','Folder',children=world)]);model.pop('Name',None)
 for name,value in [('map/TrainingMap.model.json',model),('scene.json',scene),('environment.json',env)]:
     (ROOT/name).write_text(json.dumps(value,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 from sunset import lighting
-project={'name':'SIRIAI Recruiter Island v6.12','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True,'GrassLength':.7,'WaterColor':rgb('688F9C'),'WaterTransparency':.28,'WaterReflectance':.72,'WaterWaveSize':.22,'WaterWaveSpeed':6},'Clouds':{'$className':'Clouds','$properties':{'Cover':.36,'Density':.28,'Color':rgb('F3CEAD')}}}},'Lighting':lighting(rgb),'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'AdvancedEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
+project={'name':'SIRIAI Recruiter Island v6.13','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True,'GrassLength':.7,'WaterColor':rgb('688F9C'),'WaterTransparency':.28,'WaterReflectance':.72,'WaterWaveSize':.22,'WaterWaveSpeed':6},'Clouds':{'$className':'Clouds','$properties':{'Cover':.36,'Density':.28,'Color':rgb('F3CEAD')}}}},'Lighting':lighting(rgb),'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'AdvancedEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
 (ROOT/'default.project.json').write_text(json.dumps(project,indent=2),encoding='utf-8')
-print('v6 fresh world:',len(scene),'parts, 3 job locations, 7 NPCs, 3 shared work targets; no scenery images')
+print('v6 fresh world:',len(scene),'parts, 3 job locations, 4 NPCs, 3 shared work targets; no scenery images')

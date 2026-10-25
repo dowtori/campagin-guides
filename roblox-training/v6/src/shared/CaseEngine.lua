@@ -1,5 +1,17 @@
 -- Guided campaign with freely selectable chapters; only finished actions earn a checkmark.
 local Engine={}
+local function collectionValid(p,data)
+ if p.sourceBrand~=data.collection.brandHandle or p.sourceTab~='tagged' or type(p.collected)~='table' or #p.collected<1 then return false end
+ local seen={}
+ for _,row in ipairs(p.collected)do
+  if type(row)~='table' or type(row.handle)~='string' or seen[row.handle] then return false end
+  local found=false
+  for _,post in ipairs(data.collection.posts)do if post.id==row.postId and post.author==row.handle then found=true end end
+  if not found then return false end
+  seen[row.handle]=true
+ end
+ return true
+end
 function Engine.new()return {phase=1,revision=0,complete=false,record={},completed={}}end
 function Engine.choose(state,id,data)
     if type(id)~='string' then return false,'챕터를 선택해주세요.' end
@@ -20,8 +32,8 @@ function Engine.apply(state,action,p,data)
     local ok=false
     if phase=='brief'then ok=p.reviewed==true
     elseif phase=='profile' or phase=='connect'then ok=p.assembled==true and p.understood==true and (p.completion=='already_done' or p.completion=='guide_done')
-    elseif phase=='discover'then ok=p.handle==data.lead.handle and p.reviewed==true and p.historyChecked==true
-    elseif phase=='send'then ok=p.handle==data.lead.handle and p.fee==data.lead.fee and p.sent==true and p.status=='DM 발송'
+    elseif phase=='discover'then ok=collectionValid(p,data)
+    elseif phase=='send'then ok=p.handle==(state.record.handle or data.lead.handle) and p.fee==data.lead.fee and p.sent==true and p.status=='DM 발송'
     elseif phase=='reply'then ok=p.replied==true and p.applicationRead==true
     elseif phase=='settle'then
         local example=state.exampleRecord or {}
@@ -29,7 +41,9 @@ function Engine.apply(state,action,p,data)
     if not ok then return false,'화면의 작업 안내와 기록을 확인해주세요.'end
     if phase=='profile' or phase=='connect'then
         state.record.setup=state.record.setup or {};state.record.setup[phase]={completion=p.completion,selfReported=true}
-    elseif phase=='discover'then state.record.handle=p.handle;state.record.status='연락전'
+    elseif phase=='discover'then state.record.collected={}
+        for _,row in ipairs(p.collected)do table.insert(state.record.collected,{handle=row.handle,postId=row.postId,sourceBrand=p.sourceBrand,sourceTab='tagged'})end
+        state.record.handle=p.collected[1].handle;state.record.status='연락전'
     elseif phase=='send'then state.record.sent=1;state.record.status='DM 발송'
     elseif phase=='reply'then state.record.applied=true
     elseif phase=='settle'then

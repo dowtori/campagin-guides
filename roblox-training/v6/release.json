@@ -1,10 +1,12 @@
 {
-  "version": "6.12",
+  "version": "6.13",
   "date": "2026-10-26",
   "status": "review-build",
   "verification": {
-    "celebrationChecks": "12 lifecycle checks; 152 native-property screens at four sizes, no browser-approximation overflow; Studio rendering not verified",
-    "collisionChecks": "129746 source/export checks; 46 original solid nature models and clear required route; 8694 reward client checks; engine solver and mobile performance unverified",
+    "collectionChecks": "38 exported-source interaction/identity checks; 160 native-property screens at four sizes; Studio unavailable",
+    "collectionFlow": "reference brand > Tagged > inspect author/content/followers > Save > visible sheet rows; optional post/profile detail, duplicate author protection, selected author continues to DM/reply; basic creator NPCs removed",
+    "celebrationChecks": "12 lifecycle checks; 160 native-property screens at four sizes, no browser-approximation overflow; Studio rendering not verified",
+    "collisionChecks": "129678 source/export checks; 46 original solid nature models and clear required route; 8694 reward client checks; engine solver and mobile performance unverified",
     "celebration": "single 1.5s existing-header acknowledgement; centered finish card; no floating thumb, stage-name toast or duplicate replay celebration",
     "solidCollision": "visible thumb stage only; defer growth near local avatar; original rock/bark faces and physical fixtures collidable; soft foliage, water and hidden stages passable; native engine not verified",
     "dialogUX": "content-measured native dialogs; 30/22/18/16/20 type roles; four ambiguous disclosures removed; labeled inbound/outbound messages; fixed footer with body-only scrolling; all dialog states reviewed using native-property approximation",
@@ -16,10 +18,10 @@
     "pierSculpture": "original solid thumbs-up; old pier logo removed; front/side geometry preview inspected; center path and water steps clear",
     "setupFlow": "progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance",
     "guideHandoff": "native instructions with web/email anchors; no external URLs or browser API calls in native setup UI",
-    "coreFlow": "seven phases at three forward stops; ordinary reply and separate selection notice",
+    "coreFlow": "seven phases at three forward stops including a collection PC; ordinary reply and separate selection notice",
     "advancedGames": "three optional world-space games; explicit start, server-owned 30s scout deadline, untimed NPC answers; immediate retry, stale attempt and outside-room rejection",
     "advancedRewards": "100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming",
-    "rewardEvolution": "11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal; visible-stage collision; detached model preview removed in v6.12",
+    "rewardEvolution": "11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal; visible-stage collision; detached model preview removed in v6.13",
     "advancedChecks": "exported engine/session, client, server and reward adapter checks; compact room bounds and world-panel aspect ratios checked",
     "optionalAppendix": "ten completion-only read-only topics; no new mandatory stages or tests",
     "requiredRoute": "133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry",
@@ -37,13 +39,13 @@
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_12.rbxl": {
-      "bytes": 4522963,
-      "sha256": "b3ef94139bd885e8cae5ff7bb4d365d1821ade49967300a8849bd82486e6eedc"
+    "SIRIAI_Recruiter_Island_v6_13.rbxl": {
+      "bytes": 4525679,
+      "sha256": "95c04e22b905f2adbff3711e6d111e99f80d5f41f86ff86275f22e2de1c5a485"
     },
-    "SIRIAI_Recruiter_Island_v6_12_Source.zip": {
-      "bytes": 21484421,
-      "sha256": "ab9f7570271096f4172b310501897aa3efa268c2efe49d22c5b6999d314cce44"
+    "SIRIAI_Recruiter_Island_v6_13_Source.zip": {
+      "bytes": 21492517,
+      "sha256": "e9cf3194b33b5725433efa1d94c9b7f08282a1854508766074fb0d8a5f0c4d01"
     }
   }
 }

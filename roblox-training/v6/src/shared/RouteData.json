@@ -1,5 +1,5 @@
 {
-  "version": "6.11",
+  "version": "6.13",
   "spawn": [
     -34,
     100
@@ -72,14 +72,14 @@
       "caption": "캠페인 준비",
       "place": "준비 테라스"
     },
-    "beauty_sample": {
+    "DiscoveryDesk": {
       "position": [
         -34,
         5,
         24
       ],
-      "caption": "크리에이터 살펴보기",
-      "place": "크리에이터 정원"
+      "caption": "태그됨에서 계정 수집",
+      "place": "수집 PC"
     },
     "Mailbox": {
       "position": [
@@ -93,7 +93,7 @@
   },
   "requiredStops": [
     "Manager",
-    "beauty_sample",
+    "DiscoveryDesk",
     "Mailbox"
   ]
 }

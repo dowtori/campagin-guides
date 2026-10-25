@@ -6,7 +6,7 @@ local payloads={
  {reviewed=true},
  {assembled=true,understood=true,completion='already_done'},
  {assembled=true,understood=true,completion='guide_done'},
- {handle=data.lead.handle,reviewed=true,historyChecked=true},
+ {sourceBrand='skincare_brand',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag01'}}},
  {handle=data.lead.handle,fee=100000,sent=true,status='DM 발송'},
  {replied=true,applicationRead=true},
  {reviewed=true,selectionRead=true}

@@ -12,7 +12,7 @@ H.Enum=Mock.Enum;H.Instance=Mock.Instance;H.Color3=Mock.Color3;H.UDim=Mock.UDim;
 H.task={wait=function()end,delay=function()end}
 H.workspace=Mock.Instance.new('Workspace')
 local map=Mock.Instance.new('Model');map.Name='TrainingMap';map.Parent=H.workspace
-for _,name in ipairs({'Manager','beauty_sample','Mailbox'})do
+for _,name in ipairs({'Manager','DiscoveryDesk','Mailbox'})do
  local p=Mock.Instance.new('Part');p.Name='Target_'..name;p.Position=H.Vector3.new(0,4,0);p.Parent=map
 end
 H.player=Mock.Instance.new('Player');H.player.DisplayName='테스트 파트너';local char=Mock.Instance.new('Model');H.player.Character=char

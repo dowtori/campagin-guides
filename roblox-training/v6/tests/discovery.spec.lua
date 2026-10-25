@@ -1,0 +1,43 @@
+local H=require('./ClientHarness');local E=require('./CaseEngine');local data=require('./CaseData')
+H.gui.AbsoluteSize=H.Vector2.new(1280,720)
+require('./CampusClient').start(H.gui)
+local n=0;local function check(v,m)n+=1;assert(v,m)end
+local function part(name)return H.gui:FindFirstChild(name,true)end
+local function click(name)local p=assert(part(name),name);p.Activated:Fire()end
+local function contains(value)for _,o in ipairs(H.gui:GetDescendants())do if o.Text and o.Text:find(value,1,true)then return true end end return false end
+E.choose(H.state,'discover',data);H.open('DiscoveryDesk')
+check(part('TaggedTab')~=nil and part('TaggedGrid')==nil,'starts on reference brand, not an author or candidate quiz')
+check(part('DialogTitle').Text=='@skincare_brand','reference brand identity')
+check(not part('PrimaryAction').Visible,'no fake continue button before collecting')
+local rev=H.state.revision;click('TaggedTab')
+check(part('TaggedGrid') and #part('TaggedGrid'):GetChildren()==6,'Tagged opens a six-post browsing grid')
+check(H.state.revision==rev and not H.state.completed.discover,'opening Tagged is not completion')
+check(contains('1.8만') and contains('2.4만'),'actual author follower badges are visible')
+click('Post_tag02');check(part('OpenCreatorProfile') and contains('routine_sample'),'post opens its author, not brand owner')
+click('OpenCreatorProfile');check(part('CreatorFacts') and contains('앰플 사용 과정'),'optional profile detail')
+H.click('태그됨으로 돌아가기');check(part('TaggedGrid')~=nil,'returns to tagged grid')
+click('Save_tag02')
+check(part('SavedSheetRows')~=nil and part('Save_tag04').Text=='✓ 저장됨' and part('Save_tag06').Text=='✓ 저장됨','all posts by saved author share state')
+check(not H.state.completed.discover and H.state.revision==rev,'save result visible before explicit continuation')
+check(contains('1명 추가됨') and contains('routine_sample') and contains('연락전'),'sheet row shows saved author and initial status')
+click('Save_tag04');check(contains('1명 추가됨') and not contains('2명 추가됨'),'duplicate author never adds another row')
+H.click('×');H.click('폰  [P]');H.click('이어서 하기')
+check(part('Save_tag02').Text=='✓ 저장됨','close and resume retain collected work')
+H.gui.AbsoluteSize=H.Vector2.new(390,844)
+check(part('TaggedPost_tag01').Size.X.Scale==.5,'mobile grid has two large columns')
+click('Save_tag01');check(contains('2명 추가됨'),'multiple eligible authors can be collected')
+H.click('수집 완료 · DM 대상 확인')
+check(H.state.completed.discover and H.state.record.handle=='routine_sample','first actual collected author handed off')
+check(#H.state.record.collected==2 and H.state.record.collected[1].sourceBrand=='skincare_brand','source and unique rows recorded')
+check(H.state.phase==5,'continues to DM')
+H.click('폰  [P]');H.click('이어서 하기')
+check(contains('@routine_sample') and contains('2.4만'),'DM target matches collected author/followers')
+H.click('1만~5만 미만 문구 열기');check(contains('@routine_sample에게'),'message recipient correct')
+H.click('DM 보내기');H.click('DM 발송으로 저장');check(contains('받은 메시지 · @routine_sample'),'reply identity matches saved author')
+H.click('이렇게 답장하기');check(contains('최종 선정 확인 · @routine_sample'),'selection example identity follows collection')
+local valid={sourceBrand='skincare_brand',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag01'}}}
+for _,bad in ipairs({{}, {sourceBrand='other',sourceTab='tagged',collected=valid.collected},{sourceBrand='skincare_brand',sourceTab='posts',collected=valid.collected},{sourceBrand='skincare_brand',sourceTab='tagged',collected={}},{sourceBrand='skincare_brand',sourceTab='tagged',collected={{handle='skincare_brand',postId='tag01'}}},{sourceBrand='skincare_brand',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag02'}}},{sourceBrand='skincare_brand',sourceTab='tagged',collected={valid.collected[1],valid.collected[1]}}})do
+ local s=E.new();s.phase=4;check(not E.apply(s,'discover',bad,data),'invalid source/author/duplicate rejected');check(s.record.handle==nil and not s.completed.discover,'rejected collection does not alter work')
+end
+local fresh=E.new();fresh.phase=4;check(E.apply(fresh,'discover',valid,data),'direct thumbnail save also valid')
+print('PASS: '..n..' tagged discovery, optional detail, deduplication, resume, responsive grid, downstream identity and source validation checks')

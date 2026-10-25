@@ -6,7 +6,7 @@ local n=0
 local function expect(v,m)n+=1;assert(v,m)end
 local payloads={
  brief={reviewed=true},profile={assembled=true,understood=true,completion='already_done'},connect={assembled=true,understood=true,completion='guide_done'},
- discover={handle=data.lead.handle,reviewed=true,historyChecked=true},send={handle=data.lead.handle,fee=data.lead.fee,sent=true,status='DM 발송'},
+ discover={sourceBrand='skincare_brand',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag01'}}},send={handle=data.lead.handle,fee=data.lead.fee,sent=true,status='DM 발송'},
  reply={replied=true,applicationRead=true},settle={reviewed=true,selectionRead=true}
 }
 local s=Engine.new()
