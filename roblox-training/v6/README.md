@@ -1,8 +1,8 @@
-# Siriai Recruiter Island v6.9
+# Siriai Recruiter Island v6.10
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_9.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_10.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
@@ -24,6 +24,15 @@
 실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
+
+## v6.10: 연결된 산 표면 · 풀 군락 · 네이티브 노을
+
+- 저장된 육지의 블록 기둥을 이웃 꼭짓점을 공유하는 연결 표면으로 교체했습니다. 실행 시 부분 점유율 Terrain을 생성하며, 높이를 열마다 한 번 계산하도록 줄였습니다.
+- 실제 바다는 산 생성 전에 드러납니다. 산 생성 실패로 임시 수면이 반사·파도를 가리지 않습니다. 오류 원인은 Workspace의 `SiriaiTerrainError`, 진행은 `SiriaiTerrainChunks`에서 확인할 수 있습니다.
+- 바늘 줄기를 제거하고 Kenney CC0 `grass` 원본의 휘어진 잎 11개로 구성된 군락 1,024개를 사용합니다. 원본 잎 폭을 45%로 조절했고, 길옆은 낮게 배치했습니다. 기본 Terrain 잔디와 가까운 군락의 바람을 함께 사용합니다.
+- Realistic 조명, 보랏빛 주변광, 따뜻한 직사광·대기, SunRays, 수면 반사를 저장했습니다. 붉은 해는 실행 중 엔진의 `GetSunDirection()`을 따라 움직입니다. 납작한 입체 구름 소품은 제거하고 기본 동적 구름을 사용합니다.
+- 웹은 저장된 실제 산 표면을 보여줍니다. 물·대기 렌더링은 웹의 별도 근사이며 Roblox 결과의 증거가 아닙니다.
+- [수정 전 기준·참고 자료·검증 결과](design-review-v6.10.md). 내보낸 파일과 스크립트 검사는 통과했습니다. **실제 Roblox 엔진의 화면·반사·성능은 Studio가 없어 미검증입니다.**
 
 ## v6.9: 편집 화면의 바다 · 실제 업무 기준
 
@@ -114,8 +123,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_9.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_9.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_10.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_10.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py

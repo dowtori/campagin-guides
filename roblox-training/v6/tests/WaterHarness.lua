@@ -25,6 +25,8 @@ function H.terrain:FillBlock(cf,size,material)
  table.insert(H.fills,{position=cf.Position,size=size,material=material})
 end
 function H.terrain:WriteVoxelChannels(region,resolution,channels)
+ if H.failLand then error('simulated ridge generation failure')end
+ assert(H.oceanParts[1].Transparency==1,'native water must be visible before first ridge chunk')
  if not H.channels then error('simulated older Studio')end
  assert(resolution==4 and channels.SolidMaterial and channels.SolidOccupancy and channels.LiquidOccupancy)
  local dx=(region.high.X-region.low.X)/4;local dz=(region.high.Z-region.low.Z)/4
@@ -32,6 +34,7 @@ function H.terrain:WriteVoxelChannels(region,resolution,channels)
  H.chunks+=1
 end
 function H.terrain:WriteVoxels(region,resolution,materials,occupancies)
+ if H.failLand then error('simulated ridge generation failure')end
  assert(resolution==4)
  for _,ys in ipairs(materials)do for _,zs in ipairs(ys)do for _,m in ipairs(zs)do if m=='Water'then H.waterVoxels+=1 end end end end
  H.chunks+=1
@@ -42,7 +45,7 @@ H.map={WaitForChild=function()return {WaitForChild=function(_,name)return name==
 H.workspace={Terrain=H.terrain,WaitForChild=function()return H.map end,SetAttribute=function(_,key,value)H.attributes[key]=value end}
 H.game={GetService=function(_,name)return name=='Players' and H.players or H.run end}
 function H.reset(channels,failAll)
- H.channels=channels;H.failAll=failAll;H.attributes={};H.fills={};H.chunks=0;H.waterVoxels=0;H.returns=0;H.warning=nil
+ H.channels=channels;H.failAll=failAll;H.failLand=false;H.attributes={};H.fills={};H.chunks=0;H.waterVoxels=0;H.returns=0;H.warning=nil
  H.run.Heartbeat.listeners={};H.humanoid.Health=100;H.root.Position=H.Vector3.new(0,0,60)
  H.oceanParts={{Transparency=.22,CanCollide=false,CanTouch=false,CanQuery=false,IsA=function()return true end}}
  H.previewParts={{Transparency=0,CanCollide=true,IsA=function()return true end}}

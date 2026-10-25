@@ -96,3 +96,56 @@ def add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum):
         for dx,dz,size in [(0,0,8),(3,2,5),(-2,3,6)]:place('plant_bushLarge',x+dx,z+dz,size,rng.uniform(0,360),'8E9C78')
     (ROOT/'nature-instances.json').write_bytes(json.dumps(instances,separators=(',',':')).encode())
     print(f'Nature: {len(instances)} curated CC0 instances / {wedges} wedges')
+
+
+def compact_mesh(name,ribbon_width=1):
+    """Exact coplanar rectangle merging; no invented replacement silhouette."""
+    faces=[];seen=set()
+    for face,_ in read_obj(name):
+        key=tuple(sorted(face))
+        if key not in seen:seen.add(key);faces.append(face)
+    if ribbon_width!=1:
+        # Each original ribbon is a separate connected component of the OBJ.
+        # Narrow only its .04-wide strip, retaining its bend and root location.
+        groups=[]
+        for face in faces:
+            touching=[g for g in groups if g.intersection(face)]
+            merged=set(face)
+            for g in touching:merged.update(g);groups.remove(g)
+            groups.append(merged)
+        mapping={}
+        for group in groups:
+            widths={axis:max(v[axis] for v in group)-min(v[axis] for v in group) for axis in [0,2]}
+            axis=min(widths,key=widths.get)
+            assert abs(widths[axis]-.04)<.00001
+            center=(max(v[axis] for v in group)+min(v[axis] for v in group))/2
+            for v in group:
+                p=list(v);p[axis]=center+(p[axis]-center)*ribbon_width;mapping[v]=tuple(p)
+        faces=[[mapping[v] for v in face] for face in faces]
+    consumed=set();rects=[]
+    for i,a in enumerate(faces):
+        if i in consumed:continue
+        for j in range(i+1,len(faces)):
+            if j in consumed:continue
+            b=faces[j]
+            if len(set(a)&set(b))!=2:continue
+            points=list(set(a+b))
+            if len(points)!=4:continue
+            origin=points[0];v=sorted(points[1:],key=lambda p:length(sub(p,origin)))
+            u,w=sub(v[0],origin),sub(v[1],origin)
+            if abs(dot(u,w))>1e-7 or length(sub(add(add(origin,u),w),v[2]))>1e-6:continue
+            rects.append((origin,u,w));consumed.update([i,j]);break
+    return rects,[f for i,f in enumerate(faces) if i not in consumed]
+
+def plant_mesh(parent,rects,faces,transform,color,part):
+    for origin,u,v in rects:
+        a=transform(origin);b=transform(add(origin,u));c=transform(add(origin,v))
+        axis_u=unit(sub(b,a));axis_v=unit(sub(c,a));normal=unit(cross(axis_u,axis_v))
+        # Transform only uses independent XYZ scaling plus yaw. In this kit each
+        # ribbon's width is horizontal, so its rectangular sections stay orthogonal.
+        assert abs(dot(axis_u,axis_v))<.0001
+        center=add(a,mul(add(sub(b,a),sub(c,a)),.5))
+        m=[axis_u[0],axis_v[0],normal[0],axis_u[1],axis_v[1],normal[1],axis_u[2],axis_v[2],normal[2]]
+        p=part(parent,'Kenney grass ribbon',center,(length(sub(b,a)),length(sub(c,a)),.018),color,'SmoothPlastic',rot=euler(m),collide=False)
+        p['Properties']['CFrame']=list(center)+m
+    for face in faces:triangle(parent,*[transform(v) for v in face],color,part,'Kenney grass ribbon')

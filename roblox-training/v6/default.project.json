@@ -1,5 +1,5 @@
 {
-  "name": "SIRIAI Recruiter Island v6.9",
+  "name": "SIRIAI Recruiter Island v6.10",
   "tree": {
     "$className": "DataModel",
     "Workspace": {
@@ -18,25 +18,26 @@
         "$className": "Terrain",
         "$properties": {
           "Decoration": true,
+          "GrassLength": 0.7,
           "WaterColor": [
-            0.48627450980392156,
-            0.6196078431372549,
-            0.6705882352941176
+            0.40784313725490196,
+            0.5607843137254902,
+            0.611764705882353
           ],
-          "WaterTransparency": 0.48,
-          "WaterReflectance": 0.42,
-          "WaterWaveSize": 0.14,
-          "WaterWaveSpeed": 5
+          "WaterTransparency": 0.28,
+          "WaterReflectance": 0.72,
+          "WaterWaveSize": 0.22,
+          "WaterWaveSpeed": 6
         },
         "Clouds": {
           "$className": "Clouds",
           "$properties": {
-            "Cover": 0.28,
-            "Density": 0.25,
+            "Cover": 0.36,
+            "Density": 0.28,
             "Color": [
-              0.8823529411764706,
-              0.8352941176470589,
-              0.7764705882352941
+              0.9529411764705882,
+              0.807843137254902,
+              0.6784313725490196
             ]
           }
         }
@@ -44,61 +45,86 @@
     },
     "Lighting": {
       "$properties": {
+        "LightingStyle": "Realistic",
+        "PrioritizeLightingQuality": true,
         "Ambient": [
-          0.6078431372549019,
-          0.5803921568627451,
-          0.5333333333333333
+          0.5098039215686274,
+          0.4549019607843137,
+          0.5490196078431373
         ],
         "OutdoorAmbient": [
-          0.7137254901960784,
-          0.6745098039215687,
-          0.596078431372549
+          0.6901960784313725,
+          0.6274509803921569,
+          0.7254901960784313
         ],
-        "Brightness": 2,
-        "ClockTime": 17.7,
-        "GeographicLatitude": 28,
+        "Brightness": 2.8,
+        "ExposureCompensation": 0.12,
+        "ClockTime": 15.6,
+        "GeographicLatitude": -56.0,
         "GlobalShadows": true,
-        "ShadowSoftness": 0.7,
+        "ShadowSoftness": 0.25,
         "ColorShift_Top": [
-          0.9647058823529412,
-          0.7411764705882353,
-          0.5764705882352941
+          1.0,
+          0.7764705882352941,
+          0.5058823529411764
         ],
-        "EnvironmentDiffuseScale": 0.85,
-        "EnvironmentSpecularScale": 0.65
+        "EnvironmentDiffuseScale": 1,
+        "EnvironmentSpecularScale": 1
       },
       "Atmosphere": {
         "$className": "Atmosphere",
         "$properties": {
-          "Density": 0.24,
+          "Density": 0.3,
           "Offset": 0.12,
           "Color": [
-            0.8588235294117647,
-            0.792156862745098,
-            0.6823529411764706
+            0.9411764705882353,
+            0.8,
+            0.6274509803921569
           ],
           "Decay": [
-            0.615686274509804,
-            0.6705882352941176,
-            0.7098039215686275
+            0.5372549019607843,
+            0.4666666666666667,
+            0.5607843137254902
           ],
-          "Haze": 1.2,
-          "Glare": 0.15
+          "Haze": 1.6,
+          "Glare": 0.38
         }
       },
       "Sky": {
         "$className": "Sky",
         "$properties": {
-          "CelestialBodiesShown": false,
-          "StarCount": 0
+          "CelestialBodiesShown": true,
+          "StarCount": 0,
+          "SunAngularSize": 2.8,
+          "MoonAngularSize": 0
         }
       },
       "Bloom": {
         "$className": "BloomEffect",
         "$properties": {
-          "Intensity": 0.14,
-          "Size": 24,
-          "Threshold": 1.5
+          "Intensity": 0.24,
+          "Size": 36,
+          "Threshold": 1.25
+        }
+      },
+      "SunRays": {
+        "$className": "SunRaysEffect",
+        "$properties": {
+          "Intensity": 0.075,
+          "Spread": 0.78
+        }
+      },
+      "SunsetGrade": {
+        "$className": "ColorCorrectionEffect",
+        "$properties": {
+          "Brightness": 0.015,
+          "Contrast": 0.06,
+          "Saturation": -0.03,
+          "TintColor": [
+            1.0,
+            0.9137254901960784,
+            0.8235294117647058
+          ]
         }
       }
     },

@@ -1,5 +1,5 @@
 {
-  "version": "6.9",
+  "version": "6.10",
   "date": "2026-10-26",
   "status": "review-build",
   "verification": {
@@ -19,23 +19,24 @@
     "phoneInput": "no click activation handler; deliberate equip, P and explicit button only",
     "resumeAndTravel": "passed exported server/client callback adapters, current target and revision enforced",
     "nativeClientAndServerCallbacks": "passed desktop and touch adapters, full campaign and partial task resume",
-    "nativeWaterServer": "136 API/compatibility/failure/rescue checks; preview hidden only after native water succeeds",
+    "nativeWaterServer": "143 API/compatibility/failure/rescue checks; water exposed before terrain; injected later terrain failure cannot re-cover native water",
     "editorWater": "20 serialized noncolliding water surface tiles at sea level -2; 2400x2800 coverage; verified in exported place, geometry and web comparison, not in Studio",
-    "workflowAudit": "anonymized operational chat compared in workflow-audit-v6.9.md; campaign-specific intake and approval ranges; actual followers, assigned targets, contact history, completion reports and final selection distinction",
+    "workflowAudit": "anonymized operational chat compared in workflow-audit-v6.10.md; campaign-specific intake and approval ranges; actual followers, assigned targets, contact history, completion reports and final selection distinction",
     "revisedScenarios": "254 checks across all eight scenario variants and every answer; correct/wrong outcomes, timing, immediate retry and compensation isolation",
-    "terrainAndGeometry": "passed original geometry bounds, clear paths, continuous seabed",
-    "visualCriteria": "pre-implementation water/workflow criteria and results in design-review-v6.9.md; desktop/mobile native-property renders of revised lessons, web editor-geometry comparison and fee room inspected; Roblox engine rendering remains unverified",
+    "terrainAndGeometry": "1960 saved surface corners match heightfield; no block columns; original grass bounds verified; 1024 clumps with 99.7% overlapping extents; 133-stud clear route and continuous seabed",
+    "visualCriteria": "criteria and results in design-review-v6.10.md; actual saved slopes and grass geometry inspected in browser; native lighting, grass and reflection properties verified in exported XML; engine rendering and performance not verified",
+    "nativeEnvironment": "Realistic; camera-relative red sun follows Lighting:GetSunDirection; native Clouds; layered Terrain grass and original CC0 curved blades; MIT WindShake drives coherent clumps within 85 studs",
     "webViewsAndMobilePage": "desktop world views inspected with browser; no new real-device play verification",
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_9.rbxl": {
-      "bytes": 3461699,
-      "sha256": "9e9fb03f590cd209972cb54af7a97491f648f0926107acc9164245a9f0ec6d16"
+    "SIRIAI_Recruiter_Island_v6_10.rbxl": {
+      "bytes": 4520686,
+      "sha256": "55067cea6ce9ddf2fa98e73a262de17381ed01773a81afa652cc0a0aff205e9e"
     },
-    "SIRIAI_Recruiter_Island_v6_9_Source.zip": {
-      "bytes": 15666815,
-      "sha256": "238d73572686375432f19fea66fd7f19270ee45a1f06c6dfda11f8bd9a84eb3a"
+    "SIRIAI_Recruiter_Island_v6_10_Source.zip": {
+      "bytes": 21467100,
+      "sha256": "ddc5e4720d77422be4c65df427bb6b5d4b1b2d1f937fd951a3b2790acf7ba054"
     }
   }
 }

@@ -1,7 +1,9 @@
-"""Native v6.9: navigable coastal ridges, a 3D red sun and drifting cloud models."""
+"""Native v6.10: connected coastal surfaces, CC0 meadow and engine-aligned sunset."""
 from coastal_environment import add_coast,height_at,coast_distance,HIKE
-from nature_models import add_nature
-import math,random
+from nature_models import add_nature,compact_mesh,plant_mesh
+import math,random,json
+from pathlib import Path
+from sunset import SUN_POSITION
 from layout import PATH
 def distance_to_path(x,z):
     result=10000
@@ -18,18 +20,9 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         for k in range(n):
             t=(k+.5)/n;part(world,'Boardwalk plank',(ax+(bx-ax)*t,.84,az+(bz-az)*t),(11,.32,length/n+.1),rng.choice(['AD8F65','B39770','BEA27C','A98C65']),'WoodPlanks',rot=(0,angle,0))
     # The sun is a real sphere; mountains are the walkable terrain, never image walls.
-    sun=part(world,'Setting sun',(112,103,-1250),(78,78,78),'C7233B','Neon','Ball',collide=False)
-    sun['Properties']['CastShadow']=False
-    # Mid-distance cloud sculptures add actual parallax; native Clouds provide the high sky.
-    clouds=obj('DriftingClouds','Folder');world.append(clouds)
-    cloud_specs=[(-430,230,-740,130,22,48),(-170,266,-940,102,15,34),(342,237,-840,154,20,52),
-                 (682,292,-320,168,23,60),(-645,270,-85,136,19,53),(140,298,515,153,20,50)]
-    for index,(cx,cy,cz,w,h,d) in enumerate(cloud_specs):
-        cluster=obj(f'Cloud{index:02d}','Model');clouds['Children'].append(cluster)
-        for ox,oy,oz,sx,sy,sz in [(-.22,0,0,.66,.75,.92),(.10,.23,-.08,.68,1.0,1.0),(.37,-.03,.08,.40,.60,.72),(-.06,.04,.14,.82,.62,1.10)]:
-            p=part(cluster['Children'],'Sky cloud puff',(cx+ox*w,cy+oy*h,cz+oz*d),
-                     (w*sx,h*sy,d*sz),'F2E4D3','SmoothPlastic','Ball',trans=.08,collide=False)
-            p['Properties']['CanQuery']=False;p['Properties']['CastShadow']=False
+    sun=part(world,'Setting sun',SUN_POSITION,(78,78,78),'D8412E','Neon','Ball',collide=False)
+    sun['Properties'].update(CastShadow=False,CanQuery=False)
+    # Native volumetric Clouds supply the sky; no solid pancake cloud props.
     # A connected ridge trail stays away from the work areas.
     for (ax,az),(bx,bz) in zip(HIKE,HIKE[1:]):
         length=math.hypot(bx-ax,bz-az);n=math.ceil(length/2.4);yaw=math.degrees(math.atan2(bx-ax,bz-az))
@@ -65,37 +58,39 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         if -54<x<8 and -34<z<-20:return False
         if 0<x<55 and -24<z<-9:return False
         return True
+    # Overlapping original CC0 leaves, not procedural needles. One jittered field
+    # prevents the same point being planted twice where meadow patches overlap.
     positions=[]
-    for cx,cz,rx,rz in patches:
-        for x in range(int(cx-rx),int(cx+rx),4):
-            for z in range(int(cz-rz),int(cz+rz),4):
-                px,pz=x+rng.uniform(-1.9,1.9),z+rng.uniform(-1.9,1.9)
-                radius=((px-cx)/rx)**2+((pz-cz)/rz)**2
-                if radius>1 or rng.random()>.95-radius*.18 or not allowed(px,pz):continue
-                positions.append((px,pz))
+    for x in range(-146,123,5):
+        for z in range(-278,133,5):
+            px,pz=x+rng.uniform(-1.4,1.4),z+rng.uniform(-1.4,1.4)
+            radius=min(((px-cx)/rx)**2+((pz-cz)/rz)**2 for cx,cz,rx,rz in patches)
+            if radius>1 or (radius>.82 and rng.random()>.72) or not allowed(px,pz):continue
+            positions.append((px,pz))
+    rects,faces=compact_mesh('grass',ribbon_width=.45)
+    instances=[]
     for i,(x,z) in enumerate(positions):
-        cluster=obj(f'Reeds{i:04d}','Model');reeds['Children'].append(cluster);c=cluster['Children'];base=height_at(x,z)
-        for k in range(3):
-            angle=k*math.tau/3+rng.uniform(-.5,.5);h=rng.uniform(1.7,2.7)
-            part(c,'Meadow blade',(x+math.cos(angle)*.32,base+h*.43,z+math.sin(angle)*.32),(.18,h,.055),rng.choice(['A5A16C','B3AB74','989C65']),'SmoothPlastic','Ball',rot=(0,math.degrees(-angle),-22),collide=False)
-        for k in range(2):
-            dx,dz=rng.uniform(-.45,.45),rng.uniform(-.45,.45);h=rng.uniform(2.9,4.1);lean=rng.uniform(-7,7)
-            tipx=x+dx-math.sin(math.radians(lean))*h/2
-            part(c,'Meadow stem',(x+dx,base+h*.5,z+dz),(.045,h,.045),'A9A16C','SmoothPlastic',rot=(0,0,lean),collide=False)
-            colour=rng.choice(['DDC48F','E8D3A6','D0B579'])
-            part(c,'Meadow seedhead',(tipx,base+h+.20,z+dz),(.11,.80,.09),colour,'SmoothPlastic','Ball',rot=(0,0,lean),collide=False)
-            # A loose, tapered panicle rather than a single cattail-shaped capsule.
-            for side in [-1,1]:
-                for j in range(2):
-                    part(c,'Meadow plume branch',(tipx+side*(.12-j*.04),base+h+.06+j*.24,z+dz),(.09,.50-j*.08,.06),colour,'SmoothPlastic','Ball',rot=(0,rng.uniform(-25,25),-side*(30-j*8)+lean),collide=False)
-        for p in c:p['Properties'].update(CanQuery=False,CastShadow=False)
+        cluster=obj(f'Meadow{i:04d}','Model');reeds['Children'].append(cluster);c=cluster['Children'];base=height_at(x,z)-.03
+        angle=rng.uniform(0,math.tau);co,si=math.cos(angle),math.sin(angle)
+        width=rng.uniform(14.5,17.5)
+        near=distance_to_path(x,z)<17
+        height=rng.uniform(5,7) if near else rng.uniform(9,13)
+        tint=rng.choice(['BAAD70','C6B477','D1BA7C','B5AB70'])
+        def transform(v):return (x+(v[0]*co+v[2]*si)*width,base+v[1]*height,z+(-v[0]*si+v[2]*co)*width)
+        plant_mesh(c,rects,faces,transform,tint,part)
+        # WindShake animates one invisible root per complete clump. All native
+        # faces follow that transform together, so a leaf never splits apart.
+        anchor=part(c,'Grass wind root',(x,base,z),(.1,.1,.1),'FFFFFF',trans=1,collide=False)
+        for p in c:p['Properties'].update(CanQuery=False,CanTouch=False,CastShadow=False)
+        instances.append({'position':[x,base,z],'widthScale':width,'heightScale':height,'angle':angle,'color':tint,'rectangles':len(rects),'triangles':len(faces),'asset':'grass','ribbonWidth':.45})
+    (Path(__file__).parent/'meadow-instances.json').write_text(json.dumps(instances,separators=(',',':')),encoding='utf-8')
     # An easy route into and out of the shallows, with posts continuing below water.
     for k in range(12):
         part(world,'Water access step',(0,.64-k*.42,-343-k*1.4),(10,.45,1.65),'C6B59B','WoodPlanks')
     for x in [-40,-15,15]:part(world,'Lookout foundation',(x,-3,-333),(1,8,1),'887B65','Wood')
     add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum)
-    return {'version':'6.9','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
+    return {'version':'6.10','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':SUN_POSITION,
             'lake':coast['ocean'],'seaLevel':coast['seaLevel'],'coastFile':'coast.json',
-            'backdrop':'atmosphere','sceneryGeometry':'navigable-terrain','clouds':'native-and-3d',
+            'backdrop':'atmosphere','sceneryGeometry':'navigable-terrain','clouds':'native-volumetric',
             'views':{'sunset':{'position':[0,6,-180],'target':[35,27,-850]},'lake':{'position':[70,24,-270],'target':[0,-1,-345]},
                      'ridge':{'position':[352,154,205],'target':[0,12,-210]},'overview':{'position':[250,230,265],'target':[0,1,-105]}}}

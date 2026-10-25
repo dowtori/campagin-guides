@@ -7,8 +7,10 @@ local terrain=workspace.Terrain
 local map=workspace:WaitForChild('TrainingMap')
 local previews=map:WaitForChild('Architecture'):WaitForChild('CoastPreview')
 local oceanPreviews=map:WaitForChild('Architecture'):WaitForChild('OceanPreview')
-workspace:SetAttribute('SiriaiWorldVersion','6.9')
+workspace:SetAttribute('SiriaiWorldVersion','6.10')
 workspace:SetAttribute('SiriaiOceanReady',false)
+workspace:SetAttribute('SiriaiTerrainReady',false)
+workspace:SetAttribute('SiriaiTerrainChunks',0)
 workspace:SetAttribute('SiriaiOceanStatus','해안과 바다를 준비하고 있어요')
 workspace.FallenPartsDestroyHeight=-4096
 workspace.GlobalWind=Vector3.new(4,0,1.5)
@@ -49,6 +51,12 @@ local ok,reason=xpcall(function()
         terrain:FillBlock(CFrame.new(cx,-44,cz),Vector3.new(sx,8,sz),Enum.Material.Sand)
         task.wait()
     end end
+    -- Native water is ready now. A later mountain error must not leave glass
+    -- covering the engine's waves/reflections for the entire play session.
+    for _,p in ipairs(oceanPreviews:GetChildren())do if p:IsA('BasePart')then p.Transparency=1;p.CanCollide=false;p.CanTouch=false;p.CanQuery=false end end
+    workspace:SetAttribute('SiriaiOceanReady',true)
+    workspace:SetAttribute('SiriaiOceanStatus','Water ready; building coastline')
+    local completed=0
     local r=data.voxelSize
     local nx=(data.nx-1)*data.step/r;local nz=(data.nz-1)*data.step/r
     local chunk=data.chunkCells
@@ -63,13 +71,19 @@ local ok,reason=xpcall(function()
             end end
             local upper=math.min(data.maxY,math.ceil(top/r)*r)
             local ny=(upper-data.minY)/r
+            -- Height is constant along a column. Sample once, not once per Y voxel.
+            local heights={}
+            for x=1,dx do
+                heights[x]={}
+                for z=1,dz do heights[x][z]=Coast.height(data,data.x0+(sx+x-.5)*r,data.z0+(sz+z-.5)*r) end
+            end
             local materials,solids,liquids={},{},{}
             for x=1,dx do
                 materials[x]={};solids[x]={};liquids[x]={}
                 for y=1,ny do
                     materials[x][y]={};solids[x][y]={};liquids[x][y]={}
                     for z=1,dz do
-                        local name,solid,liquid=Coast.voxel(data,data.x0+(sx+x-.5)*r,data.minY+(y-1)*r,data.z0+(sz+z-.5)*r)
+                        local name,solid,liquid=Coast.voxelAtHeight(data,heights[x][z],data.minY+(y-1)*r)
                         materials[x][y][z]=Enum.Material[name];solids[x][y][z]=solid;liquids[x][y][z]=liquid
                     end
                 end
@@ -92,16 +106,16 @@ local ok,reason=xpcall(function()
                 end end end
                 terrain:WriteVoxels(region,r,materials,solids)
             end
+            completed+=1;workspace:SetAttribute('SiriaiTerrainChunks',completed)
             task.wait()
         end
     end
     for _,p in ipairs(previews:GetChildren())do if p:IsA('BasePart')then p.Transparency=1;p.CanCollide=false;p.CanQuery=false end end
-    -- Remove the editor-only surface only once real water and coastline are ready.
-    for _,p in ipairs(oceanPreviews:GetChildren())do if p:IsA('BasePart')then p.Transparency=1;p.CanCollide=false;p.CanTouch=false;p.CanQuery=false end end
-    workspace:SetAttribute('SiriaiOceanReady',true)
+    workspace:SetAttribute('SiriaiTerrainReady',true)
     workspace:SetAttribute('SiriaiOceanStatus','얕은 물가와 수영 가능한 바다')
 end,debug.traceback)
 if not ok then
-    workspace:SetAttribute('SiriaiOceanStatus','바다 준비 오류 · 육지와 복귀 기능은 유지됩니다')
+    workspace:SetAttribute('SiriaiOceanStatus','Terrain build failed; saved land and rescue retained')
+    workspace:SetAttribute('SiriaiTerrainError',tostring(reason))
     warn('[SIRIAI Coast] '..tostring(reason))
 end

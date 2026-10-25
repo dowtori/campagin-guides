@@ -13,13 +13,15 @@ function Coast.height(data,x,z)
     local b=h(0,1)*(1-ax)+h(1,1)*ax
     return a*(1-az)+b*az
 end
-function Coast.voxel(data,x,y,z)
-    local h=Coast.height(data,x,z)
+function Coast.voxelAtHeight(data,h,y)
     local solid=clamp((h-y)/data.voxelSize,0,1)
     local liquid=clamp((data.seaLevel-y)/data.voxelSize,0,1)
     if solid>1-1/256 then liquid=0 end -- Full solid voxels cannot contain water.
     local material=solid<=0 and 'Air' or (h<-.15 and 'Sand' or (h>44 and 'Rock' or 'Grass'))
     return material,solid,liquid
+end
+function Coast.voxel(data,x,y,z)
+    return Coast.voxelAtHeight(data,Coast.height(data,x,z),y)
 end
 function Coast.rescue(data,x,y,z)
     local r=data.rescue

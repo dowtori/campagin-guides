@@ -11,8 +11,8 @@ try{
  const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;viewer.prepend(renderer.domElement);
  const camera=new THREE.PerspectiveCamera(52,1,.1,6000),controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=10;controls.maxDistance=1200;controls.maxPolarAngle=Math.PI/2-.01;
- scene.add(new THREE.HemisphereLight(0xe4ecf4,0x8c8b72,1.85));
- const sun=new THREE.DirectionalLight(0xffe4c4,1.8);sun.position.set(-200,130,-600);sun.target.position.set(0,0,-50);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-180,right:180,top:180,bottom:-180,near:10,far:1000});sun.shadow.bias=-.0006;sun.shadow.normalBias=.15;scene.add(sun,sun.target);
+ scene.add(new THREE.HemisphereLight(0xd0b7c5,0xa58d6a,1.65));
+ const sun=new THREE.DirectionalLight(0xffcb8c,2.2);sun.position.fromArray(env.sun);sun.target.position.set(0,0,0);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-180,right:180,top:180,bottom:-180,near:10,far:1800});sun.shadow.bias=-.0006;sun.shadow.normalBias=.15;scene.add(sun,sun.target);
  const time={value:0};
  // A procedural atmospheric gradient. There is no photo, painted sun or painted mountain.
  const sky=new THREE.Mesh(new THREE.SphereGeometry(3000,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{},vertexShader:`varying vec3 vDir;void main(){vDir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec3 vDir;void main(){float y=normalize(vDir).y;vec3 horizon=vec3(.88,.76,.59);vec3 upper=vec3(.38,.53,.65);vec3 lower=vec3(.61,.65,.63);vec3 c=mix(horizon,upper,smoothstep(0.,.42,y));c=mix(c,lower,smoothstep(0.,.45,-y));gl_FragColor=vec4(c,1.);}` }));sky.material.toneMapped=false;if(!portrait)scene.add(sky);else scene.background=new THREE.Color('#f4eee4');
@@ -25,7 +25,7 @@ try{
     const key=p.color+p.transparency+p.material+p.wind;
     if(!materials.has(key)){
       let m=new THREE.MeshStandardMaterial({color:p.color,roughness:p.material==='WoodPlanks'?.92:.85,metalness:0,transparent:p.transparency>0,opacity:1-p.transparency,emissive:p.material==='Neon'?p.color:0,emissiveIntensity:p.name==='Setting sun'?.5:p.material==='Neon'?.65:0,depthWrite:p.transparency<.5});
-      if(p.name==='Setting sun'){m=new THREE.MeshBasicMaterial({color:'#c7233b',toneMapped:false,fog:false});}
+      if(p.name==='Setting sun'){m=new THREE.MeshBasicMaterial({color:'#d8412e',toneMapped:false,fog:false});}
       if(p.wind)m.onBeforeCompile=shader=>{shader.uniforms.uTime=time;shader.vertexShader='uniform float uTime;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`vec4 mvPosition=vec4(transformed,1.);
         #ifdef USE_INSTANCING
         mvPosition=instanceMatrix*mvPosition;
@@ -43,7 +43,7 @@ try{
   const thumbs=[];
   for(const p of parts){
     if(portrait&&!p.thumb)continue;
-    if(p.name==='Ocean water preview'||p.name==='Coast ground preview'||p.name==='Solid sea floor'||p.name==='Mountain terrain preview'||p.name.startsWith('Target_'))continue;
+    if(p.transparency===1||p.name==='Ocean water preview'||p.name==='Solid sea floor'||p.name.startsWith('Target_'))continue;
     if(p.thumb){thumbs.push(p);continue;}
     if(p.answerNPC&&previewChallenge.timed)continue; // The scout round hides NPCs in the native client too.
     const geom=p.shape==='Wedge'?wedge:p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box,m=material(p),key=geom.uuid+m.uuid+Boolean(p.shadow);
@@ -121,7 +121,7 @@ try{
     if(x<coast.nx-1&&z<coast.nz-1){const i=x*coast.nz+z;indices.push(i,i+1,i+coast.nz,i+1,i+coast.nz+1,i+coast.nz);}
   }
   const groundGeometry=new THREE.BufferGeometry();groundGeometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));groundGeometry.setAttribute('color',new THREE.Float32BufferAttribute(colours,3));groundGeometry.setIndex(indices);groundGeometry.computeVertexNormals();
-  const ground=new THREE.Mesh(groundGeometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:false}));ground.receiveShadow=true;if(!portrait)scene.add(ground);
+  const ground=new THREE.Mesh(groundGeometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:false}));ground.receiveShadow=true;// Saved native triangles above are used instead of this smoother substitute.
   const heightBytes=new Uint8Array(coast.nx*coast.nz);
   for(let z=0;z<coast.nz;z++)for(let x=0;x<coast.nx;x++)heightBytes[z*coast.nx+x]=Math.round((coast.heights[x*coast.nz+z]+40)/216*255);
   const heights=new THREE.DataTexture(heightBytes,coast.nx,coast.nz,THREE.RedFormat);heights.minFilter=THREE.LinearFilter;heights.magFilter=THREE.LinearFilter;heights.needsUpdate=true;

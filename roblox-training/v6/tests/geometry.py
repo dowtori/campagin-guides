@@ -22,7 +22,7 @@ for x in range(-1190,1200,40):
   assert any(abs(x-p['CFrame'][0])<=p['Size'][0]/2 and abs(z-p['CFrame'][2])<=p['Size'][2]/2 for p in ocean),'editor ocean has no gaps'
 sun=next(p for p in parts if p.get('Name')=='Setting sun');assert sun['Properties']['Shape']=='Ball' and not sun.get('Children')
 clouds=[p for p in parts if p.get('Name')=='Sky cloud puff']
-assert len(clouds)==24 and all(p['Properties']['Size'][0]>p['Properties']['Size'][1]*2 for p in clouds)
+assert not clouds,'clouds must use native volumetric Clouds, not solid props'
 assert {p['model'] for p in json.loads((R/'nature-instances.json').read_text()) if p['model'].startswith('tree_')}=={'tree_oak'}
 floors=[p['Properties'] for p in parts if p.get('Name')=='Solid sea floor'];assert len(floors)==20
 for x in range(-1020,1021,60):
@@ -60,4 +60,4 @@ for width in [360,390,768,1440]:
  hud_right=width*.035+min(width-126,360);phone_left=width*.965-90
  assert hud_right+4<phone_left
 assert len([p for p in parts if p['ClassName']=='WedgePart'])>10000
-print(f'PASS: {len(parts)} parts; actual 3D sun/ridges/clouds; no image walls; continuous seabed, original OBJ bounds, three targets, source branding and HUD/control separation')
+print(f'PASS: {len(parts)} parts; actual 3D sun/ridges, native Clouds; no image walls; continuous seabed, original OBJ bounds, three targets, source branding and HUD/control separation')

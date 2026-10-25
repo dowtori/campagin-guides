@@ -41,13 +41,13 @@ def height_at(x,z):
 def write_coast_data():
     step=8;x0,z0=-768,-992;nx,nz=193,217
     heights=[round(height_at(x0+x*step,z0+z*step),3) for x in range(nx) for z in range(nz)]
-    data={'version':'6.9','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
+    data={'version':'6.10','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
           'seaLevel':SEA_LEVEL,'minY':-40,'maxY':176,'voxelSize':4,'chunkCells':32,
           'adaptiveChunkHeight':True,'hikePath':HIKE,
           'ocean':{'center':[0,-21,-500],'size':[2400,38,2800]},
           'rescue':{'minY':-38,'maxX':1030,'minZ':-1090,'maxZ':760,'shore':[0,5,-326],'arrival':[-34,5,100]},
-          'materialColors':{'Sand':'CCBA96','Ground':'AAB78A','Grass':'AAB78A','Rock':'9B998B'},
-          'waterColor':'7C9EAB','waterTransparency':.48,'waterReflectance':.42,'waveSize':.14,'waveSpeed':5}
+          'materialColors':{'Sand':'CCBA96','Ground':'AAAD76','Grass':'AAAD76','Rock':'9B998B'},
+          'waterColor':'688F9C','waterTransparency':.28,'waterReflectance':.72,'waveSize':.22,'waveSpeed':6}
     (ROOT/'coast.json').write_bytes(json.dumps(data,separators=(',',':')).encode())
     (ROOT/'src/server/CoastData.json').write_bytes(json.dumps(data,separators=(',',':')).encode())
     return data
@@ -63,18 +63,22 @@ def add_coast(world,part,obj,cf):
             sx=min(600,ocean['size'][0]-x);sz=min(560,ocean['size'][2]-z)
             p=part(water['Children'],'Ocean water preview',(left+x+sx/2,SEA_LEVEL-.06,back+z+sz/2),(sx,.12,sz),data['waterColor'],'Glass',trans=.22,collide=False)
             p['Properties'].update(CastShadow=False,CanCollide=False,CanTouch=False,CanQuery=False,Reflectance=.16)
-    # Land colliders remain until native terrain is ready.
-    for x in range(-368,369,16):
-        for z in range(-448,641,16):
-            h=height_at(x,z)
-            if h<-14:continue
-            color='CCBA96' if h<-.15 or coast_distance(x,z)>-27 else 'AAB78A'
-            p=part(folder['Children'],'Coast ground preview',(x,(h-40)/2,z),(16,h+40,16),color,'Sand' if color=='CCBA96' else 'Ground')
-            p['Properties']['CastShadow']=False
+    # Shared-corner surface, not columns. This saved collider also stays safe if
+    # Terrain construction fails. No 16-stud risers are visible in edit mode.
+    def land_part(parent,name,pos,size,color,material,shape,rot,collide):
+        p=part(parent,'Coast surface preview',pos,(.08,size[1],size[2]),color,'Grass' if color=='AAAD76' else 'Sand',shape,rot,collide=True)
+        p['Properties'].update(CanQuery=True,CastShadow=False)
+        return p
+    for x in range(-384,384,16):
+        for z in range(-448,656,16):
+            pts=[(xx,height_at(xx,zz),zz) for xx,zz in [(x,z),(x+16,z),(x,z+16),(x+16,z+16)]]
+            if max(v[1] for v in pts)<-14:continue
+            color='CCBA96' if coast_distance(x+8,z+8)>-27 else 'AAAD76'
+            for ids in [(0,2,1),(1,2,3)]:triangle(folder['Children'],*(pts[i] for i in ids),color,land_part,'Coast surface preview')
     # Volumetric offshore islands also appear before Play, with the same sampled heights.
     def preview_part(parent,name,pos,size,color,material,shape,rot,collide):
         p=part(parent,'Mountain terrain preview',pos,(.25,size[1],size[2]),color,'Rock',shape,rot,collide=True)
-        p['Properties']['CanQuery']=True
+        p['Properties'].update(CanQuery=True,CastShadow=False)
         return p
     for cx,cz in [(-532,-648),(527,-708)]:
         for x in range(cx-224,cx+224,32):

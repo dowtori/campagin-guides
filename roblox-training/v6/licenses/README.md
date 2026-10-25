@@ -12,3 +12,7 @@
 Fisch, Work at a Pizza Place, Bee Swarm Simulator는 플레이 구조와 공간 참고 자료입니다. 해당 게임의 모델·음악·캐릭터·썸네일은 이 배포물에 포함하지 않습니다. 구체적인 참고 범위는 `design-review.md`에 기록했습니다.
 
 따봉 v6.7은 Slap Battles의 장갑 진열과 Roblox의 과장된 크기 소품을 시각적으로 참고했습니다. 외부 게임의 손 모델·텍스처·썸네일은 배포하지 않습니다. 참고 링크와 채택 범위는 [v6.7 검토 기록](../design-review-v6.7.md)에 남겼습니다.
+
+## v6.10 환경
+
+Kenney `grass.obj`의 굽은 잎 형상을 사용하며 잎 폭·배치·색을 조절했습니다. CC0 원본을 포함합니다. Roblox Duvall Drive는 식생을 층으로 배치하는 방식만 참고했으며 해당 게임 자산은 포함하지 않았습니다. [검토 기록](../design-review-v6.10.md)에 공식 조명 예제와 제작자 자료를 연결했습니다.
