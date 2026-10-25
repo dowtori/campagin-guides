@@ -91,3 +91,5 @@ Rojo 7.7.1로 파일 빌드, Luau 0.744 구문 검증, 318개 상태·진행 검
 `art-direction/`은 픽셀 아트·드림코어 배경의 디자인 검토용 페이지입니다. 이미지 생성 도구로 새로 만든 콘셉트이며 실제 Roblox 화면이나 v3에 적용된 텍스처가 아닙니다. 제공된 참고 사진의 픽셀은 복제·포함하지 않았고, 원본 참고 사진은 저장소와 배포에 넣지 않았습니다. 사용한 프롬프트와 생성 도구는 `art-direction/generation-record.json`에 기록했습니다. 맵 파일과 교육 동작은 v3를 유지합니다.
 
 수정 02는 타투이스트라는 맥락에 맞춰 블랙워크 실루엣·크롬·금속 가시·붉은 태양으로 강도를 높인 별도 시안입니다. `art-direction/black-halo-concept.png`와 `generation-record.json`에 이미지와 제작 기록이 있습니다. 이전 이미지·설명·기록은 각각 `digital-reed-garden-concept.png`, `soft-study.html`, `generation-record-v1.json`에 보존했습니다.
+
+수정 03은 원래 디지털 갈대 정원 시안을 입력으로 사용한 이미지 편집본입니다. 풍경과 마름모 조형물은 살리고, 오른쪽 수평선에 작은 붉은 태양만 반영했습니다. 최신 이미지는 `art-direction/red-sun-concept.png`, 편집 프롬프트는 `generation-record.json`에 있습니다. 강도가 높았던 수정 02는 `black-halo-study.html`과 `generation-record-v2.json`에 보존했습니다.
