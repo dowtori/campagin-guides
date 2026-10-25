@@ -43,4 +43,3 @@ with tempfile.TemporaryDirectory(prefix='siriai-roblox-tests-', dir=ROOT/'tests'
     subprocess.run([str(Path(args.luau).resolve()),str(tmp/'engine.spec.lua')],check=True,cwd=tmp)
 print('PASS: exported place structure / 536 original parts / 6 prompts / no external asset IDs or network calls')
 print('Roblox Studio runtime and account publishing have not been tested here.')
-

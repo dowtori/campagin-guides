@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.otf binary
+*.zip binary
+downloads/*.rbxlx -diff
+map/*.model.json linguist-generated=true
+scene.json linguist-generated=true
+vendor/** -whitespace linguist-vendored=true

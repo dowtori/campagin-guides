@@ -152,4 +152,3 @@ Players.PlayerAdded:Connect(onPlayer)
 Players.PlayerRemoving:Connect(function(player) sessions[player] = nil end)
 for _, player in ipairs(Players:GetPlayers()) do onPlayer(player) end
 print('[SIRIAI] Training Campus loaded: 6 stations / 18 activities')
-
