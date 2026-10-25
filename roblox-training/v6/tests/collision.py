@@ -61,7 +61,7 @@ for n in nodes:
    if 'CanCollide' in p['Properties']:check(not p['Properties']['CanCollide'] and p['Properties']['Transparency']==1,'idle NPC cannot become invisible obstruction')
 import xml.etree.ElementTree as ET
 from collections import Counter
-xml=ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_13.rbxlx')
+xml=ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_14.rbxlx')
 exported=next(it for it in xml.iter('Item') if it.find("Properties/string[@name='Name']") is not None and it.find("Properties/string[@name='Name']").text=='TrainingMap')
 expected=Counter((n.get('Name',''),n['Properties']['CanCollide']) for n in nodes if 'CanCollide' in n.get('Properties',{}))
 actual=Counter()

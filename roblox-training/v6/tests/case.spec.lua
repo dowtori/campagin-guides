@@ -6,9 +6,9 @@ local payloads={
  {reviewed=true},
  {assembled=true,understood=true,completion='already_done'},
  {assembled=true,understood=true,completion='guide_done'},
- {sourceBrand='skincare_brand',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag01'}}},
+ {sourceBrand='oddtype_official',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag01'}}},
  {handle=data.lead.handle,fee=100000,sent=true,status='DM 발송'},
- {replied=true,applicationRead=true},
+ {reaction='none',applicationRead=true},
  {reviewed=true,selectionRead=true}
 }
 local s=Engine.new()
@@ -34,5 +34,5 @@ expect(s.record.setup.profile.completion=='already_done' and s.record.setup.conn
 expect(s.record.setup.profile.selfReported and s.record.setup.connect.selfReported,'outside setup is self-reported, not claimed as verified')
 local setup=Engine.new();setup.phase=2
 expect(not Engine.apply(setup,'profile',{assembled=true,understood=true,completion='opened_guide'},data),'opening a guide does not complete setup')
-expect(#data.appendix==10,'optional edge-case reference topics')
+expect(#data.appendix==9,'optional edge-case reference topics')
 print('PASS: '..n..' campaign checks; ordinary response, separate final notice, no forced exception practice')

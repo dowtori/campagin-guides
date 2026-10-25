@@ -94,5 +94,9 @@
       "commit": "c2161ba08c1974fbb7716cb83b643097ba72f896"
     }
   ],
-  "runtimeScenery": "Actual heightfield terrain, native water, 3D sphere sun, 3D cloud models, engine atmosphere and Clouds. No image scenery walls."
+  "runtimeScenery": "Actual heightfield terrain, native water, 3D sphere sun, 3D cloud models, engine atmosphere and Clouds. No image scenery walls.",
+  "v6.14Screenshots": {
+    "oddtype": "User-supplied screenshot, 2026-10-26. Exact first two content rows and original tab strip; no generative replacement. Training account metadata is explicitly synthetic, not attributed to pictured people. No assertion of general reuse rights.",
+    "sheet": "Captured from authorized existing SIRIAI sheet, 신규모집, blank rows only. Cropped to D/E/F/P columns; no account UI, contact details or operational rows. Native example row and status controls overlaid."
+  }
 }

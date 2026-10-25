@@ -1,10 +1,10 @@
-"""Package the already-built v6.13 place and its exact editable sources."""
+"""Package the already-built v6.14 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.13'
-BINARY='SIRIAI_Recruiter_Island_v6_13.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_13_Source.zip'
+VERSION='6.14'
+BINARY='SIRIAI_Recruiter_Island_v6_14.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_14_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,13 +14,13 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_13')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_14')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_13/downloads/'+BINARY)==place.read_bytes()
+ assert archive.read('SIRIAI_Recruiter_Island_v6_14/downloads/'+BINARY)==place.read_bytes()
 release={'version':VERSION,'date':'2026-10-26','status':'review-build','verification':{
- 'collectionChecks':'38 exported-source interaction/identity checks; 160 native-property screens at four sizes; Studio unavailable',
- 'collectionFlow':'reference brand > Tagged > inspect author/content/followers > Save > visible sheet rows; optional post/profile detail, duplicate author protection, selected author continues to DM/reply; basic creator NPCs removed',
+ 'collectionChecks':'35 screenshot/order/sheet/DM/no-reply/HUD/criteria checks plus full workflow regressions; 156 work UI and 32 HUD property snapshots; Studio unavailable',
+ 'collectionFlow':'user-supplied oddtype first two rows, exact four-column order, native save overlays; explicitly synthetic author metadata; actual blank sheet capture and status selection; full multiline DM; like/read-only application acknowledgement; invented contact-history condition removed',
  'celebrationChecks':'12 lifecycle checks; 160 native-property screens at four sizes, no browser-approximation overflow; Studio rendering not verified',
  'collisionChecks':'129678 source/export checks; 46 original solid nature models and clear required route; 8694 reward client checks; engine solver and mobile performance unverified',
  'celebration':'single 1.5s existing-header acknowledgement; centered finish card; no floating thumb, stage-name toast or duplicate replay celebration',
@@ -37,9 +37,9 @@ release={'version':VERSION,'date':'2026-10-26','status':'review-build','verifica
  'coreFlow':'seven phases at three forward stops including a collection PC; ordinary reply and separate selection notice',
  'advancedGames':'three optional world-space games; explicit start, server-owned 30s scout deadline, untimed NPC answers; immediate retry, stale attempt and outside-room rejection',
  'advancedRewards':'100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming',
- 'rewardEvolution':'11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal; visible-stage collision; detached model preview removed in v6.13',
+ 'rewardEvolution':'11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal; visible-stage collision; detached model preview removed in v6.12',
  'advancedChecks':'exported engine/session, client, server and reward adapter checks; compact room bounds and world-panel aspect ratios checked',
- 'optionalAppendix':'ten completion-only read-only topics; no new mandatory stages or tests',
+ 'optionalAppendix':'nine completion-only read-only topics; no new mandatory stages or tests',
  'requiredRoute':'133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry',
  'phoneInput':'no click activation handler; deliberate equip, P and explicit button only',
  'resumeAndTravel':'passed exported server/client callback adapters, current target and revision enforced',

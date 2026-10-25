@@ -1,4 +1,4 @@
--- SIRIAI v6.13: measured dialogs, explicit actions and consistent type roles.
+-- SIRIAI v6.14: measured dialogs, explicit actions and consistent type roles.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
@@ -6,6 +6,7 @@ local RS=game:GetService('ReplicatedStorage')
 local UIS=game:GetService('UserInputService')
 local data=require(script.Parent:WaitForChild('CaseData'))
 local Discovery=require(script.Parent:WaitForChild('DiscoveryLesson'))
+local Sheet=require(script.Parent:WaitForChild('SheetLesson'))
 local DialogLayout=require(script.Parent:WaitForChild('DialogLayout'))
 local T={title=30,body=22,note=18,label=16,action=20}
 local Raster=require(script.Parent:WaitForChild('RasterRenderer'))
@@ -33,10 +34,21 @@ local function btn(parent,value,fn)
  local o=make('TextButton',parent,{Text=value,TextSize=T.action,TextColor3=C.ink,Font=Enum.Font.GothamBold,TextWrapped=true,BackgroundColor3=C.soft,BorderSizePixel=0,Size=UDim2.new(1,0,0,52),AutoButtonColor=true})
  round(o,10);if fn then o.Activated:Connect(fn)end;return o
 end
-local hud=make('Frame',gui,{Name='ObjectiveHUD',Position=UDim2.new(.035,0,0,74),Size=UDim2.new(1,-126,0,112),BackgroundColor3=C.ink,BackgroundTransparency=.06,BorderSizePixel=0});round(hud,14)
-make('UISizeConstraint',hud,{MaxSize=Vector2.new(360,112)})
-local phaseText=txt(hud,'첫 캠페인 받기',22,C.white,28);phaseText.Name='ObjectiveTitle';phaseText.Position=UDim2.fromOffset(14,12);phaseText.Size=UDim2.new(1,-28,0,28);phaseText.Font=Enum.Font.GothamBold
-local objective=make('TextButton',hud,{Text='준비 테라스로 이동 →',TextSize=18,TextColor3=C.white,Font=Enum.Font.Gotham,LineHeight=1.2,TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,BackgroundColor3=C.white,BackgroundTransparency=.88,BorderSizePixel=0});round(objective,8);objective.Position=UDim2.fromOffset(14,47);objective.Size=UDim2.new(1,-28,0,52)
+local hud=make('Frame',gui,{Name='ObjectiveHUD',Position=UDim2.new(.035,0,0,74),Size=UDim2.new(1,-126,0,160),BackgroundColor3=C.ink,BackgroundTransparency=.04,BorderSizePixel=0});round(hud,14)
+make('UISizeConstraint',hud,{MaxSize=Vector2.new(360,224)})
+local phaseText=txt(hud,'첫 캠페인 받기',24,C.white,60);phaseText.Name='ObjectiveTitle';phaseText.Position=UDim2.fromOffset(20,16);phaseText.Size=UDim2.new(1,-40,0,60);phaseText.Font=Enum.Font.GothamBold
+local objective=make('TextButton',hud,{Name='ObjectiveAction',Text='준비 테라스로 이동 →',TextSize=20,TextColor3=C.white,Font=Enum.Font.GothamBold,TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,BackgroundColor3=C.pink,BorderSizePixel=0});round(objective,8);objective.Position=UDim2.fromOffset(20,92);objective.Size=UDim2.new(1,-40,0,48)
+make('UIPadding',objective,{PaddingLeft=UDim.new(0,16),PaddingRight=UDim.new(0,16)})
+local function fitHud()
+ local width=math.min(360,gui.AbsoluteSize.X-126)-40
+ local pixels=0;for _,code in utf8.codes(phaseText.Text)do pixels+=phaseText.TextSize*(code>=0x2E80 and 1 or code==32 and .36 or .62)end
+ local height=math.max(30,math.ceil(pixels/math.max(100,width*.96))*29)
+ phaseText.Size=UDim2.new(1,-40,0,height)
+ objective.Position=UDim2.fromOffset(20,16+height+14)
+ hud.Size=UDim2.new(1,-126,0,height+94)
+end
+phaseText:GetPropertyChangedSignal('Text'):Connect(fitHud)
+fitHud()
 local phoneButton=btn(gui,'폰  [P]');phoneButton.Name='PhoneButton';phoneButton.Size=UDim2.fromOffset(90,44);phoneButton.AnchorPoint=Vector2.new(1,0);phoneButton.Position=UDim2.new(.965,0,0,74)
 local helpButton=btn(gui,'?');helpButton.Size=UDim2.fromOffset(44,44);helpButton.AnchorPoint=Vector2.new(1,0);helpButton.Position=UDim2.new(.965,0,0,126)
 local toast=txt(gui,'',T.note,C.white,64);toast.AnchorPoint=Vector2.new(.5,1);toast.Position=UDim2.new(.5,0,1,UIS.TouchEnabled and -220 or -138);toast.Size=UDim2.new(.9,0,0,64);toast.AutomaticSize=Enum.AutomaticSize.Y;toast.Size=UDim2.new(.9,0,0,0);toast.BackgroundColor3=C.ink;toast.BackgroundTransparency=.04;toast.Visible=false;round(toast)
@@ -56,10 +68,12 @@ local bodyLayout=make('UIListLayout',body,{Padding=UDim.new(0,12),SortOrder=Enum
 make('UIPadding',body,{PaddingRight=UDim.new(0,6),PaddingBottom=UDim.new(0,4)})
 local primary=btn(panel,'계속');primary.Name='PrimaryAction';primary.Size=UDim2.new(1,-48,0,52);primary.BackgroundColor3=C.pink;primary.TextColor3=C.white
 local secondary=btn(panel,'이미 완료했습니다');secondary.Name='SecondaryAction';secondary.Size=UDim2.new(1,-48,0,52);secondary.Visible=false
+local measureCards
 local layoutDirty=true;local dialogWidth=560;local centeredDialog=false
 local function requestLayout()layoutDirty=true end
 local function fitDialog()
  if mode=='phone' then return end
+ if measureCards then measureCards(math.min(dialogWidth,math.max(240,gui.AbsoluteSize.X-32))-90) end
  local titleHeight=title.TextBounds and title.TextBounds.Y or 36
  local content=bodyLayout.AbsoluteContentSize and bodyLayout.AbsoluteContentSize.Y or 0
  if content>0 then content+=4 end
@@ -119,13 +133,38 @@ local function clear(heading,step)
  secondary.Visible=false;doSecondary=nil
  requestLayout();fitDialog();visibility(true);action('계속',nil,false)
 end
+local cards={}
 local function card(label,value,color)
  local f=make('Frame',body,{Name='InfoCard',Size=UDim2.new(1,0,0,0),AutomaticSize=Enum.AutomaticSize.Y,BackgroundColor3=C.soft,BorderSizePixel=0});round(f)
  make('UIPadding',f,{PaddingLeft=UDim.new(0,18),PaddingRight=UDim.new(0,18),PaddingTop=UDim.new(0,16),PaddingBottom=UDim.new(0,16)})
  make('UIListLayout',f,{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder})
  local small=txt(f,label,T.label,C.gray);small.Name='CardLabel';small.LayoutOrder=1
  local main=txt(f,value,T.body,color or C.ink);main.Name='CardValue';main.LayoutOrder=2
+ table.insert(cards,{frame=f,label=small,value=main})
  return f,main
+end
+measureCards=function(width)
+ local service=game:GetService('TextService')
+ local function measure(t)
+  local lines=0
+  for line in (t.Text..'\n'):gmatch('(.-)\n')do
+   local pixels=0
+   for _,code in utf8.codes(line)do pixels+=t.TextSize*(code>=0x2E80 and 1 or code==32 and .36 or .62)end
+   lines+=math.max(1,math.ceil(pixels/math.max(80,width*.94)))
+  end
+  local height=math.ceil(lines*t.TextSize*1.24)+4
+  if service then
+   local ok,bounds=pcall(function()return service:GetTextSize(t.Text,t.TextSize,t.Font,Vector2.new(math.max(80,width),10000))end)
+   if ok and bounds then height=math.max(height,math.ceil(bounds.Y*1.2)+2)end
+  end
+  t.AutomaticSize=Enum.AutomaticSize.None;t.Size=UDim2.new(1,0,0,height)
+  return height
+ end
+ for i=#cards,1,-1 do
+  local c=cards[i]
+  if not c.frame.Parent then table.remove(cards,i)
+  else local h=measure(c.label)+8+measure(c.value)+32;c.frame.AutomaticSize=Enum.AutomaticSize.None;c.frame.Size=UDim2.new(1,0,0,h)end
+ end
 end
 local function note(value,color)return txt(body,value,T.note,color or C.gray)end
 local function images(keys,height,ratio)
@@ -212,13 +251,13 @@ render=function(profileId)
  local function screen(heading,step,total)clear(heading,q.place..(total and ('  ·  '..step..' / '..total) or ''))end
  if q.id=='brief'then
   screen('첫 캠페인을 맡아볼까요?')
-  card('이번 연습의 모집 기준','스킨케어 광고 릴스 경험\n팔로워 1천~5만')
+  card('이번 연습의 모집 기준',data.criteria)
   action('첫 캠페인 맡기',function()submit({reviewed=true})end)
  elseif q.id=='profile' or q.id=='connect'then
   setupLesson(q,d)
  elseif q.id=='discover'then
   Discovery.render({make=make,txt=txt,btn=btn,round=round,body=body,colors=C,raster=Raster,
-   UDim2=UDim2,UDim=UDim,Vector2=Vector2,Enum=Enum,width=gui.AbsoluteSize.X,
+   UDim2=UDim2,UDim=UDim,Vector2=Vector2,Enum=Enum,width=gui.AbsoluteSize.X,height=gui.AbsoluteSize.Y,
    clear=clear,card=card,action=action,alternate=alternate,submit=submit,render=function()render()end,
    configure=function(width,footer)
     dialogWidth=width;centeredDialog=true;panelLimit.MaxSize=Vector2.new(width,780);primary.Visible=footer
@@ -232,19 +271,20 @@ render=function(profileId)
    action('1만~5만 미만 문구 열기',function()d.step=2;render()end)
   elseif d.step==2 then
    screen('DM 미리보기',2,3)
-   card('@'..leadHandle..'에게','안녕하세요, 시리아이입니다 :)\n스킨케어 릴스 캠페인 협업을 제안드립니다.\n제안 고료 10만 원\n관심 있으시면 지원 부탁드립니다.')
+   local bubble=card('@'..leadHandle..'에게',data.dmExample);bubble.Name='CampaignDM'
    action('DM 보내기',function()d.step=3;render()end)
   else
    screen('발송 기록',3,3)
-   card('시트 기록','@'..leadHandle..'\n연락전 → DM 발송')
-   card('완료 공유','연습 캠페인\n발송 1건 · 특이사항 없음')
-   action('DM 발송으로 저장',function()submit({handle=leadHandle,fee=data.lead.fee,sent=true,status='DM 발송'})end)
+   Sheet.render({make=make,txt=txt,btn=btn,body=body,colors=C,raster=Raster,UDim2=UDim2,Vector2=Vector2,Enum=Enum,width=gui.AbsoluteSize.X,
+    render=function()render()end,configure=function(width,footer)dialogWidth=width;centeredDialog=true;panelLimit.MaxSize=Vector2.new(width,780);primary.Visible=footer;requestLayout()end},data,lead,d)
+   note('발송 1건 · 특이사항 없음')
+   action('발송 기록 완료',function()submit({handle=leadHandle,fee=data.lead.fee,sent=true,status='DM 발송'})end,d.status=='DM 발송')
   end
  elseif q.id=='reply'then
   screen('도착한 회신')
   card('받은 메시지 · @'..leadHandle,'안내해주신 캠페인에 지원했어요!')
-  card('보낼 답장','감사합니다! 최종 선정된 분께는\n담당자가 따로 안내드릴게요 :)')
-  action('이렇게 답장하기',function()submit({replied=true,applicationRead=true})end)
+  alternate('답장 없이 확인',function()submit({applicationRead=true,reaction='none'})end)
+  action('♥ 좋아요',function()submit({applicationRead=true,reaction='like'})end)
  elseif q.id=='settle'then
   screen('정산 확인')
   note('최종 선정 확인 · @'..leadHandle,C.green)
@@ -261,7 +301,7 @@ local function update()
  if advancedView then advancedView.sync(Reward.summary(state))end
  local q=data.phases[state.phase]
  phaseText.Text=state.complete and '첫 캠페인 완료' or q.title
- objective.Text=state.complete and '나루터로 이동 →' or q.place..' · 바로 이동 →'
+ objective.Text=state.complete and '나루터로 이동 →' or q.place..'로 이동 →'
  if marker then marker:Destroy()end;if highlight then highlight:Destroy()end
  if not state.complete then
   local world=workspace:FindFirstChild('TrainingMap');local p=world and world:FindFirstChild('Target_'..q.target,true)
@@ -418,7 +458,7 @@ local function finished()
  requestLayout();fitDialog()
 end
 phoneButton.Activated:Connect(phone)
-gui:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()if mode=='phone' and panel.Visible then phone(true)elseif mode=='work' and panel.Visible and data.phases[state.phase].id=='discover' then render()else requestLayout()end end)
+gui:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()fitHud();if mode=='phone' and panel.Visible then phone(true)elseif mode=='work' and panel.Visible and (data.phases[state.phase].id=='discover' or (data.phases[state.phase].id=='send' and drafts.send and drafts.send.step==3)) then render()else requestLayout()end end)
 helpButton.Activated:Connect(function()
  if panel.Visible then return end
  mode='help';clear('조작 안내')

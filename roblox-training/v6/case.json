@@ -1,9 +1,9 @@
 {
-  "version": "6.13",
+  "version": "6.14",
   "title": "인플루언서 모집을 로블록스에서!",
   "welcome": "브랜드의 캠페인에 어울리는 크리에이터를 찾고, 협업 제안을 전달하는 일이에요. 첫 캠페인 하나를 함께 맡아볼까요?",
   "campaign": "연습 캠페인 / 뷰티",
-  "criteria": "스킨케어 광고 릴스 · 팔로워 1천~5만",
+  "criteria": "뷰티 제품 광고 릴스 · 팔로워 1천~5만",
   "feeRule": "1만 미만: 5만 원 / 1만~5만 미만: 10만 원 / 5만 이상: 20만 원",
   "bio": "The most\nintuitive contents, Siriai.",
   "link": "https://link.siriai.co.kr/",
@@ -20,8 +20,8 @@
       "id": "brief",
       "zone": 1,
       "title": "첫 캠페인 받기",
-      "context": "스킨케어 캠페인의 크리에이터를 찾아 협업을 제안해요.",
-      "reference": "이번 연습: 스킨케어 광고 릴스 경험 · 팔로워 1천~5만. 실제 업무는 캠페인별 모집 기준·레퍼런스·수량·마감과 지정 시트를 확인해요.",
+      "context": "뷰티 캠페인의 크리에이터를 찾아 협업을 제안해요.",
+      "reference": "이번 연습: 뷰티 제품 광고 릴스 경험 · 팔로워 1천~5만. 실제 업무는 캠페인별 모집 기준·레퍼런스·수량·마감과 지정 시트를 확인해요.",
       "goal": "매니저에게 모집 조건을 받아요.",
       "done": "이 자리에서 프로필을 준비해요.",
       "target": "Manager",
@@ -55,7 +55,7 @@
       "title": "태그됨에서 계정 수집",
       "context": "참고 브랜드의 태그됨에서 모집 기준에 맞는 계정을 시트에 저장해요.",
       "reference": "브랜드 계정 → 태그됨 → 게시물·작성자·팔로워 확인 → 저장. 필요하면 게시물이나 프로필을 열어 더 살펴봐요.",
-      "goal": "스킨케어 광고 릴스 · 팔로워 1천~5만",
+      "goal": "뷰티 제품 광고 릴스 · 팔로워 1천~5만",
       "done": "계정을 저장했어요. 길을 따라 DM 데스크로 가요.",
       "target": "DiscoveryDesk",
       "place": "수집 PC"
@@ -76,9 +76,9 @@
       "zone": 3,
       "title": "도착한 회신 확인",
       "context": "지원 완료 소식이 왔어요.",
-      "reference": "지원 접수와 최종 선정은 달라요. 최종 선정된 인원에게는 담당자가 개별 안내해요.",
-      "goal": "지원 완료 회신에 답해요.",
-      "done": "응대 완료. 이 자리에서 이번 기록을 마무리해요.",
+      "reference": "지원 완료 메시지는 좋아요 또는 확인으로 마쳐요. 추가 답장은 보내지 않아요.",
+      "goal": "지원 완료 메시지를 확인해요.",
+      "done": "확인 완료. 이번 기록을 마무리해요.",
       "target": "Mailbox",
       "place": "DM 데스크"
     },
@@ -99,56 +99,96 @@
       "id": "beauty_sample",
       "handle": "beauty_sample",
       "followers": 18000,
-      "genre": "스킨케어 광고 릴스",
+      "genre": "뷰티 제품 광고 릴스",
       "posts": [
-        1,
-        2,
-        3
+        1
       ],
-      "recent": "제품 사용 장면 · 선명한 영상·썸네일\n팔로워 대비 조회·댓글 반응 양호",
-      "history": "이번 캠페인의 제외 대상·최근 접촉 이력 없음",
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
       "fits": true
-    },
-    {
-      "id": "tiny_sample",
-      "handle": "tiny_sample",
-      "followers": 800,
-      "genre": "스킨케어 콘텐츠",
-      "posts": [
-        4,
-        5,
-        6
-      ],
-      "recent": "스킨케어 루틴 게시물",
-      "history": "기존 접촉 없음",
-      "fits": false
-    },
-    {
-      "id": "trip_sample",
-      "handle": "trip_sample",
-      "followers": 20000,
-      "genre": "여행 사진",
-      "posts": [
-        7,
-        8,
-        9
-      ],
-      "recent": "최근 여행 풍경 사진 위주",
-      "history": "기존 접촉 없음",
-      "fits": false
     },
     {
       "id": "routine_sample",
       "handle": "routine_sample",
       "followers": 24000,
-      "genre": "스킨케어 광고 릴스",
+      "genre": "뷰티 제품 광고 릴스",
       "posts": [
-        4,
-        5,
+        2
+      ],
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
+      "fits": true
+    },
+    {
+      "id": "creator_sample03",
+      "handle": "creator_sample03",
+      "followers": 12000,
+      "genre": "뷰티 제품 광고 릴스",
+      "posts": [
+        3
+      ],
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
+      "fits": true
+    },
+    {
+      "id": "creator_sample04",
+      "handle": "creator_sample04",
+      "followers": 32000,
+      "genre": "뷰티 제품 광고 릴스",
+      "posts": [
+        4
+      ],
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
+      "fits": true
+    },
+    {
+      "id": "creator_sample05",
+      "handle": "creator_sample05",
+      "followers": 18000,
+      "genre": "뷰티 제품 광고 릴스",
+      "posts": [
+        5
+      ],
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
+      "fits": true
+    },
+    {
+      "id": "creator_sample06",
+      "handle": "creator_sample06",
+      "followers": 14000,
+      "genre": "뷰티 제품 광고 릴스",
+      "posts": [
         6
       ],
-      "recent": "앰플 사용 과정 · 제품 설명 릴스",
-      "history": "이번 캠페인의 제외 대상·최근 접촉 이력 없음",
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
+      "fits": true
+    },
+    {
+      "id": "creator_sample07",
+      "handle": "creator_sample07",
+      "followers": 28000,
+      "genre": "뷰티 제품 광고 릴스",
+      "posts": [
+        7
+      ],
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
+      "fits": true
+    },
+    {
+      "id": "creator_sample08",
+      "handle": "creator_sample08",
+      "followers": 19000,
+      "genre": "뷰티 제품 광고 릴스",
+      "posts": [
+        8
+      ],
+      "recent": "뷰티 제품을 소개하는 릴스",
+      "history": "",
       "fits": true
     }
   ],
@@ -171,13 +211,6 @@
       "question": "시트는 1.2만인데 실제 계정은 9천이에요.",
       "reply": "인스타그램의 실제 수치를 확인하고, 해당 캠페인의 구간별 문구를 다시 확인해요.",
       "note": "불일치는 시트에 반영·공유해요. 모집 기준과 고료 구간은 따로 확인해요."
-    },
-    {
-      "id": "history",
-      "title": "기존 접촉·중복 확인",
-      "question": "다른 캠페인에서 연락했던 계정이에요.",
-      "reply": "이번 캠페인의 제외 기준과 접촉 이력을 확인하고, 재연락 여부를 시리아이에 확인해요.",
-      "note": "지정된 탭·발송 대상만 진행해요. 최근 접촉 제외 기간이나 재연락 허용은 캠페인마다 달라요."
     },
     {
       "id": "fee",
@@ -233,46 +266,61 @@
   "maximumFollowers": 50000,
   "searchGuide": "안내받은 참고 브랜드 계정의 태그됨에서 찾아요. 콘텐츠·작성자·팔로워를 확인하고 적합한 계정을 저장해요. 필요하면 게시물이나 프로필을 더 살펴봐요.",
   "collection": {
-    "brandHandle": "skincare_brand",
-    "brandName": "스킨케어 브랜드",
+    "brandHandle": "oddtype_official",
+    "brandName": "Oddtype",
     "sourceTab": "tagged",
     "posts": [
       {
         "id": "tag01",
         "author": "beauty_sample",
-        "image": "creator2",
-        "caption": "수분 앰플 사용 과정 · 광고 릴스"
+        "image": "oddtypePost1",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
       },
       {
         "id": "tag02",
         "author": "routine_sample",
-        "image": "creator5",
-        "caption": "스킨케어 루틴 · 광고 릴스"
+        "image": "oddtypePost2",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
       },
       {
         "id": "tag03",
-        "author": "beauty_sample",
-        "image": "creator1",
-        "caption": "앰플 사용 후 피부 표현"
+        "author": "creator_sample03",
+        "image": "oddtypePost3",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
       },
       {
         "id": "tag04",
-        "author": "routine_sample",
-        "image": "creator6",
-        "caption": "제형과 사용감 · 광고 릴스"
+        "author": "creator_sample04",
+        "image": "oddtypePost4",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
       },
       {
         "id": "tag05",
-        "author": "beauty_sample",
-        "image": "creator3",
-        "caption": "제품 도포 과정 · 광고 릴스"
+        "author": "creator_sample05",
+        "image": "oddtypePost5",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
       },
       {
         "id": "tag06",
-        "author": "routine_sample",
-        "image": "creator4",
-        "caption": "데일리 스킨케어 루틴"
+        "author": "creator_sample06",
+        "image": "oddtypePost6",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
+      },
+      {
+        "id": "tag07",
+        "author": "creator_sample07",
+        "image": "oddtypePost7",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
+      },
+      {
+        "id": "tag08",
+        "author": "creator_sample08",
+        "image": "oddtypePost8",
+        "caption": "고객사 태그됨 게시물 · 제공된 캡처"
       }
-    ]
-  }
+    ],
+    "screenshot": "oddtypeTagged",
+    "metadataNotice": "계정 정보는 연습용 예시입니다."
+  },
+  "dmExample": "안녕하세요, 시리아이입니다 :)\n뷰티 제품 릴스 캠페인 협업을 제안드려요.\n\n[캠페인 안내]\n콘텐츠: 제품을 활용한 인스타그램 릴스 1건\n제안 고료: 10만 원\n제품과 상세 가이드는 지원서에서 확인해 주세요.\n\n참여를 희망하시면 아래 지원서를 작성해 주세요.\n지원서: [캠페인별 전달 링크]\n감사합니다!"
 }

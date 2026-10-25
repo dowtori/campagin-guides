@@ -14,6 +14,7 @@ def encode(path,size,colors=48,crop=None):
     else:src=src.resize(size,Image.Resampling.LANCZOS)
     alpha=src.getchannel('A')
     q=src.convert('RGB').quantize(colors=colors,dither=Image.Dither.NONE)
+    pal=q.getpalette();indices=[v+1 if a>0 else 0 for v,a in zip(q.getdata(),alpha.getdata())]
     palette=['00000000']+['%02X%02X%02XFF'%tuple(pal[i*3:i*3+3]) for i in range(colors)]
     rle=[]
     for index in indices:
@@ -36,6 +37,7 @@ def encode(path,size,colors=48,crop=None):
         active=current
     return {'width':size[0],'height':size[1],'palette':palette,'runs':rle,'rects':rects,'file':str(path).replace('\\','/'),'crop':crop,'sourceSize':original_size}
 
+existing=json.loads((ROOT/'raster-data.json').read_text(encoding='utf-8')) if (ROOT/'raster-data.json').exists() else {}
 assets={'logo':encode('assets/siriai-symbol.png',(192,192),8),'logoWhite':encode('assets/siriai-symbol-white.png',(192,192),8),'wordmark':encode('assets/siriai-wordmark-white.png',(480,140),8)}
 for i in range(1,7):assets[f'brand{i}']=encode(f'assets/brand-profile-{i}.jpg',(240,300),48)
 for i in range(1,10):
@@ -45,6 +47,7 @@ for key,data in assets.items():
     size=(128,128) if key.startswith('creator') else (144,180) if key.startswith('brand') else (data['width'],data['height'])
     fallback=encode(data['file'],size,32 if key.startswith(('brand','creator')) else 8)
     data.update(rects=fallback['rects'],fallbackPalette=fallback['palette'],fallbackWidth=size[0],fallbackHeight=size[1])
+assets.update({k:v for k,v in existing.items() if k.startswith('oddtype') or k=='sheetStatus'})
 (ROOT/'raster-data.json').write_text(json.dumps(assets,separators=(',',':')),encoding='utf-8')
 folder=ROOT/'src/shared/RasterData';folder.mkdir(exist_ok=True)
 for key,data in assets.items():(folder/(key+'.json')).write_text(json.dumps(data,separators=(',',':')),encoding='utf-8')

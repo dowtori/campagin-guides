@@ -59,23 +59,23 @@
           ]
         },
         {
-          "conditions": "스킨케어 · 팔로워 1천 이상 · 광고 경험\n이번에는 관련 업체 2개월 내 접촉 제외",
+          "conditions": "스킨케어 · 팔로워 1천~5만\n광고 릴스 경험 · 제품 사용 장면",
           "options": [
             {
               "id": "living",
               "name": "@skin_note",
               "image": "creator2",
-              "facts": "팔로워 8천\n스킨케어 광고\n최근 접촉 없음",
+              "facts": "팔로워 8천\n스킨케어 광고\n제품 사용 릴스",
               "correct": true,
-              "feedback": "이번 모집 조건과 접촉 제외 기준을 모두 확인했어요."
+              "feedback": "팔로워 범위와 스킨케어 광고 경험, 제품 사용 장면이 맞아요."
             },
             {
-              "id": "contacted",
+              "id": "tooSmall",
               "name": "@skin_day",
               "image": "creator5",
-              "facts": "팔로워 2.4만\n스킨케어 광고\n관련 업체와\n지난주 DM",
+              "facts": "팔로워 800\n스킨케어 광고\n제품 사용 릴스",
               "correct": false,
-              "feedback": "이번 캠페인은 관련 업체와 최근 2개월 내 접촉한 계정을 제외해요."
+              "feedback": "이번 모집 하한은 팔로워 1천 명이에요."
             },
             {
               "id": "genre",

@@ -34,7 +34,7 @@ function Engine.apply(state,action,p,data)
     elseif phase=='profile' or phase=='connect'then ok=p.assembled==true and p.understood==true and (p.completion=='already_done' or p.completion=='guide_done')
     elseif phase=='discover'then ok=collectionValid(p,data)
     elseif phase=='send'then ok=p.handle==(state.record.handle or data.lead.handle) and p.fee==data.lead.fee and p.sent==true and p.status=='DM 발송'
-    elseif phase=='reply'then ok=p.replied==true and p.applicationRead==true
+    elseif phase=='reply'then ok=p.applicationRead==true and (p.reaction=='like' or p.reaction=='none')
     elseif phase=='settle'then
         local example=state.exampleRecord or {}
         ok=(state.record.sent==1 or example.sent==1) and (state.record.applied==true or example.applied==true) and p.reviewed==true and p.selectionRead==true end
@@ -45,7 +45,7 @@ function Engine.apply(state,action,p,data)
         for _,row in ipairs(p.collected)do table.insert(state.record.collected,{handle=row.handle,postId=row.postId,sourceBrand=p.sourceBrand,sourceTab='tagged'})end
         state.record.handle=p.collected[1].handle;state.record.status='연락전'
     elseif phase=='send'then state.record.sent=1;state.record.status='DM 발송'
-    elseif phase=='reply'then state.record.applied=true
+    elseif phase=='reply'then state.record.applied=true;state.record.reaction=p.reaction
     elseif phase=='settle'then
         state.record.selected=data.result.selected;state.record.selection=data.result.selection
         state.record.total=(state.record.sent or state.exampleRecord.sent)*300+state.record.selected*2000 end

@@ -14,7 +14,7 @@ expect(H.last().kind=='arrived' and H.last().state.phase==1,'travel preserves wo
 expect(H.root.Position.Z==H.targets.Manager.Position.Z+7,'server-selected clear arrival')
 H.send({kind='resume',revision=0});expect(H.last().kind=='open' and H.last().profile=='Manager','resume current work')
 H.send({kind='travel',revision=90});expect(H.last().kind=='state','stale travel rejected')
-local payloads={{reviewed=true},{assembled=true,understood=true,completion='already_done'},{assembled=true,understood=true,completion='guide_done'},{sourceBrand='skincare_brand',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag01'}}},{handle='beauty_sample',fee=100000,sent=true,status='DM 발송'},{replied=true,applicationRead=true},{reviewed=true,selectionRead=true}}
+local payloads={{reviewed=true},{assembled=true,understood=true,completion='already_done'},{assembled=true,understood=true,completion='guide_done'},{sourceBrand='oddtype_official',sourceTab='tagged',collected={{handle='beauty_sample',postId='tag01'}}},{handle='beauty_sample',fee=100000,sent=true,status='DM 발송'},{reaction='none',applicationRead=true},{reviewed=true,selectionRead=true}}
 local visits={};local previous=nil
 for i,q in ipairs(data.phases)do
  if q.target~=previous then table.insert(visits,q.target);previous=q.target end

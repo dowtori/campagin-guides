@@ -1,4 +1,4 @@
-"""Build v6.13: native coastal terrain, clustered nature and original company visuals."""
+"""Build v6.14: native coastal terrain, clustered nature and original company visuals."""
 import json,math,random
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
@@ -137,19 +137,19 @@ for primitive in thumb['Children']:
     record['thumbStage']=primitive['Children'][-1]['Properties']['Value'];record['thumb']=True
 from advanced_room import add_room
 add_room(world,part,obj,sign,actor)
-sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.13','FFFFFF',INK)
+sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.14','FFFFFF',INK)
 # Short inset chevrons mark forward travel without a screen-size route diagram.
 for z in [92,43,35,0,-19,-60]:
     for side in [-1,1]:part(world,'Forward route arrow',(-34+side*.5,1.03,z),(1.5,.055,.18),PINK,'SmoothPlastic',rot=(0,side*38,0),collide=False)
 # New-world data remains independent of every previous training implementation.
 env.update(version='6.11',views={'challenge':{'position':[60,9,-54],'target':[60,10,-89]},'challengeEntry':{'position':[60,6,-63],'target':[60,10,-89]},'pier':{'position':[-45,14,-280],'target':[-29,10,-328]},'pierClose':{'position':[-41,12,-295],'target':[-29,8,-328]},'meadow':{'position':[0,5,-230],'target':[15,4,-325]},'sunset':{'position':[0,6,-330],'target':[-120,80,-1120]},'overview':{'position':[164,143,172],'target':[0,3,-30]},'agency':{'position':[-10,19,113],'target':[-34,6,63]},'garden':{'position':[-4,11,25],'target':[-54,4,7]},'gardenOriginal':{'position':[-5,20,49],'target':[-47,5,8]}})
-route={'version':'6.13','spawn':list(SPAWN),'path':PATH,'targets':TARGETS,'requiredStops':['Manager','DiscoveryDesk','Mailbox']}
+route={'version':'6.14','spawn':list(SPAWN),'path':PATH,'targets':TARGETS,'requiredStops':['Manager','DiscoveryDesk','Mailbox']}
 (ROOT/'route.json').write_text(json.dumps(route,ensure_ascii=False,indent=2),encoding='utf-8')
 (ROOT/'src/shared/RouteData.json').write_text(json.dumps(route,ensure_ascii=False,indent=2),encoding='utf-8')
 model=obj('TrainingMap','Model',children=[obj('Architecture','Folder',children=world)]);model.pop('Name',None)
 for name,value in [('map/TrainingMap.model.json',model),('scene.json',scene),('environment.json',env)]:
     (ROOT/name).write_text(json.dumps(value,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 from sunset import lighting
-project={'name':'SIRIAI Recruiter Island v6.13','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True,'GrassLength':.7,'WaterColor':rgb('688F9C'),'WaterTransparency':.28,'WaterReflectance':.72,'WaterWaveSize':.22,'WaterWaveSpeed':6},'Clouds':{'$className':'Clouds','$properties':{'Cover':.36,'Density':.28,'Color':rgb('F3CEAD')}}}},'Lighting':lighting(rgb),'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'AdvancedEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
+project={'name':'SIRIAI Recruiter Island v6.14','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True,'GrassLength':.7,'WaterColor':rgb('688F9C'),'WaterTransparency':.28,'WaterReflectance':.72,'WaterWaveSize':.22,'WaterWaveSpeed':6},'Clouds':{'$className':'Clouds','$properties':{'Cover':.36,'Density':.28,'Color':rgb('F3CEAD')}}}},'Lighting':lighting(rgb),'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'AdvancedEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
 (ROOT/'default.project.json').write_text(json.dumps(project,indent=2),encoding='utf-8')
 print('v6 fresh world:',len(scene),'parts, 3 job locations, 4 NPCs, 3 shared work targets; no scenery images')
