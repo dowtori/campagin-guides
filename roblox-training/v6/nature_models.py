@@ -70,7 +70,7 @@ def add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum):
             r,g,b=[int(original[i:i+2],16) for i in (0,2,4)]
             # Keep the original topology; map the kit's saturated colours into the
             # same restrained coastal palette. Bark and canopy remain distinct.
-            if name.startswith('stone'):color='A59E8D'
+            if name.startswith('stone'):color='ADA48E'
             elif r>g*1.15:color='78614E'
             elif r>235 and g>235 and b>235:color='B3AE95'
             else:color=foliage
@@ -80,17 +80,19 @@ def add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum):
     # Three layered groves frame work areas. The centre stays open to the sea.
     groves=[(-126,60),(-151,-65),(143,-46),(-136,165),(130,183)]
     for gi,(cx,cz) in enumerate(groves):
-        for j,(dx,dz,scale) in enumerate([(-13,-8,29),(3,3,32),(17,-12,26),(-4,21,28),(21,18,24)]):
-            name='tree_oak' if j in (0,1) else 'tree_fat' if j in (2,3) else 'tree_default'
-            place(name,cx+dx,cz+dz,scale,rng.uniform(0,360),['819C73','75926A','69875F'][j%3])
-        for dx,dz in [(-17,9),(9,-21),(29,3)]:
-            place('plant_bushLarge',cx+dx,cz+dz,rng.uniform(9,13),rng.uniform(0,360),'8BA178')
+        for j,(dx,dz,scale) in enumerate([(-8,-4,22),(2,1,27),(12,-8,20),(-2,12,24),(13,9,18)]):
+            name='tree_oak'
+            place(name,cx+dx,cz+dz,scale,rng.uniform(0,360),['8E9C78','7D906E','708463'][j%3])
+        for dx,dz in [(-12,4),(5,-14),(18,2),(-4,9),(12,12)]:
+            place('plant_bushLarge',cx+dx,cz+dz,rng.uniform(7,11),rng.uniform(0,360),'8E9C78')
     # Shore rocks are seated in groups rather than scattered as tiny grey dots.
-    for cx,cz in [(-121,-279),(-78,-290),(77,-287),(141,-269),(-193,-187),(188,-178)]:
+    for cx,cz in [(-121,-279),(-78,-290),(-46,-271),(77,-287),(141,-269),(-193,-187),(188,-178)]:
         for dx,dz,scale in [(0,0,17),(-9,4,10),(12,2,12)]:
             place('stone_largeC' if dx else 'stone_largeD',cx+dx,cz+dz,scale,rng.uniform(0,360))
     # Low understorey borders terraces; it never intrudes into a work target.
     for x,z,scale in [(-70,23,10),(-70,37,9),(-66,67,9),(-10,67,8),(-88,-78,10),(-42,-83,9),(-15,-61,8),(76,-55,10),(76,-33,10),(28,-65,8)]:
-        place('plant_bushLarge',x,z,scale,rng.uniform(0,360),'95AC82')
+        place('plant_bushLarge',x,z,scale,rng.uniform(0,360),'8E9C78')
+    for x,z in [(-85,30),(-83,17),(-83,-3),(-70,-22),(-58,-23),(-9,51),(-9,67)]:
+        for dx,dz,size in [(0,0,8),(3,2,5),(-2,3,6)]:place('plant_bushLarge',x+dx,z+dz,size,rng.uniform(0,360),'8E9C78')
     (ROOT/'nature-instances.json').write_bytes(json.dumps(instances,separators=(',',':')).encode())
     print(f'Nature: {len(instances)} curated CC0 instances / {wedges} wedges')

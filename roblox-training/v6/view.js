@@ -5,15 +5,17 @@ const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 try{
  await document.fonts.ready;
  const [parts,env,rasterAssets,coast,thumbData,advancedData]=await Promise.all(['scene.json','environment.json','raster-assets.json','coast.json','src/shared/ThumbData.json','src/shared/AdvancedData.json'].map(u=>fetch('./v6/'+u).then(r=>{if(!r.ok)throw Error(u);return r.json()})));
+ const previewChallenge=advancedData.challenges.find(c=>c.id===new URLSearchParams(location.search).get('challenge'))||advancedData.challenges[0];
+ const portrait=new URLSearchParams(location.search).get('view')==='thumbPortrait';
  const scene=new THREE.Scene();scene.fog=new THREE.FogExp2('#c5bba5',.00068);
  const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;viewer.prepend(renderer.domElement);
  const camera=new THREE.PerspectiveCamera(52,1,.1,6000),controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=10;controls.maxDistance=1200;controls.maxPolarAngle=Math.PI/2-.01;
- scene.add(new THREE.HemisphereLight(0xe6ecdf,0x77866e,2.5));
- const sun=new THREE.DirectionalLight(0xffdfb4,1.7);sun.position.set(-200,130,-600);sun.target.position.set(0,0,-50);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-180,right:180,top:180,bottom:-180,near:10,far:1000});sun.shadow.bias=-.0006;sun.shadow.normalBias=.15;scene.add(sun,sun.target);
+ scene.add(new THREE.HemisphereLight(0xe4ecf4,0x8c8b72,1.85));
+ const sun=new THREE.DirectionalLight(0xffe4c4,1.8);sun.position.set(-200,130,-600);sun.target.position.set(0,0,-50);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-180,right:180,top:180,bottom:-180,near:10,far:1000});sun.shadow.bias=-.0006;sun.shadow.normalBias=.15;scene.add(sun,sun.target);
  const time={value:0};
  // A procedural atmospheric gradient. There is no photo, painted sun or painted mountain.
- const sky=new THREE.Mesh(new THREE.SphereGeometry(3000,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{},vertexShader:`varying vec3 vDir;void main(){vDir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec3 vDir;void main(){float y=normalize(vDir).y;vec3 horizon=vec3(.88,.76,.59);vec3 upper=vec3(.38,.53,.65);vec3 lower=vec3(.61,.65,.63);vec3 c=mix(horizon,upper,smoothstep(0.,.42,y));c=mix(c,lower,smoothstep(0.,.45,-y));gl_FragColor=vec4(c,1.);}` }));sky.material.toneMapped=false;scene.add(sky);
+ const sky=new THREE.Mesh(new THREE.SphereGeometry(3000,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{},vertexShader:`varying vec3 vDir;void main(){vDir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec3 vDir;void main(){float y=normalize(vDir).y;vec3 horizon=vec3(.88,.76,.59);vec3 upper=vec3(.38,.53,.65);vec3 lower=vec3(.61,.65,.63);vec3 c=mix(horizon,upper,smoothstep(0.,.42,y));c=mix(c,lower,smoothstep(0.,.45,-y));gl_FragColor=vec4(c,1.);}` }));sky.material.toneMapped=false;if(!portrait)scene.add(sky);else scene.background=new THREE.Color('#f4eee4');
   const box=new THREE.BoxGeometry(1,1,1),sphere=new THREE.SphereGeometry(.5,16,10),cylinder=new THREE.CylinderGeometry(.5,.5,1,12);cylinder.rotateZ(Math.PI/2);
   const wedge=new THREE.BufferGeometry();
   wedge.setAttribute('position',new THREE.Float32BufferAttribute([-.5,-.5,-.5,-.5,-.5,.5,-.5,.5,.5,.5,-.5,-.5,.5,-.5,.5,.5,.5,.5],3));
@@ -40,8 +42,10 @@ try{
   }
   const thumbs=[];
   for(const p of parts){
+    if(portrait&&!p.thumb)continue;
     if(p.name==='Coast ground preview'||p.name==='Solid sea floor'||p.name==='Mountain terrain preview'||p.name.startsWith('Target_'))continue;
     if(p.thumb){thumbs.push(p);continue;}
+    if(p.answerNPC&&previewChallenge.timed)continue; // The scout round hides NPCs in the native client too.
     const geom=p.shape==='Wedge'?wedge:p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box,m=material(p),key=geom.uuid+m.uuid+Boolean(p.shadow);
     if(!p.name.startsWith('Pixel twilight')){if(!batches.has(key))batches.set(key,{geom,material:m,shadow:p.shadow!==false&&p.material!=='Neon'&&p.transparency<.6&&!p.name.startsWith('Distant')&&!p.name.startsWith('Floating')&&!p.name.startsWith('Cyan'),parts:[]});batches.get(key).parts.push(p);}partCount++;
     if(p.label||p.art||p.raster){
@@ -73,32 +77,35 @@ try{
   function thumbStage(stage){
     const item=thumbData.stages[stage],origin=thumbData.origin;
     for(const {p,mesh} of thumbMeshes){
-      mesh.visible=p.thumbStage<=stage&&!(p.thumbStage===8&&stage===10);
+      mesh.visible=item.groups.includes(p.thumbStage);
       mesh.position.set(...p.position.map((v,i)=>origin[i]+(v-origin[i])*item.scale));mesh.scale.set(...p.size.map(v=>v*item.scale));
-      mesh.material.color.set(stage>=7&&p.thumbStage===0&&!p.name.includes('pedestal')?'#ffce53':p.color);
+      mesh.material.color.set(p.thumbStage===0&&!p.name.includes('pedestal')&&!p.name.includes('thumbnail')?'rgb('+item.color.join(',')+')':p.color);
     }
     const label=document.querySelector('#thumb-label');if(label)label.textContent=item.title+' · '+stage+'/10';
     window.__thumbStage=stage;
   }
   const slider=document.querySelector('#thumb-stage');const initial=Math.max(0,Math.min(10,Number(new URLSearchParams(location.search).get('thumb')??7)));
   if(slider){slider.value=initial;slider.addEventListener('input',()=>{thumbStage(Number(slider.value));view('pier');});}thumbStage(initial);
-  // Static display of the same first challenge data; actual interactions run in Roblox.
-  const round=advancedData.challenges[0].rounds[0];
+  // The public spatial preview uses the same data and exact native panel ratios.
+  const round=previewChallenge.rounds[0];
   async function boardTexture(p){
-    let canvas=document.createElement('canvas');canvas.width=p.name==='ConditionBoard'?1640:750;canvas.height=p.name==='ConditionBoard'?170:465;let ctx=canvas.getContext('2d');
-    ctx.fillStyle=p.name==='ConditionBoard'?'#27242f':'#f9f6ee';ctx.fillRect(0,0,canvas.width,canvas.height);
+    const condition=p.name==='ConditionBoard',consoleBoard=p.name==='ChallengeConsole';
+    let canvas=document.createElement('canvas');canvas.width=condition?1560:consoleBoard?960:750;canvas.height=condition?195:consoleBoard?320:465;let ctx=canvas.getContext('2d');
+    ctx.fillStyle=condition||consoleBoard?'#27242f':'#f9f6ee';ctx.fillRect(0,0,canvas.width,canvas.height);
     function lines(value,x,y,size,color='#25212d'){ctx.font='700 '+size+'px Pretendard,sans-serif';ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';value.split('\n').forEach((t,i)=>ctx.fillText(t,x,y+i*size*1.3));}
-    if(p.name==='ConditionBoard'){lines(round.conditions,680,57,40,'#f9f6ee');lines('30초',1490,85,36,'#f9f6ee');}
-    else{
-      const n=Number(p.name.slice(-1)),o=round.options[n-1];lines(n+'  '+o.name,375,45,34);
-      let image=new Image();image.src='./v6/'+rasterAssets[o.image].file;await image.decode();ctx.drawImage(image,30,93,260,260);
-      lines(o.facts,550,160,30);
-      ctx.fillStyle='#df1940';ctx.fillRect(30,372,690,74);lines('이 크리에이터 선택',375,409,30,'#fff');
+    if(condition){lines(round.conditions,650,68,44,'#f9f6ee');lines(previewChallenge.timed?'30초':'시간제한 없음',1415,98,26,'#f9f6ee');}
+    else if(consoleBoard){
+      advancedData.challenges.map(c=>c.title).forEach((title,i)=>{ctx.fillStyle=advancedData.challenges[i].id===previewChallenge.id?'#df1940':'#534b5c';ctx.fillRect(i*320+12,8,296,70);lines(title,i*320+160,43,26,'#fff');});
+      lines(previewChallenge.timed?'벽면에서 한 명을 선택!':'NPC의 답변 중 하나를 선택!',480,172,40,'#f9f6ee');
+    }else{
+      const n=Number(p.name.slice(-1)),o=round.options[n-1];lines(n+'  '+o.name,375,45,38);
+      if(previewChallenge.timed){let image=new Image();image.src='./v6/'+rasterAssets[o.image].file;await image.decode();ctx.drawImage(image,30,93,260,260);lines(o.facts,550,132,44);}else{lines(o.answer,375,155,44);}
+      ctx.fillStyle='#df1940';ctx.fillRect(30,372,690,74);lines(previewChallenge.timed?'이 크리에이터 선택':'이 답변 선택',375,409,30,'#fff');
     }
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
     const mesh=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0],p.size[1]),new THREE.MeshBasicMaterial({map:texture,toneMapped:false}));mesh.position.set(p.position[0],p.position[1],p.position[2]+p.size[2]/2+.04);scene.add(mesh);
   }
-  await Promise.all(parts.filter(p=>p.name==='ConditionBoard'||p.name.startsWith('ChoiceBoard')).map(boardTexture));
+  if(!portrait)await Promise.all(parts.filter(p=>p.name==='ConditionBoard'||p.name==='ChallengeConsole'||p.name.startsWith('ChoiceBoard')).map(boardTexture));
   // The same height samples used for native terrain drive this continuous preview mesh.
   const positions=[],colours=[],indices=[];const sand=new THREE.Color('#ccba96'),meadow=new THREE.Color('#aab78a'),rock=new THREE.Color('#9b998b');
   for(let x=0;x<coast.nx;x++)for(let z=0;z<coast.nz;z++){
@@ -107,7 +114,7 @@ try{
     if(x<coast.nx-1&&z<coast.nz-1){const i=x*coast.nz+z;indices.push(i,i+1,i+coast.nz,i+1,i+coast.nz+1,i+coast.nz);}
   }
   const groundGeometry=new THREE.BufferGeometry();groundGeometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));groundGeometry.setAttribute('color',new THREE.Float32BufferAttribute(colours,3));groundGeometry.setIndex(indices);groundGeometry.computeVertexNormals();
-  const ground=new THREE.Mesh(groundGeometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:false}));ground.receiveShadow=true;scene.add(ground);
+  const ground=new THREE.Mesh(groundGeometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:false}));ground.receiveShadow=true;if(!portrait)scene.add(ground);
   const heightBytes=new Uint8Array(coast.nx*coast.nz);
   for(let z=0;z<coast.nz;z++)for(let x=0;x<coast.nx;x++)heightBytes[z*coast.nx+x]=Math.round((coast.heights[x*coast.nz+z]+40)/216*255);
   const heights=new THREE.DataTexture(heightBytes,coast.nx,coast.nz,THREE.RedFormat);heights.minFilter=THREE.LinearFilter;heights.magFilter=THREE.LinearFilter;heights.needsUpdate=true;
@@ -124,13 +131,13 @@ try{
       float ripple=sin(vWorld.z*2.+w*3.+uTime*.4)*.5+.5;colour+=vec3(.25,.13,.045)*sparkle*ripple;
       float fog=1.-exp(-length(cameraPosition-vWorld)*.0013);colour=mix(colour,vec3(.73,.71,.63),fog);gl_FragColor=vec4(colour,mix(.72,.97,smoothstep(.2,8.,depth)));
     }`
-  }));water.rotation.x=-Math.PI/2;water.position.set(env.lake.center[0],coast.seaLevel,env.lake.center[2]);water.material.toneMapped=false;scene.add(water);
+  }));water.rotation.x=-Math.PI/2;water.position.set(env.lake.center[0],coast.seaLevel,env.lake.center[2]);water.material.toneMapped=false;if(!portrait)scene.add(water);
 
  let mode='overview';
- function view(name){mode=name;const v=env.views[name]||env.views.overview;camera.position.fromArray(v.position);controls.target.fromArray(v.target);controls.update();document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));}
+ function view(name){mode=name;camera.fov=name==='challengeEntry'?70:(viewer.clientWidth<600?72:52);camera.updateProjectionMatrix();const v=env.views[name]||env.views.overview;camera.position.fromArray(v.position);controls.target.fromArray(v.target);if(name==='thumbPortrait'){const k=thumbData.stages[Number(slider.value)].scale,o=thumbData.origin;camera.position.set(o[0]+11*k,o[1]+7*k,o[2]+20*k);controls.target.set(o[0],o[1]+3*k,o[2]);camera.fov=34;camera.updateProjectionMatrix();}controls.update();document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));}
  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>view(b.dataset.view)));
- function resize(){renderer.setSize(viewer.clientWidth,viewer.clientHeight,false);camera.aspect=viewer.clientWidth/viewer.clientHeight;camera.fov=viewer.clientWidth<600?72:52;camera.updateProjectionMatrix();}
- new ResizeObserver(resize).observe(viewer);resize();const requestedView=new URLSearchParams(location.search).get('view');view(Object.hasOwn(env.views,requestedView)?requestedView:'overview');
+ function resize(){renderer.setSize(viewer.clientWidth,viewer.clientHeight,false);camera.aspect=viewer.clientWidth/viewer.clientHeight;camera.fov=mode==='thumbPortrait'?34:mode==='challengeEntry'?70:viewer.clientWidth<600?72:52;camera.updateProjectionMatrix();}
+ new ResizeObserver(resize).observe(viewer);resize();const requestedView=new URLSearchParams(location.search).get('view');view(Object.hasOwn(env.views,requestedView)||requestedView==='thumbPortrait'?requestedView:'overview');
  let last=performance.now();
  function draw(now){requestAnimationFrame(draw);const dt=Math.min(.1,(now-last)/1000);last=now;if(!reduceMotion)time.value+=dt;controls.update();sky.position.copy(camera.position);renderer.render(scene,camera);window.__mapRendered=true;window.__mapStats={parts:partCount,drawCalls:renderer.info.render.calls,view:mode,scenery:'3D terrain + sphere sun + cloud geometry'};}
  requestAnimationFrame(draw);loading.remove();window.__mapReady=true;

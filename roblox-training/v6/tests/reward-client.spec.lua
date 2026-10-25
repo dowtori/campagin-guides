@@ -36,6 +36,7 @@ for i,id in ipairs({'brief','profile','connect','discover','send','reply','settl
  for _,fn in ipairs(H.delayed)do fn()end;H.delayed={}
  check(base.Size.X>initial,'each phase grows');initial=base.Size.X
  check(notifications[#notifications]:find(config.stages[i+1].title,1,true),'correct title')
+ if i==4 then for _,part in ipairs(model:GetChildren())do if part.Name:find('sunglasses') or part.Name:find('cape')then check(part.Transparency==1,'work outfit replaces earlier glasses; cape remains locked')end end end
 end
 local count=#notifications;reward.sync(state);check(#notifications==count,'same phase no duplicate')
 state.advanced={completed={}}
@@ -45,7 +46,7 @@ for i,id in ipairs({'scout','fee','conditions'})do
 end
 for _,p in ipairs(model:GetChildren())do
  local level=p:FindFirstChild('ThumbStage').Value
- check(p.Transparency==(level==8 and 1 or 0),'king accessories')
+ check(p.Transparency==(table.find(config.stages[11].groups,level) and 0 or 1),'king only shows the expression, cape and crown')
  check(type(p.Material)=='string','valid enum material')
 end
 check(notifications[#notifications]:find('왕따봉',1,true),'king notification')

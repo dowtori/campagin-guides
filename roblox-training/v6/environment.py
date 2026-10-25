@@ -1,4 +1,4 @@
-"""Native v6.5: navigable coastal ridges, a 3D red sun and drifting cloud models."""
+"""Native v6.6: navigable coastal ridges, a 3D red sun and drifting cloud models."""
 from coastal_environment import add_coast,height_at,coast_distance,HIKE
 from nature_models import add_nature
 import math,random
@@ -26,10 +26,9 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
                  (682,292,-320,168,23,60),(-645,270,-85,136,19,53),(140,298,515,153,20,50)]
     for index,(cx,cy,cz,w,h,d) in enumerate(cloud_specs):
         cluster=obj(f'Cloud{index:02d}','Model');clouds['Children'].append(cluster)
-        for k in range(7):
-            t=k/6-.5
-            p=part(cluster['Children'],'Sky cloud puff',(cx+t*w,cy+(1-abs(t)*1.6)*h*.38,cz+rng.uniform(-d*.18,d*.18)),
-                     (w*.38,h*rng.uniform(.75,1.3),d*rng.uniform(.75,1.15)),rng.choice(['E7D9CC','E4D2C3','EEDFD0']),'SmoothPlastic','Ball',trans=.18,collide=False)
+        for ox,oy,oz,sx,sy,sz in [(-.22,0,0,.66,.75,.92),(.10,.23,-.08,.68,1.0,1.0),(.37,-.03,.08,.40,.60,.72),(-.06,.04,.14,.82,.62,1.10)]:
+            p=part(cluster['Children'],'Sky cloud puff',(cx+ox*w,cy+oy*h,cz+oz*d),
+                     (w*sx,h*sy,d*sz),'F2E4D3','SmoothPlastic','Ball',trans=.08,collide=False)
             p['Properties']['CanQuery']=False;p['Properties']['CastShadow']=False
     # A connected ridge trail stays away from the work areas.
     for (ax,az),(bx,bz) in zip(HIKE,HIKE[1:]):
@@ -56,7 +55,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
     centers=[(s['position'][0],s['position'][2]) for s in curriculum['stages']]
     # Compact stands at field margins: broad basal leaves, joined stems and soft
     # seed heads. No random crossing needles in the whole playable landscape.
-    patches=[(-40,-140,26,44),(-64,-213,35,48),(47,-173,29,54),(82,-231,36,42),
+    patches=[(-31,-254,20,18),(30,-249,18,21),(-40,-140,26,44),(-64,-213,35,48),(47,-173,29,54),(82,-231,36,42),
              (-117,-113,25,30),(102,-112,29,32),(-49,108,35,21),(59,77,28,30)]
     def allowed(x,z):
         if 7<x<113 and -120<z<-35:return False
@@ -68,30 +67,34 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         return True
     positions=[]
     for cx,cz,rx,rz in patches:
-        for x in range(int(cx-rx),int(cx+rx),5):
-            for z in range(int(cz-rz),int(cz+rz),5):
-                px,pz=x+rng.uniform(-2,2),z+rng.uniform(-2,2)
+        for x in range(int(cx-rx),int(cx+rx),4):
+            for z in range(int(cz-rz),int(cz+rz),4):
+                px,pz=x+rng.uniform(-1.9,1.9),z+rng.uniform(-1.9,1.9)
                 radius=((px-cx)/rx)**2+((pz-cz)/rz)**2
-                if radius>1 or rng.random()>.8-radius*.25 or not allowed(px,pz):continue
+                if radius>1 or rng.random()>.95-radius*.18 or not allowed(px,pz):continue
                 positions.append((px,pz))
     for i,(x,z) in enumerate(positions):
         cluster=obj(f'Reeds{i:04d}','Model');reeds['Children'].append(cluster);c=cluster['Children'];base=height_at(x,z)
-        for k in range(5):
-            angle=k*math.tau/5+rng.uniform(-.3,.3);h=rng.uniform(1.3,2.1)
-            # A fan whose leaves share the root; wider silhouettes read as grass.
-            part(c,'Meadow blade',(x+math.cos(angle)*.38,base+h*.43,z+math.sin(angle)*.38),(.24,h,.1),rng.choice(['ABB27B','B6BA81','9CA66B']),'SmoothPlastic','Ball',rot=(0,math.degrees(-angle),-24),collide=False)
+        for k in range(3):
+            angle=k*math.tau/3+rng.uniform(-.5,.5);h=rng.uniform(1.7,2.7)
+            part(c,'Meadow blade',(x+math.cos(angle)*.32,base+h*.43,z+math.sin(angle)*.32),(.18,h,.055),rng.choice(['A5A16C','B3AB74','989C65']),'SmoothPlastic','Ball',rot=(0,math.degrees(-angle),-22),collide=False)
         for k in range(2):
-            dx,dz=rng.uniform(-.5,.5),rng.uniform(-.5,.5);h=rng.uniform(2.5,3.6)
-            # Vertical stems meet their plumes exactly. Gold comes from seed heads.
-            part(c,'Meadow stem',(x+dx,base+h*.5,z+dz),(.075,h,.075),'A9A16C','SmoothPlastic',collide=False)
-            part(c,'Meadow seedhead',(x+dx,base+h,z+dz),(.36,.95,.28),rng.choice(['D8C08D','E2CCA0','CEB47F']),'SmoothPlastic','Ball',rot=(0,rng.uniform(0,180),0),collide=False)
+            dx,dz=rng.uniform(-.45,.45),rng.uniform(-.45,.45);h=rng.uniform(2.9,4.1);lean=rng.uniform(-7,7)
+            tipx=x+dx-math.sin(math.radians(lean))*h/2
+            part(c,'Meadow stem',(x+dx,base+h*.5,z+dz),(.045,h,.045),'A9A16C','SmoothPlastic',rot=(0,0,lean),collide=False)
+            colour=rng.choice(['DDC48F','E8D3A6','D0B579'])
+            part(c,'Meadow seedhead',(tipx,base+h+.20,z+dz),(.11,.80,.09),colour,'SmoothPlastic','Ball',rot=(0,0,lean),collide=False)
+            # A loose, tapered panicle rather than a single cattail-shaped capsule.
+            for side in [-1,1]:
+                for j in range(2):
+                    part(c,'Meadow plume branch',(tipx+side*(.12-j*.04),base+h+.06+j*.24,z+dz),(.09,.50-j*.08,.06),colour,'SmoothPlastic','Ball',rot=(0,rng.uniform(-25,25),-side*(30-j*8)+lean),collide=False)
         for p in c:p['Properties'].update(CanQuery=False,CastShadow=False)
     # An easy route into and out of the shallows, with posts continuing below water.
     for k in range(12):
         part(world,'Water access step',(0,.64-k*.42,-343-k*1.4),(10,.45,1.65),'C6B59B','WoodPlanks')
     for x in [-40,-15,15]:part(world,'Lookout foundation',(x,-3,-333),(1,8,1),'887B65','Wood')
     add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum)
-    return {'version':'6.5','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
+    return {'version':'6.6','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
             'lake':coast['ocean'],'seaLevel':coast['seaLevel'],'coastFile':'coast.json',
             'backdrop':'atmosphere','sceneryGeometry':'navigable-terrain','clouds':'native-and-3d',
             'views':{'sunset':{'position':[0,6,-180],'target':[35,27,-850]},'lake':{'position':[70,24,-270],'target':[0,-1,-345]},

@@ -12,7 +12,9 @@ assert all(max(p['Properties']['Size'])<=2048 for p in parts)
 assert all(p['Properties']['Anchored'] for p in parts)
 assert not any('Pixel twilight' in p.get('Name','') or p.get('Name')=='Lake water preview' for p in parts)
 sun=next(p for p in parts if p.get('Name')=='Setting sun');assert sun['Properties']['Shape']=='Ball' and not sun.get('Children')
-assert len([p for p in parts if p.get('Name')=='Sky cloud puff'])==42
+clouds=[p for p in parts if p.get('Name')=='Sky cloud puff']
+assert len(clouds)==24 and all(p['Properties']['Size'][0]>p['Properties']['Size'][1]*2 for p in clouds)
+assert {p['model'] for p in json.loads((R/'nature-instances.json').read_text()) if p['model'].startswith('tree_')}=={'tree_oak'}
 floors=[p['Properties'] for p in parts if p.get('Name')=='Solid sea floor'];assert len(floors)==20
 for x in range(-1020,1021,60):
  for z in range(-1080,761,60):assert any(abs(x-f['CFrame'][0])<=f['Size'][0]/2 and abs(z-f['CFrame'][2])<=f['Size'][2]/2 and f['CanCollide'] for f in floors)

@@ -3,22 +3,22 @@
     "center": [
       60,
       0,
-      -80
+      -73
     ],
     "halfSize": [
-      46,
+      28,
       14,
-      34
+      18
     ],
     "arrival": [
       60,
       4,
-      -61
+      -63
     ],
     "lookAt": [
       60,
       10,
-      -108
+      -89
     ]
   },
   "rewardPerClear": 100,
@@ -36,7 +36,7 @@
               "id": "beauty",
               "name": "@beauty_note",
               "image": "creator1",
-              "facts": "팔로워 1.8만\n뷰티 릴스 · 3일 전 게시",
+              "facts": "팔로워 1.8만\n뷰티 릴스\n3일 전 게시",
               "correct": true,
               "feedback": "분야·팔로워·최근 게시 조건이 모두 맞아요."
             },
@@ -44,14 +44,14 @@
               "id": "large",
               "name": "@glow_daily",
               "image": "creator4",
-              "facts": "팔로워 4.2만\n뷰티 릴스 · 2일 전 게시",
+              "facts": "팔로워 4.2만\n뷰티 릴스\n2일 전 게시",
               "feedback": "이번 캠페인은 팔로워 3만 이하예요."
             },
             {
               "id": "travel",
               "name": "@trip_frame",
               "image": "creator7",
-              "facts": "팔로워 1.6만\n여행 사진 · 1일 전 게시",
+              "facts": "팔로워 1.6만\n여행 사진\n1일 전 게시",
               "feedback": "이번에는 여행 사진이 아닌 뷰티 릴스 계정을 찾아요."
             }
           ]
@@ -63,7 +63,7 @@
               "id": "fresh",
               "name": "@skin_story",
               "image": "creator2",
-              "facts": "팔로워 2.4만\n뷰티 릴스 · 2일 전 게시",
+              "facts": "팔로워 2.4만\n뷰티 릴스\n2일 전 게시",
               "correct": true,
               "feedback": "세 가지 모집 조건을 모두 충족했어요."
             },
@@ -71,14 +71,14 @@
               "id": "small",
               "name": "@daily_glow",
               "image": "creator5",
-              "facts": "팔로워 8천\n뷰티 릴스 · 1일 전 게시",
+              "facts": "팔로워 8천\n뷰티 릴스\n1일 전 게시",
               "feedback": "이번 캠페인은 팔로워 1만 이상이에요."
             },
             {
               "id": "old",
               "name": "@beauty_archive",
               "image": "creator3",
-              "facts": "팔로워 3.1만\n뷰티 릴스 · 30일 전 게시",
+              "facts": "팔로워 3.1만\n뷰티 릴스\n30일 전 게시",
               "feedback": "최근 7일 안의 뷰티 릴스가 필요해요."
             }
           ]

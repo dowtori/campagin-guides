@@ -19,7 +19,7 @@ function Client.start(gui,closeWork,notice,viewThumb)
  local function surface(name,w,h)
   return make('SurfaceGui',player:WaitForChild('PlayerGui'),{Name='Challenge_'..name,Adornee=room:WaitForChild(name),Face=Enum.NormalId.Back,SizingMode=Enum.SurfaceGuiSizingMode.FixedSize,CanvasSize=Vector2.new(w,h),LightInfluence=0,AlwaysOnTop=false,Active=true,MaxDistance=130,ZOffset=.05,ResetOnSpawn=false})
  end
- local condition=surface('ConditionBoard',1640,170)
+ local condition=surface('ConditionBoard',1560,195)
  local console=surface('ChallengeConsole',960,320)
  for i=1,3 do choices[i]=surface('ChoiceBoard'..i,750,465) end
  local function button(parent,caption,x,y,w,h,fn,color)
@@ -33,10 +33,10 @@ function Client.start(gui,closeWork,notice,viewThumb)
   elseif run and run.status~='brief' then send('retry')end
  end
  for i=1,3 do
-  local p=make('ProximityPrompt',room:WaitForChild('ChoiceBoard'..i),{Name='ChooseAnswer',ActionText='선택',ObjectText=tostring(i)..'번',KeyboardKeyCode=Enum.KeyCode.E,HoldDuration=0,MaxActivationDistance=20,RequiresLineOfSight=false,ClickablePrompt=true,Enabled=false})
+  local p=make('ProximityPrompt',room:WaitForChild('ChoiceBoard'..i),{Name='ChooseAnswer',ActionText='선택',ObjectText=tostring(i)..'번',KeyboardKeyCode=Enum.KeyCode.E,HoldDuration=0,MaxActivationDistance=13,RequiresLineOfSight=false,ClickablePrompt=true,Enabled=false})
   p.Triggered:Connect(function()pick(i)end);prompts[i]=p
  end
- local entry=make('ProximityPrompt',room:WaitForChild('ChallengeConsole'),{Name='ChallengeEntry',ActionText='도전하기',ObjectText='따봉 챌린지',KeyboardKeyCode=Enum.KeyCode.E,HoldDuration=0,MaxActivationDistance=22,RequiresLineOfSight=false,ClickablePrompt=true})
+ local entry=make('ProximityPrompt',room:WaitForChild('ChallengeConsole'),{Name='ChallengeEntry',ActionText='도전하기',ObjectText='따봉 챌린지',KeyboardKeyCode=Enum.KeyCode.E,HoldDuration=0,MaxActivationDistance=15,RequiresLineOfSight=false,ClickablePrompt=true})
  entry.Triggered:Connect(function()remote:FireServer({kind='enter',id='scout'})end)
  local function clear(s)for _,c in ipairs(s:GetChildren())do c:Destroy()end end
  local function render()
@@ -45,7 +45,7 @@ function Client.start(gui,closeWork,notice,viewThumb)
   entry.Enabled=not run
   local challenge,round
   if run then for _,c in ipairs(data.challenges)do if c.id==run.id then challenge=c;round=c.rounds[run.round] end end end
-  text(condition,run and ((run.status=='passed' or run.status=='failed' or run.status=='timeout') and run.feedback or round.conditions) or '따봉 챌린지',.025,.02,.79,.96,40,paper)
+  text(condition,run and ((run.status=='passed' or run.status=='failed' or run.status=='timeout') and run.feedback or round.conditions) or '따봉 챌린지',.025,.02,.79,.96,44,paper)
   timer=text(condition,run and (run.status=='passed' and (run.firstClear and '+100점' or '클리어') or (run.status=='failed' or run.status=='timeout') and '재도전' or (challenge.timed and '30초' or '시간제한 없음')) or '심화 과정',.83,.1,.16,.8,32,paper)
   for i,p in ipairs(prompts)do p.Enabled=run~=nil;p.ActionText=run and (run.status=='brief' and '시작' or run.status=='active' and '선택') or '다시 도전' end
   for i=1,3 do
@@ -55,15 +55,15 @@ function Client.start(gui,closeWork,notice,viewThumb)
    if run and run.status~='brief' then
     local option=round.options[run.order[i]]
     local bg=make('Frame',s,{Size=UDim2.fromScale(1,1),BackgroundColor3=paper,BorderSizePixel=0})
-    text(bg,tostring(i)..'  '..option.name,.04,.025,.92,.14,34)
+    text(bg,tostring(i)..'  '..option.name,.04,.025,.92,.14,38)
     if challenge.timed then
      local im=Raster.draw(bg,option.image,UDim2.fromScale(.04,.20),UDim2.fromScale(.44,.56));make('UIAspectRatioConstraint',im,{AspectRatio=1,AspectType=Enum.AspectType.FitWithinMaxSize})
-     text(bg,option.facts,.51,.22,.45,.50,34)
+     text(bg,option.facts,.50,.19,.46,.57,44)
     else text(bg,option.answer,.06,.19,.88,.52,44) end
     if run.status=='active' then button(bg,challenge.timed and '이 크리에이터 선택' or '이 답변 선택',.04,.80,.92,.16,function()pick(i)end)
     else button(bg,'다시 도전',.04,.80,.92,.16,function()send('retry')end) end
    else
-    text(s,tostring(i),.1,.20,.8,.45,100,paper)
+    text(s,tostring(i),.1,.20,.8,.45,100,ink)
     if run then button(s,challenge.timed and '조건 읽었어요 · 시작' or 'NPC 답변 보기',.04,.80,.92,.16,function()send('start')end)end
    end
   end

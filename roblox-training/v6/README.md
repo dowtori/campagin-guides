@@ -1,8 +1,8 @@
-# Siriai Recruiter Island v6.5
+# Siriai Recruiter Island v6.6
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_5.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_6.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
@@ -24,6 +24,15 @@
 실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
+
+## v6.6: 개선 기준을 먼저 고정한 시각 정리
+
+- [사전 판정 기준과 결과](design-review-v6.6.md)를 기준으로 점검했습니다.
+- 따봉은 대표 장식이 교체됩니다. 왕따봉은 웃는 표정·망토·왕관만 남기고, 엄지가 왕관보다 높게 보입니다.
+- 심화 방은 92×68 → 56×36스터드, 선택 벽까지 26.6스터드. 낮은 중앙 조작대와 동등한 3개 선택 영역을 둡니다.
+- 조건·선택·조작대의 물리 비율을 SurfaceGui 캔버스와 일치시켰습니다. 선택지 조건은 크게 세 줄로 분리했습니다.
+- 나무는 Kenney oak 계열로 통일하고 수관/관목을 군락으로 배치했습니다. 갈대는 통통한 이삭 대신 가늘게 퍼지는 이삭, 구름은 겹친 덩어리로 바꿨습니다.
+- 웹 미리보기는 공간/가독성 검수 도구이며 Roblox 엔진의 최종 조명·텍스트·터치·성능 검증을 대신하지 않습니다.
 
 ## v6.5: 따봉 성장과 맵 안의 심화 미니게임
 
@@ -82,8 +91,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_5.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_5.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_6.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_6.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py

@@ -11,9 +11,9 @@ function Client.start(gui,notice)
  local function pose(target,scale,bob)
   for _,v in ipairs(parts)do
    local p=v.part;p.Size=v.size*scale;p.CFrame=CFrame.new(origin+v.offset*scale+Vector3.new(0,bob or 0,0))*v.rotation
-   p.Transparency=v.level<=target and not (v.level==8 and target==10) and 0 or 1
-   p.Color=target>=7 and v.level==0 and not p.Name:find('pedestal') and Color3.fromRGB(255,206,83) or v.color
-   p.Material=(v.level==6 or (target==10 and v.level==10 and p.Name:find('jewel'))) and Enum.Material.Neon or Enum.Material.SmoothPlastic
+   p.Transparency=table.find(config.stages[target+1].groups,v.level) and 0 or 1
+   p.Color=v.level==0 and not p.Name:find('pedestal') and not p.Name:find('thumbnail') and Color3.fromRGB(unpack(config.stages[target+1].color)) or v.color
+   p.Material=v.level==6 and Enum.Material.Neon or Enum.Material.SmoothPlastic
   end
  end
  -- A small non-blocking 3D preview of the actual sculpture accompanies each growth.

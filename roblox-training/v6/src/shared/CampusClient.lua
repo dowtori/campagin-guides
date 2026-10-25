@@ -1,4 +1,4 @@
--- SIRIAI v6.5: one visible action, deliberate phone access, resumable work.
+-- SIRIAI v6.6: one visible action, deliberate phone access, resumable work.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
