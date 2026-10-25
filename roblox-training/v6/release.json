@@ -1,8 +1,10 @@
 {
-  "version": "6.2.0",
+  "version": "6.3.0",
   "date": "2026-10-25",
   "status": "review-build",
   "verification": {
+    "setupFlow": "progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance",
+    "guideHandoff": "native instructions with web/email anchors; no external URLs or browser API calls in native setup UI",
     "coreFlow": "seven phases at three forward stops; ordinary reply and separate selection notice",
     "optionalAppendix": "completion-only reference; no required steps, remotes, progress or payout mutations",
     "requiredRoute": "133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry",
@@ -15,13 +17,13 @@
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_2.rbxl": {
-      "bytes": 2560893,
-      "sha256": "8762b54f94f60866e42d4ea1845968effde55f90b1652621c87c73a47a8d46e6"
+    "SIRIAI_Recruiter_Island_v6_3.rbxl": {
+      "bytes": 2562374,
+      "sha256": "a429ff967c997c51d26c3760f2e800564d22b3f31286b5fcd11a8c82fc3a77e5"
     },
-    "SIRIAI_Recruiter_Island_v6_2_Source.zip": {
-      "bytes": 12035304,
-      "sha256": "4c94e06c4944810f13d5040e2b01172374078b5ec43a4c10de75bc551955ea88"
+    "SIRIAI_Recruiter_Island_v6_3_Source.zip": {
+      "bytes": 12040554,
+      "sha256": "2e2eb91ee191354d7d6dc69e5de9ec2a526374ba7b1421dc5ee42b2644b16209"
     }
   }
 }

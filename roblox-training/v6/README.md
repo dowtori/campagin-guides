@@ -1,8 +1,8 @@
-# Siriai Recruiter Island v6.2
+# Siriai Recruiter Island v6.3
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_2.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_3.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
@@ -15,7 +15,7 @@
 
 필수 방문지는 세 곳이며 되돌아가는 구간이 없습니다.
 
-- **준비 테라스:** 캠페인 기준을 받고, 원본 프로필을 적용한 뒤 수집 도구를 연결합니다. 한 자리에서 이어집니다.
+- **준비 테라스:** 캠페인 기준을 받고, 버튼을 눌러 프로필·연결 예시를 채웁니다. 완성된 예시로 이해를 확인한 뒤 실제 준비 여부를 선택합니다. 한 자리에서 이어집니다.
 - **크리에이터 정원:** 콘텐츠·팔로워·기존 접촉 이력을 살펴보고 적합한 계정을 저장합니다.
 - **DM 데스크:** 제공 문구로 DM을 보내고 상태를 기록합니다. 일반적인 지원 완료 회신에 짧게 답한 뒤, 이후 도착한 최종 선정 안내와 정산 예시를 확인하면 기본 과정이 끝납니다.
 
@@ -24,6 +24,16 @@
 실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
+
+## v6.3: 채워서 이해하고 실제 설정으로
+
+프로필은 로고 → 원본 게시물 6장 → 소개·링크가 채워집니다. 연결 화면은 확장프로그램 → 받은 주소·본인 이름 → 캠페인·저장 상태가 채워집니다. 매번 지금 할 행동 하나만 제시하며 순서를 맞히는 문제와 가짜 URL 입력·연결 테스트를 없앴습니다.
+
+완성된 예시에서 **이해했어요**를 누르면 **지금 하기 / 이미 완료했습니다** 두 가지를 선택합니다. 지금 하기는 받은 안내서의 해당 부분에서 실제 설정을 마치고 돌아오는 안내입니다. 돌아와 **설정했습니다 · 계속**을 눌러야 다음 과정으로 진행합니다. 안내를 열기만 해서는 완료되지 않습니다. 이미 완료했다면 다시 설정하지 않고 다음으로 이어집니다. 실제 외부 계정·확장프로그램의 상태를 검증하지 않으며, 기록은 사용자의 완료 확인입니다.
+
+실제 바로가기는 웹 배포 페이지와 메일에 제공합니다: [계정 세팅](https://campagin-guides-un3g.vercel.app/dm-partner-guide/#account) · [확장프로그램 설치·연결](https://campagin-guides-un3g.vercel.app/dm-partner-guide/#extension). Roblox 안에는 외부 URL이나 동작하지 않는 브라우저 열기 버튼을 넣지 않았습니다. [Roblox 공식 외부 링크 안내](https://en.help.roblox.com/hc/en-us/articles/360000910966-Social-Media-Links-for-Experiences-Communities)를 확인하고 사용자와 이 방식을 정했습니다.
+
+설정 예시와 돌아오기 안내는 현재 플레이 세션에서 창을 닫았다 열어도 유지됩니다. 재접속 시 새 연습을 시작하는 기존 동작은 유지됩니다.
 
 ## 지형과 물
 
@@ -44,8 +54,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_2.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_2.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py
@@ -53,9 +63,9 @@ python tests/route.py
 
 내보낸 파일의 실제 ModuleScript·Script 소스를 검증에 사용합니다. 클라이언트와 서버의 콜백을 데스크톱·터치 모드 어댑터에서 실행하고 근접 거리·요청 순서·중복 완료·기록을 검사합니다. 물 서버는 실제 소스의 API 정상·호환·실패 경로를 확인합니다.
 
-## v6.2 검증
+## v6.3 검증
 
-기본 캠페인 전체 완료, 같은 장소에서 다음 작업 자동 연결, 단계 사이의 현재 목표 이동, 부록이 완료 전에 노출되지 않는지와 부록을 읽어도 진행·정산이 변하지 않는지를 검사했습니다. 일반 회신을 보낸 시점에는 지원으로 기록되고, 별도의 최종 선정 안내 확인 후 인센티브가 적용됩니다.
+프로필·연결 예시의 누적 채움, 중간 화면 복귀, 양쪽 완료 분기, 안내에서 돌아오기와 완료 전 상태 유지, 기본 캠페인 전체 완료, 같은 장소에서 다음 작업 자동 연결, 단계 사이의 현재 목표 이동, 부록이 완료 전에 노출되지 않는지와 부록을 읽어도 진행·정산이 변하지 않는지를 검사했습니다. 일반 회신을 보낸 시점에는 지원으로 기록되고, 별도의 최종 선정 안내 확인 후 인센티브가 적용됩니다.
 
 실제 내보낸 모델에서 필수 방문지 세 곳이 전진하는 순서인지, 도착점까지 133 studs의 주 동선에 벽·가구가 걸리는지 검사했습니다. 화면을 닫았다가 이어하기, 폰 입력 충돌 방지와 재시작 시 시작점 복귀도 확인했습니다. 이 검사는 실제 캐릭터의 물리 플레이를 대체하지 않습니다.
 

@@ -1,4 +1,4 @@
--- SIRIAI v6.2: one visible action, deliberate phone access, resumable work.
+-- SIRIAI v6.3: one visible action, deliberate phone access, resumable work.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
@@ -45,7 +45,13 @@ local body=make('ScrollingFrame',panel,{Name='WorkBody',Position=UDim2.fromOffse
 make('UIListLayout',body,{Padding=UDim.new(0,18),SortOrder=Enum.SortOrder.LayoutOrder})
 make('UIPadding',body,{PaddingRight=UDim.new(0,4),PaddingBottom=UDim.new(0,14)})
 local primary=btn(panel,'계속');primary.Name='PrimaryAction';primary.Position=UDim2.new(0,22,1,-70);primary.Size=UDim2.new(1,-44,0,50);primary.BackgroundColor3=C.pink;primary.TextColor3=C.white
-local doPrimary=nil
+local secondary=btn(panel,'이미 완료했습니다');secondary.Name='SecondaryAction';secondary.Position=UDim2.new(0,22,1,-126);secondary.Size=UDim2.new(1,-44,0,46);secondary.Visible=false
+local doPrimary,doSecondary=nil,nil
+secondary.Activated:Connect(function()if secondary.Visible and secondary.Active and not pending and doSecondary then doSecondary()end end)
+local function alternate(caption,fn)
+ secondary.Text=caption;secondary.Visible=true;secondary.Active=true;doSecondary=fn
+ body.Size=UDim2.new(1,-44,1,-270)
+end
 local promptList={}
 local world=workspace:FindFirstChild('TrainingMap')
 if world then for _,o in ipairs(world:GetDescendants())do if o:IsA('ProximityPrompt')then table.insert(promptList,o)end end end
@@ -71,6 +77,7 @@ body.ChildAdded:Connect(function(o)if o:IsA('GuiObject')then order+=1;o.LayoutOr
 local function clear(heading,step)
  for _,o in ipairs(body:GetChildren())do if o:IsA('GuiObject')then o:Destroy()end end
  order=0;body.CanvasPosition=Vector2.zero;title.Text=heading;tag.Text=step or 'SIRIAI';toast.Visible=false
+ secondary.Visible=false;doSecondary=nil;body.Size=UDim2.new(1,-44,1,-214)
  visibility(true);action('계속',nil,false)
 end
 local function card(label,value,color)
@@ -80,11 +87,6 @@ local function card(label,value,color)
  local small=txt(f,label,13,C.gray);small.LayoutOrder=1
  local main=txt(f,value,20,color or C.ink);main.Font=Enum.Font.GothamBold;main.LayoutOrder=2
  return f,main
-end
-local function input(label,value)
- txt(body,label,14,C.gray)
- local o=make('TextBox',body,{Text=value or '',PlaceholderText=label,ClearTextOnFocus=false,TextSize=17,Font=Enum.Font.Gotham,TextColor3=C.ink,TextXAlignment=Enum.TextXAlignment.Left,BackgroundColor3=C.white,BorderSizePixel=0,Size=UDim2.new(1,0,0,48)})
- round(o,9);make('UIPadding',o,{PaddingLeft=UDim.new(0,12),PaddingRight=UDim.new(0,12)});return o
 end
 local function detail(value,label)
  local b=btn(body,label or '자세히 보기');b.TextSize=14;b.Size=UDim2.new(1,0,0,44);b.BackgroundTransparency=1;b.TextColor3=C.gray
@@ -101,7 +103,73 @@ local function submit(payload)
  remote:FireServer({kind='apply',revision=state.revision,action=data.phases[state.phase].id,payload=payload})
  local revision=state.revision;task.delay(8,function()if pending and state.revision==revision then pending=false;notice('잠시 후 폰에서 이어하기를 눌러주세요.')end end)
 end
+-- One offered action at a time; taps fill the example, never ask for a sequence.
+local function profilePreview(filled)
+ local f=make('Frame',body,{Name='ProfilePreview',Size=UDim2.new(1,0,0,340),BackgroundColor3=C.white,BorderSizePixel=0});round(f,12)
+ local logo=make('Frame',f,{Name='LogoSlot',Position=UDim2.fromOffset(14,14),Size=UDim2.fromOffset(58,58),BackgroundColor3=C.soft,BorderSizePixel=0});round(logo,29)
+ if filled>=1 then Raster.draw(logo,'logo')else local t=txt(logo,'로고',14,C.gray,58);t.TextXAlignment=Enum.TextXAlignment.Center;t.TextYAlignment=Enum.TextYAlignment.Center end
+ local handle=txt(f,'siriai_partner',18,C.ink,24);handle.Position=UDim2.fromOffset(86,14);handle.Size=UDim2.new(1,-100,0,24);handle.Font=Enum.Font.GothamBold
+ local bio=txt(f,filled>=3 and data.bio or '프로필 소개',15,C.gray,44);bio.Name='BioSlot';bio.Position=UDim2.fromOffset(86,42);bio.Size=UDim2.new(1,-100,0,44)
+ local link=txt(f,filled>=3 and '✓ 제공된 프로필 링크' or '프로필 링크',14,filled>=3 and C.green or C.gray,22);link.Name='LinkSlot';link.Position=UDim2.fromOffset(14,91);link.Size=UDim2.new(1,-28,0,22)
+ local grid=make('Frame',f,{Name='PostSlots',Position=UDim2.fromOffset(14,122),Size=UDim2.new(1,-28,0,204),BackgroundTransparency=1})
+ for i=1,6 do
+  local col=(i-1)%3;local row=math.floor((i-1)/3)
+  local slot=make('Frame',grid,{Name='Post'..i,Position=UDim2.new(col/3,0,row/2,0),Size=UDim2.new(1/3,-4,.5,-4),BackgroundColor3=C.soft,BorderSizePixel=0})
+  if filled>=2 then local im=Raster.draw(slot,'brand'..i);make('UIAspectRatioConstraint',im,{AspectRatio=.8,AspectType=Enum.AspectType.FitWithinMaxSize});im.AnchorPoint=Vector2.new(.5,.5);im.Position=UDim2.fromScale(.5,.5)end
+ end
+end
+local function connectionPreview(filled)
+ local f=make('Frame',body,{Name='ConnectionPreview',Size=UDim2.new(1,0,0,274),BackgroundColor3=C.white,BorderSizePixel=0});round(f,12)
+ local app=txt(f,filled>=1 and '✓ IG Lead Saver 설치됨' or 'IG Lead Saver',18,filled>=1 and C.green or C.gray,28);app.Name='ExtensionSlot';app.Position=UDim2.fromOffset(16,14);app.Size=UDim2.new(1,-32,0,28);app.Font=Enum.Font.GothamBold
+ local function field(name,label,value,y,ready)
+  local t=txt(f,label,12,C.gray,18);t.Position=UDim2.fromOffset(16,y);t.Size=UDim2.new(1,-32,0,18)
+  local v=txt(f,value,16,ready and C.ink or C.gray,32);v.Name=name;v.Position=UDim2.fromOffset(16,y+20);v.Size=UDim2.new(1,-32,0,32);v.BackgroundColor3=C.soft;v.TextYAlignment=Enum.TextYAlignment.Center;round(v,6)
+  make('UIPadding',v,{PaddingLeft=UDim.new(0,10),PaddingRight=UDim.new(0,10)})
+ end
+ field('AddressSlot','웹앱 URL',filled>=2 and '✓ 받은 주소 입력됨' or '받은 주소가 들어갈 자리',50,filled>=2)
+ field('SaverSlot','저장자 이름',filled>=2 and '✓ 본인 이름' or '이름이 들어갈 자리',110,filled>=2)
+ field('CampaignSlot','진행 중인 캠페인',filled>=3 and data.campaign or '안내받은 캠페인',170,filled>=3)
+ local result=txt(f,filled>=3 and '✓ 연결·저장 완료  ·  연락전  ·  기존 목록 확인' or '설정을 채우면 연결 준비가 끝나요.',13,filled>=3 and C.green or C.gray,36);result.Name='ConnectionResult';result.Position=UDim2.fromOffset(16,232);result.Size=UDim2.new(1,-32,0,36)
+end
 local render
+local function setupLesson(q,d)
+ local profile=q.id=='profile';d.filled=d.filled or 0
+ local section=profile and '계정 세팅' or '확장프로그램 설치·연결'
+ local function complete(source)submit({assembled=true,understood=true,completion=source})end
+ if d.view=='handoff' then
+  clear('실제 설정을 마치고 돌아와요',q.title)
+  card('받아둔 안내서에서',section)
+  txt(body,'안내서를 따라 설정한 뒤, 이 화면에서 계속해주세요.',18)
+  alternate('선택으로 돌아가기',function()d.view='choice';render()end)
+  action('설정했습니다 · 계속',function()complete('guide_done')end)
+ elseif d.view=='choice' then
+  clear(profile and '실제 계정도 준비됐나요?' or '실제 연결도 마쳤나요?',q.title)
+  card('이해 확인 완료',profile and '로고 · 게시물 · 소개 · 링크' or '설치 · 주소와 내 이름 · 캠페인 연결')
+  txt(body,'아직이라면 받은 안내서로 설정하고 돌아와요.',18)
+  alternate('이미 완료했습니다',function()complete('already_done')end)
+  action('지금 하기',function()d.view='handoff';render()end)
+ else
+  clear(profile and '모집 계정을 채워봐요' or '연결 화면을 채워봐요','설정 예시  ·  '..d.filled..' / 3')
+  if profile then profilePreview(d.filled)else connectionPreview(d.filled)end
+  local steps=profile and {
+   {button='로고 넣기',hint='받은 시리아이 로고를 프로필 사진에 넣어요.'},
+   {button='게시물 6장 채우기',hint='제공된 이미지 6장으로 게시물을 채워요.'},
+   {button='소개·링크 채우기',hint='받은 소개 문구와 링크를 그대로 넣어요.'}
+  } or {
+   {button='확장프로그램 준비하기',hint='IG Lead Saver를 설치하고 옵션 화면을 열어요.'},
+   {button='주소·이름 채우기',hint='받은 웹앱 주소와 본인 이름을 넣어요.'},
+   {button='캠페인 연결·저장',hint='연결 테스트 후 안내받은 캠페인에 저장하고, 기존 목록을 불러와요.'}
+  }
+  if d.filled<3 then
+   local nextStep=steps[d.filled+1];txt(body,nextStep.hint,17)
+   action(nextStep.button,function()d.filled+=1;render()end)
+  else
+   txt(body,profile and '받은 자료를 내 모집 계정에 적용하면 돼요. 어떻게 준비할지 이해했나요?' or '내 이름과 안내받은 캠페인으로 연결하면 돼요. 어떻게 준비할지 이해했나요?',18)
+   btn(body,'다시 채워보기',function()d.filled=0;d.understood=false;render()end)
+   action('이해했어요',function()d.understood=true;d.view='choice';render()end)
+  end
+ end
+end
 render=function(profileId)
  mode='work';pending=false
  local q=data.phases[state.phase]
@@ -112,36 +180,8 @@ render=function(profileId)
   txt(body,'브랜드에 어울리는 크리에이터를 찾고, 협업 DM을 보내는 일이에요.',18)
   card('오늘 찾을 크리에이터','뷰티 릴스\n팔로워 5천~3만')
   action('첫 캠페인 맡기',function()submit({reviewed=true})end)
- elseif q.id=='profile'then
-  screen('이렇게 준비해요')
-  local f=make('Frame',body,{Size=UDim2.new(1,0,0,82),BackgroundTransparency=1})
-  Raster.draw(f,'logo',UDim2.fromOffset(0,4),UDim2.fromOffset(68,68))
-  local t=txt(f,'siriai_partner',20);t.Font=Enum.Font.GothamBold;t.Position=UDim2.fromOffset(84,5);t.Size=UDim2.new(1,-84,0,28)
-  t=txt(f,data.bio,15,C.gray);t.Position=UDim2.fromOffset(84,36);t.Size=UDim2.new(1,-84,0,44)
-  images({'brand1','brand2','brand3'},94,.8);images({'brand4','brand5','brand6'},94,.8)
-  txt(body,'받은 로고·게시물·소개를 그대로 적용해요.',17)
-  detail('프로필 링크: '..data.link..'\n부계정도 사용할 수 있어요.','프로필 링크 확인')
-  action('이 프로필 적용',function()submit({photo='siriai',bio=data.bio,link=data.link,posts=true})end)
- elseif q.id=='connect'then
-  if d.step==1 then
-   screen('시트에 연결해요',1,2)
-   local url=input('Apps Script 웹앱 URL',d.url or '');url.TextSize=14
-   url:GetPropertyChangedSignal('Text'):Connect(function()d.url=url.Text end)
-   btn(body,'받은 주소 붙여넣기',function()url.Text=data.webAppUrl end)
-   local name=input('저장자 이름',d.name or player.DisplayName or '');d.name=name.Text
-   name:GetPropertyChangedSignal('Text'):Connect(function()d.name=name.Text end)
-   detail('Chrome 웹 스토어에서 IG Lead Saver 설치 → 확장 프로그램의 세부정보 → 확장 프로그램 옵션.\n내 이름으로 수집한 인원을 구분해요.','옵션 화면 여는 법')
-   action('연결 확인',function()
-    if url.Text~=data.webAppUrl or not name.Text:find('%S')then notice('받은 주소와 저장자 이름을 넣어주세요.');return end
-    d.step=2;render()
-   end)
-  else
-   screen('이 캠페인에 저장해요',2,2)
-   card('연결 완료',data.campaign,C.green)
-   card('처음 저장할 상태','연락전')
-   txt(body,'저장 후 기존 목록을 불러와 중복을 확인해요.',18)
-   action('설정 저장 · 목록 불러오기',function()submit({url=data.webAppUrl,name=d.name,tab=data.campaign,status='연락전',tested=true,loaded=true})end)
-  end
+ elseif q.id=='profile' or q.id=='connect'then
+  setupLesson(q,d)
  elseif q.id=='discover'then
   local p=data.profiles[1];for _,item in ipairs(data.profiles)do if item.id==profileId then p=item end end
   d.profile=p.id;screen('@'..p.handle)

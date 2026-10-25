@@ -4,8 +4,8 @@ local n=0
 local function expect(v,m)n+=1;assert(v,m)end
 local payloads={
  {reviewed=true},
- {photo='siriai',bio=data.bio,link=data.link,posts=true},
- {url=data.webAppUrl,name='파트너',tab=data.campaign,status='연락전',tested=true,loaded=true},
+ {assembled=true,understood=true,completion='already_done'},
+ {assembled=true,understood=true,completion='guide_done'},
  {handle=data.lead.handle,reviewed=true,historyChecked=true},
  {handle=data.lead.handle,fee=100000,sent=true,status='DM 발송'},
  {replied=true,applicationRead=true},
@@ -30,5 +30,9 @@ end
 expect(s.complete and s.record.total==2300,'basic case finishes without any appendix interaction')
 expect(s.record.selected==1 and s.record.sent==1 and s.record.applied,'final notice and basic work recorded')
 expect(not Engine.apply(s,'settle',{reviewed=true,selectionRead=true},data),'no duplicate payout')
+expect(s.record.setup.profile.completion=='already_done' and s.record.setup.connect.completion=='guide_done','two explicit setup routes recorded')
+expect(s.record.setup.profile.selfReported and s.record.setup.connect.selfReported,'outside setup is self-reported, not claimed as verified')
+local setup=Engine.new();setup.phase=2
+expect(not Engine.apply(setup,'profile',{assembled=true,understood=true,completion='opened_guide'},data),'opening a guide does not complete setup')
 expect(#data.appendix==2,'optional edge-case reference topics')
 print('PASS: '..n..' campaign checks; ordinary response, separate final notice, no forced exception practice')
