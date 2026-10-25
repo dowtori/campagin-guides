@@ -55,4 +55,18 @@ def add_thumbs_up(world,part,obj,cf):
     for p in parts:
         props=p['Properties'];level=p['Children'][-1]['Properties']['Value']
         props.update(CastShadow=True,CanCollide=level in (0,1),CanQuery=level in (0,1))
+    config_path=Path(__file__).parent/'src/shared/ThumbData.json'
+    config=json.loads(config_path.read_text(encoding='utf-8'))
+    for item in config['stages']:
+        target=item.get('origin',origin);points=[]
+        for p in parts:
+            f=p['Properties'];level=p['Children'][-1]['Properties']['Value']
+            if level not in item['groups']:continue
+            k=1 if level==0 else item['scale'];center=[target[j]+(.486 if j==1 else 0)+(f['CFrame'][j]-origin[j]-(.486 if j==1 else 0))*k for j in range(3)];size=[v*k for v in f['Size']]
+            if level==0 and 'pedestal' in item:center=item['pedestal']['position'];size=item['pedestal']['size']
+            elif level==0:center=f['CFrame'][:3]
+            m=f['CFrame'][3:];ext=[sum(abs(m[j*3+i])*size[i]/2 for i in range(3)) for j in range(3)]
+            points.extend([[center[j]+sign*ext[j] for j in range(3)] for sign in [-1,1]])
+        item['bounds']={'min':[min(p[j] for p in points) for j in range(3)],'max':[max(p[j] for p in points) for j in range(3)]}
+    config_path.write_text(json.dumps(config,ensure_ascii=False,indent=2),encoding='utf-8')
     return model

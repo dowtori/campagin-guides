@@ -12,10 +12,17 @@ function Client.start(gui)
  end
  local function pose(target)
   local item=config.stages[target+1]
+  local targetOrigin=item.origin and Vector3.new(unpack(item.origin)) or origin
   for _,v in ipairs(parts)do
    local p=v.part;local k=v.level==0 and 1 or item.scale;local anchor=Vector3.new(0,.486,0)
    local visible=table.find(item.groups,v.level)~=nil
-   p.Size=v.size*k;p.CFrame=CFrame.new(origin+anchor+(v.offset-anchor)*k)*v.rotation
+   local position=targetOrigin+anchor+(v.offset-anchor)*k
+   local size=v.size*k
+   if v.level==0 then
+    position=origin+v.offset
+    if item.pedestal then position=Vector3.new(unpack(item.pedestal.position));size=Vector3.new(unpack(item.pedestal.size))end
+   end
+   p.Size=size;p.CFrame=CFrame.new(position)*v.rotation
    p.Transparency=visible and 0 or 1;p.CanCollide=visible;p.CanQuery=visible;p.CanTouch=false
    p.Color=v.level>0 and Color3.fromRGB(unpack(item.color)) or v.color
    p.Material=Enum.Material.SmoothPlastic
@@ -25,10 +32,14 @@ function Client.start(gui)
  local function clearForGrowth()
   local root=player.Character and player.Character:FindFirstChild('HumanoidRootPart')
   if not root then return true end
-  local d=root.Position-origin
-  -- Encloses every possible hand, plus avatar clearance. This is a growth guard,
-  -- not an invisible wall: the player can freely walk away before the pose changes.
-  return math.abs(d.X)>18 or math.abs(d.Z)>12 or d.Y>30 or d.Y< -5
+  local function occupied(index)
+   local bounds=config.stages[index+1].bounds;local p=root.Position
+   return p.X>=bounds.min[1]-3 and p.X<=bounds.max[1]+3
+    and p.Y>=bounds.min[2]-4 and p.Y<=bounds.max[2]+4
+    and p.Z>=bounds.min[3]-3 and p.Z<=bounds.max[3]+3
+  end
+  -- Never grow around an avatar or remove a sculpture while they stand on it.
+  return not occupied(desired) and (stage<0 or not occupied(stage))
  end
  local function applyPending()
   if desired~=stage and clearForGrowth() then pose(desired)end

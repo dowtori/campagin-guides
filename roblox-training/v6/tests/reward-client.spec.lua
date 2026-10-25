@@ -42,7 +42,18 @@ local function checkPose(index)
    visible+=1;check(level==index+1,'no old-stage overlap')
   end
  end
- check(base.Size.X==plinth,'pedestal stays the same size')
+ check(base.Size.X==(item.pedestal and item.pedestal.size[1] or plinth),'normal plinth unchanged; king has offshore seabed support')
+ local target=item.origin or config.origin
+ for _,p in ipairs(model:GetChildren())do
+  local level=p:FindFirstChild('ThumbStage').Value
+  if table.find(item.groups,level) then
+   if level==0 and item.pedestal then
+    check(p.CFrame.Position.X==item.pedestal.position[1] and p.CFrame.Position.Z==item.pedestal.position[3],'king plinth at offshore position')
+   elseif level>0 then
+    check(p.CFrame.Position.Z< (index==10 and -385 or -317),'hand is at correct stage location')
+   end
+  end
+ end
  check(visible>0 and visible<=28,'compact native silhouette exists')
  local height=(item.thumbHeight-.54)*.9*item.scale
  check(height>lastHeight,'actual hand height grows');lastHeight=height
@@ -87,4 +98,15 @@ for _,p in ipairs(model:GetChildren())do
  local level=p:FindFirstChild('ThumbStage').Value
  check(p.CanCollide==(level==0 or level==2),'visible stage remains solid on another progression')
 end
+-- Remote king footprint must also defer growth, not only the old pier footprint.
+root.Position=H.Vector3.new(-165,5,-470)
+reward.sync(state);H.run.Heartbeat:Fire(.1)
+check(base.CFrame.Position.Z==config.origin[3],'king waits while local avatar occupies offshore target')
+root.Position=H.Vector3.new(0,4,-326);H.run.Heartbeat:Fire(.1)
+check(base.CFrame.Position.Z==-470,'king appears when offshore target clear; pier viewer remains free')
+root.Position=H.Vector3.new(-165,220,-470)
+reward.sync(independent);H.run.Heartbeat:Fire(.1)
+check(base.CFrame.Position.Z==-470,'do not remove king under avatar standing near top')
+root.Position=H.Vector3.new(0,4,-326);H.run.Heartbeat:Fire(.1)
+check(base.CFrame.Position.Z==config.origin[3],'restores normal pier pedestal after leaving king')
 print('PASS: '..n..' exported reward-client checks; all growth stages, silhouettes, fixed pedestal, materials, visible collision, hidden-stage clearance and safe pending growth')

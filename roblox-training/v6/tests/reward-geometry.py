@@ -18,8 +18,13 @@ for stage,scale in enumerate(scales):
   k=1 if level==0 else scale
   center=[origin[i]+(.486 if i==1 else 0)+(f['CFrame'][i]-origin[i]-(.486 if i==1 else 0))*k for i in range(3)]
   m=f['CFrame'][3:];ext=[sum(abs(m[j*3+i])*f['Size'][i]*k/2 for i in range(3)) for j in range(3)]
-  assert -45<center[0]-ext[0] and center[0]+ext[0]<-18
-  assert -342.5<center[2]-ext[2] and center[2]+ext[2]<-317.5
+  if stage<10:
+   assert -45<center[0]-ext[0] and center[0]+ext[0]<-18
+   assert -342.5<center[2]-ext[2] and center[2]+ext[2]<-317.5
+  else:
+   target=config['stages'][stage]['origin'];center=[center[i]+target[i]-origin[i] for i in range(3)]
+   if level>0:assert center[2]+ext[2]<-385,'giant hand stays offshore, clear of pier and water stairs'
+
 boards=[n for n in nodes if n.get('Name','').startswith('ChoiceBoard')]
 assert len(boards)==3
 condition=next(n for n in nodes if n.get('Name')=='ConditionBoard')['Properties']
@@ -49,7 +54,7 @@ arrival_z=float(re.search(r'Vector3.new\(-17,5,(-\d+)\)',server)[1])
 deck=next(n for n in nodes if n.get('Name')=='Sunset lookout deck')['Properties']
 assert abs(-17-deck['CFrame'][0])+2<deck['Size'][0]/2
 assert abs(arrival_z-deck['CFrame'][2])+2<deck['Size'][2]/2,'reward arrival has solid deck underneath'
-print('PASS: eleven growing sculptures within the widened pier, clear central path; world panels clear NPCs/each other')
+print('PASS: first ten sculptures within pier, final king offshore and clear of water steps; world panels clear NPCs')
 
 # Use actual native prism vertices (not boxes around their empty triangular halves).
 def vertex_points(p):
@@ -68,11 +73,19 @@ for i,stage in enumerate(config['stages']):
   level=p['Children'][-1]['Properties']['Value']
   if level not in stage['groups']:continue
   scale=1 if level==0 else k
-  points=[[origin[j]+(.486 if j==1 else 0)+(q[j]-origin[j]-(.486 if j==1 else 0))*scale for j in range(3)] for q in vertex_points(p)]
+  target=stage.get('origin',origin)
+  points=[[target[j]+(.486 if j==1 else 0)+(q[j]-origin[j]-(.486 if j==1 else 0))*scale for j in range(3)] for q in vertex_points(p)]
   all_points+=points
   if level>0:hand+=points
  bottom=min(q[1] for q in hand);top=max(q[1] for q in hand)
- assert abs(bottom-(origin[1]+.486))<1e-6,'hand is grounded on the fixed plinth'
+ assert abs(bottom-(stage.get('origin',origin)[1]+.486))<1e-6,'hand is grounded on the fixed plinth'
  measured.append(top-bottom)
 assert all(b>a for a,b in zip(measured,measured[1:])) and measured[-1]/measured[0]>=4
 print(f'PASS: hand height {measured[0]:.2f} -> {measured[-1]:.2f} studs ({measured[-1]/measured[0]:.2f}x); all 11 hands grounded; hidden stages noncolliding in saved place')
+
+assert abs(measured[-1]/((8.75-.54)*.9*2.92)-10)<1e-6,'king linear height is exactly ten times previous final stage'
+assert config['stages'][-1]['scale']==29.2 and config['stages'][-2]['scale']==2.61
+king=config['stages'][-1];assert king['bounds']['max'][2]<-385
+assert king['pedestal']['position'][1]-king['pedestal']['size'][0]/2<=-32,'plinth reaches seabed'
+assert abs(king['pedestal']['position'][1]+king['pedestal']['size'][0]/2-(king['origin'][1]+.486))<1e-6
+print('PASS: king exact 10x, 215.759-stud hand on solid seabed-reaching plinth, pier path clear')

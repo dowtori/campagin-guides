@@ -46,7 +46,7 @@ near=0
 for i,a in enumerate(instances):
  if any(i!=j and math.hypot(a['position'][0]-b['position'][0],a['position'][2]-b['position'][2])<.19*(a['widthScale']+b['widthScale']) for j,b in enumerate(instances)):near+=1
 assert near/len(instances)>.8
-xml=ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_14.rbxlx').getroot()
+xml=ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_15.rbxlx').getroot()
 items=list(xml.iter('Item'))
 def prop(i,k):return i.find("Properties/*[@name='"+k+"']")
 light=next(i for i in items if i.get('class')=='Lighting')

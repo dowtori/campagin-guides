@@ -29,8 +29,8 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         for k in range(n):
             t=(k+.5)/n;x,z=ax+(bx-ax)*t,az+(bz-az)*t
             part(world,'Ridge trail',(x,height_at(x,z)+.22,z),(6,.4,length/n+.3),'C8BA9C','Sandstone',rot=(0,yaw,0))
-    summit_y=height_at(300,110)
-    part(world,'Ridge lookout',(300,summit_y+.2,110),(16,.4,13),'C8BA9C','Sandstone')
+    from ridge_lookout import add_lookout
+    add_lookout(world,part,obj,rgb,height_at)
     part(world,'Sunset lookout deck',(-13,.82,-330),(64,.4,25),'B69B73','WoodPlanks')
     world.append(obj('LookoutSpawn','Part',{'Anchored':True,'CanCollide':False,'CanTouch':False,'CanQuery':False,'Transparency':1,'Size':[1,1,1],'CFrame':cf((0,4,-326))}))
     for x in [-43,17]:
