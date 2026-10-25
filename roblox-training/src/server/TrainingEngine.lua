@@ -38,19 +38,29 @@ function Engine.question(state, curriculum)
     local stage = curriculum.stages[active.stage]
     local source = stage.questions[active.index]
     local choices = {}
-    for i, choice in ipairs(source.options) do
+    for i, choice in ipairs(source.options or {}) do
         choices[i] = {id = choice.id, text = choice.text}
     end
     -- Never send the answer key to the client.
     return {
         id = source.id, mode = source.mode, title = source.title,
-        context = source.context, options = choices,
+        context = source.context, options = choices, visual = source.visual,
         stage = stage.id, stageTitle = stage.title, stageIntro = stage.intro,
         step = active.index, steps = #stage.questions, review = active.review,
     }
 end
 
 function Engine.isCorrect(question, answer)
+    if question.mode == 'form' then
+        if type(answer) ~= 'table' then return false end
+        local expectedCount,actualCount = 0,0
+        for key,value in pairs(question.answer) do
+            expectedCount += 1
+            if answer[key] ~= value then return false end
+        end
+        for _ in pairs(answer) do actualCount += 1 end
+        return actualCount == expectedCount
+    end
     if question.mode == 'sequence' then
         if type(answer) ~= 'table' or #answer ~= #question.answer then return false end
         local count = 0

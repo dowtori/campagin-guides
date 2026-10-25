@@ -20,7 +20,7 @@ assert classes.get('SpawnLocation')==1
 assert classes.get('ProximityPrompt')==6
 assert classes.get('RemoteEvent')==1
 assert classes.get('Script')==1 and classes.get('LocalScript')==1
-assert classes.get('ModuleScript')==2
+assert classes.get('ModuleScript')==4
 for item in items:
     if item.attrib['class']=='Part':
         assert item.find("Properties/bool[@name='Anchored']").text=='true'
@@ -40,6 +40,12 @@ with tempfile.TemporaryDirectory(prefix='siriai-roblox-tests-', dir=ROOT/'tests'
     assert tmp.resolve().is_relative_to((ROOT/'tests').resolve())
     for name,value in modules.items(): (tmp/(name+'.lua')).write_text(value,encoding='utf-8')
     shutil.copyfile(ROOT/'tests/engine.spec.lua',tmp/'engine.spec.lua')
-    subprocess.run([str(Path(args.luau).resolve()),str(tmp/'engine.spec.lua')],check=True,cwd=tmp)
-print('PASS: exported place structure / 536 original parts / 6 prompts / no external asset IDs or network calls')
+    shutil.copyfile(ROOT/'tests/NativeUiMock.lua',tmp/'NativeUiMock.lua')
+    shutil.copyfile(ROOT/'tests/visual-ui.spec.lua',tmp/'visual-ui.spec.lua')
+    visual=modules['VisualTutorials'].replace('require(script.Parent.VisualAssets)',"require('./VisualAssets')")
+    prefix="local Mock=require('./NativeUiMock')\nlocal Instance,Color3,UDim,UDim2,Enum,game=Mock.Instance,Mock.Color3,Mock.UDim,Mock.UDim2,Mock.Enum,Mock.game\n"
+    (tmp/'VisualTutorials.lua').write_text(prefix+visual,encoding='utf-8')
+    for test in ['engine.spec.lua','visual-ui.spec.lua']:
+        subprocess.run([str(Path(args.luau).resolve()),str(tmp/test)],check=True,cwd=tmp)
+print(f"PASS: exported place structure / {classes.get('Part',0)+classes.get('SpawnLocation',0)} original parts / 6 prompts / no external asset IDs or network calls")
 print('Roblox Studio runtime and account publishing have not been tested here.')

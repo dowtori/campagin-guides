@@ -4,6 +4,7 @@ local Prompts = game:GetService('ProximityPromptService')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local TweenService = game:GetService('TweenService')
 local UserInputService = game:GetService('UserInputService')
+local Visual = require(script.Parent.VisualTutorials)
 local player = Players.LocalPlayer
 local remote = ReplicatedStorage:WaitForChild('TrainingEvent')
 local gui = Instance.new('ScreenGui')
@@ -51,7 +52,7 @@ local hudFill = make('Frame',hudBar,{Size=UDim2.fromScale(0,1),BackgroundColor3=
 round(hudBar,3) round(hudFill,3)
 local mapButton = button(hud,'미션지도',{Position=UDim2.new(1,-128,0,26),Size=UDim2.fromOffset(72,38),TextSize=13})
 local helpButton = button(hud,'?',{Position=UDim2.new(1,-48,0,26),Size=UDim2.fromOffset(32,38),TextSize=18})
-local hint = make('TextLabel',gui,{AnchorPoint=Vector2.new(.5,1),Position=UDim2.new(.5,0,1,-16),Size=UDim2.new(.85,0,0,36),BackgroundColor3=C.ink,BackgroundTransparency=.12,BorderSizePixel=0,Text='단말기 가까이에서 E · 모바일은 버튼 터치',TextColor3=Color3.new(1,1,1),Font=Enum.Font.Gotham,TextSize=12,TextWrapped=true})
+local hint = make('TextLabel',gui,{AnchorPoint=Vector2.new(.5,1),Position=UDim2.new(.5,0,1,-16),Size=UDim2.new(.85,0,0,36),BackgroundColor3=C.ink,BackgroundTransparency=.12,BorderSizePixel=0,Text='단말기에서 E / 터치 · 그림과 모의 화면으로 직접 연습',TextColor3=Color3.new(1,1,1),Font=Enum.Font.Gotham,TextSize=12,TextWrapped=true})
 round(hint,12) make('UISizeConstraint',hint,{MaxSize=Vector2.new(570,48)})
 
 local shade = make('TextButton',gui,{Size=UDim2.fromScale(1,1),Text='',BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=.34,BorderSizePixel=0,Visible=false,AutoButtonColor=false,Modal=true})
@@ -148,8 +149,9 @@ end
 renderQuestion=function(payload,newToken)
     question,token=payload,newToken
     show(string.format('MISSION %02d  ·  %d / %d%s',payload.stage,payload.step,payload.steps,payload.review and '  ·  복습' or ''),payload.stageTitle)
-    if payload.step==1 then text(body,payload.stageIntro,15,C.muted) end
     text(body,payload.title,23,C.ink,true)
+    if Visual.render({body=body,text=text,button=button,primary=setPrimary,secondary=setSecondary,finish=sendAnswer,hint=notify,replay=function()renderQuestion(payload,newToken)end},payload) then return end
+    if payload.step==1 then text(body,payload.stageIntro,15,C.muted) end
     card(payload.context,false)
     if payload.mode=='sequence' then text(body,'먼저 할 일부터 하나씩 눌러 순서를 완성해요.',14,C.muted) end
     -- Choice order is randomized per render; correctness never depends on button position.
@@ -218,6 +220,7 @@ local function renderResult(packet)
     token=packet.token
     show(packet.correct and 'NICE WORK' or 'LET’S TRY AGAIN',packet.correct and '좋아요, 이렇게 진행하면 돼요.' or '설명을 보고 다시 골라볼까요?')
     text(body,question and question.title or '미션 확인',21,C.ink,true)
+    Visual.feedback({body=body},question,packet.correct)
     card(packet.explanation,packet.correct)
     text(body,packet.correct and '이해했다면 다음 단계로 넘어가요.' or '실수해도 괜찮아요. 횟수 제한 없이 다시 연습할 수 있어요.',15,C.muted)
     setSecondary('잠깐 닫기',function() close(true) end)
@@ -281,7 +284,7 @@ end
 local function showWelcome()
     show('WELCOME TO SIRIAI','소현님, 반가워요 :)')
     text(body,'인플루언서 모집을\n플레이하면서 배워봐요.',30,C.ink,true)
-    card('프로필 준비 → 확장프로그램 연결 → 인원 선별 → DM 발송 → 문의 응대 → 정산\n\n6개 공간을 둘러보며 18개 활동을 완료하면 교육 수료!',false)
+    card('프로필 준비 → 확장프로그램 연결 → 인원 선별 → DM 발송 → 문의 응대 → 정산\n\n그림 카드를 고르고, 화면을 직접 눌러 18개 활동을 완료하면 교육 수료!',false)
     text(body,'분홍색 표식의 단말기 가까이 가서 E를 누르세요. 모바일에서는 표시된 버튼을 터치하면 됩니다. 미션지도에서 빠르게 이동할 수도 있어요.',16,C.muted)
     text(body,'실제 계정·시트와 연결되지 않는 교육용 시뮬레이션입니다.',14,C.muted)
     setSecondary('둘러보기',function() close(true) end)

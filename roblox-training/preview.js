@@ -1,3 +1,4 @@
+import {illustration} from './visual-art.js';
 import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 const viewer=document.querySelector('#viewer');
@@ -7,7 +8,7 @@ const stationRoot=document.querySelector('#stations');
 const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 try {
   await document.fonts.ready;
-  const [parts,missions]=await Promise.all([fetch('./scene.json').then(r=>r.json()),fetch('./missions.json').then(r=>r.json())]);
+  const [parts,missions,artAssets]=await Promise.all([fetch('./scene.json').then(r=>r.json()),fetch('./missions.json').then(r=>r.json()),fetch('./visual-assets.json').then(r=>r.json())]);
   const scene=new THREE.Scene();
   scene.background=new THREE.Color('#dae5e5');
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});
@@ -73,9 +74,16 @@ try {
     if(p.label) {
       const ink=p.color.toLowerCase()==='#252420'||p.color.toLowerCase()==='#ff234b'||p.name==='Back number';
       const texture=labelTexture(p.label,p.size[0],p.size[1]);
-      const plane=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0]*.94,p.size[1]*.9),new THREE.MeshBasicMaterial({map:texture,transparent:true,color:ink?0xffffff:0x252420,depthWrite:false}));
+      const plane=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0]*.94,p.size[1]*(p.art ? .22 : .9)),new THREE.MeshBasicMaterial({map:texture,transparent:true,color:ink?0xffffff:0x252420,depthWrite:false}));
       plane.position.z=p.size[2]/2+.025;
+      if(p.art)plane.position.y=-p.size[1]*.34;
       group.add(plane);
+    }
+    if(p.art){
+      const texture=new THREE.TextureLoader().load('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(illustration(p.art,artAssets)));
+      texture.colorSpace=THREE.SRGBColorSpace;
+      const image=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0]*.9,p.size[1]*.65),new THREE.MeshBasicMaterial({map:texture}));
+      image.position.set(0,p.size[1]*.12,p.size[2]/2+.03);group.add(image);
     }
     scene.add(group);
   }
@@ -127,17 +135,18 @@ try {
   overview();camera.position.copy(goalPosition);controls.target.copy(goalTarget);animating=false;
   resize();
   const projected=new THREE.Vector3();
+  let inView=true;new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;},{rootMargin:'100px'}).observe(viewer);
   let lastFrame=performance.now();
   function draw(now=performance.now()){
     requestAnimationFrame(draw);
     const dt=Math.min((now-lastFrame)/1000,.2);lastFrame=now;
-    if(document.hidden) return;
+    if(document.hidden||!inView) return;
     if(animating){
       const blend=1-Math.exp(-7*dt);
       camera.position.lerp(goalPosition,blend);controls.target.lerp(goalTarget,blend);
       if(camera.position.distanceTo(goalPosition)<.08)animating=false;
     }
-    controls.update();renderer.render(scene,camera);
+    controls.update();renderer.render(scene,camera);window.__mapRendered=true;
     for(const p of pins){
       projected.copy(p.position).project(camera);
       const visible=projected.z<1 && Math.abs(projected.x)<1.05 && Math.abs(projected.y)<1.05;

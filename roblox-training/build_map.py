@@ -170,6 +170,19 @@ for x in [-3.5,3.5]:
 for x in [-28,28]: plant(world,x,-144,True)
 sign(world,'Finish reminder',(-49,6,-144),(29,9,.7),'WE HELP.\n\n어려운 문의는 단톡에서 함께\n실제 업무는 받은 안내서로',INK,PAPER)
 sign(world,'Finish reward',(49,6,-144),(29,9,.7),'NICE WORK :)\n\n6개 미션의 스탬프를 모아\n첫 연결을 준비해요.',INK,PAPER)
+# Illustrated workbench signs in the actual 3D world (native SurfaceGui shapes).
+art_assets=json.loads((ROOT/'src/client/VisualAssets.json').read_text(encoding='utf-8-sig'))
+for stage,station,key in zip(curriculum['stages'],station_models,['brand','brand','beauty','mail','chat','skincare']):
+    x,_,z=stage['position'];children=station['Children']
+    panel=part(children,'VisualTutorialBoard',(x+12,6.8,z+6),(6.8,9,.5),PAPER,collide=False)
+    data=art_assets[key]
+    picture=obj('OriginalIllustration','Frame',{'Position':{'UDim2':[[.05,0],[.04,0]]},'Size':{'UDim2':[[.9,0],[.65,0]]},'BackgroundColor3':rgb(data['bg']),'BorderSizePixel':0,'ClipsDescendants':True})
+    for shape in data['shapes']:
+        v=obj('Shape','Frame',{'Position':{'UDim2':[[shape['x'],0],[shape['y'],0]]},'Size':{'UDim2':[[shape['w'],0],[shape['h'],0]]},'BackgroundColor3':rgb(shape['color']),'BorderSizePixel':0,'Rotation':shape.get('rot',0)})
+        if shape.get('r',0): v['Children'].append(obj('Round','UICorner',{'CornerRadius':{'UDim':[shape['r'],0]}}))
+        picture['Children'].append(v)
+    gui=obj('VisualGuide','SurfaceGui',{'Face':'Back','SizingMode':'PixelsPerStud','PixelsPerStud':35,'LightInfluence':0},[picture,obj('Instruction','TextLabel',{'Position':{'UDim2':[[.06,0],[.73,0]]},'Size':{'UDim2':[[.88,0],[.22,0]]},'BackgroundTransparency':1,'Text':'보고 · 직접 해보고\n결과 확인하기','TextColor3':rgb(INK),'TextScaled':True,'TextWrapped':True,'Font':'GothamBold'})])
+    panel['Children'].append(gui);scene[-1]['art']=key;scene[-1]['label']='보고 · 직접 해보기'
 model=obj('TrainingMap','Model',children=[obj('Architecture','Folder',children=world),obj('Stations','Folder',children=station_models)])
 model.pop('Name',None)
 (ROOT/'map/TrainingMap.model.json').write_text(json.dumps(model,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
@@ -189,3 +202,6 @@ print(f'Original campus generated: {len(scene)} parts, 6 stations, 1 spawn')
 
 missions=[{**{k:s[k] for k in ['id','title','subtitle','color','position']},'topics':[q['title'] for q in s['questions']]} for s in curriculum['stages']]
 (ROOT/'missions.json').write_text(json.dumps(missions,ensure_ascii=False),encoding='utf-8')
+
+(ROOT/'visual-assets.json').write_bytes((ROOT/'src/client/VisualAssets.json').read_bytes())
+(ROOT/'tutorials.json').write_bytes((ROOT/'src/server/Curriculum.json').read_bytes())

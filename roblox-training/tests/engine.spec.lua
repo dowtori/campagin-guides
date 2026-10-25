@@ -55,4 +55,17 @@ local extra=table.clone(question.answer); extra.extra=true
 expect(not Engine.isCorrect(question,extra),'sequence rejects unexpected dictionary keys')
 local reversed=table.clone(question.answer); reversed[1],reversed[2]=reversed[2],reversed[1]
 expect(not Engine.isCorrect(question,reversed),'sequence must follow actual order')
+for _,stage in ipairs(Curriculum.stages) do for _,q in ipairs(stage.questions) do
+    local s=Engine.new();s.progress=stage.id;Engine.open(s,Curriculum,stage.id);s.active.index=table.find(stage.questions,q)
+    local public=Engine.question(s,Curriculum)
+    expect(public.visual and public.visual.kind,'every activity has visual metadata')
+    if q.mode=='form' then
+        local extra=table.clone(q.answer);extra.unexpected=true
+        expect(not Engine.isCorrect(q,extra),'form rejects unexpected fields')
+        for key in pairs(q.answer) do
+            local missing=table.clone(q.answer);missing[key]=nil
+            expect(not Engine.isCorrect(q,missing),'form requires every field')
+        end
+    end
+end end
 print(string.format('PASS: %d assertions; 18 activities; gating, retries, resume, replay, completion, malformed input',checks))
