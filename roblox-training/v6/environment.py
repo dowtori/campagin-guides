@@ -1,4 +1,4 @@
-"""Native v6.4: navigable coastal ridges, a 3D red sun and drifting cloud models."""
+"""Native v6.5: navigable coastal ridges, a 3D red sun and drifting cloud models."""
 from coastal_environment import add_coast,height_at,coast_distance,HIKE
 from nature_models import add_nature
 import math,random
@@ -39,9 +39,9 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
             part(world,'Ridge trail',(x,height_at(x,z)+.22,z),(6,.4,length/n+.3),'C8BA9C','Sandstone',rot=(0,yaw,0))
     summit_y=height_at(300,110)
     part(world,'Ridge lookout',(300,summit_y+.2,110),(16,.4,13),'C8BA9C','Sandstone')
-    part(world,'Sunset lookout deck',(0,.82,-330),(38,.4,25),'B69B73','WoodPlanks')
+    part(world,'Sunset lookout deck',(-13,.82,-330),(64,.4,25),'B69B73','WoodPlanks')
     world.append(obj('LookoutSpawn','Part',{'Anchored':True,'CanCollide':False,'CanTouch':False,'CanQuery':False,'Transparency':1,'Size':[1,1,1],'CFrame':cf((0,4,-326))}))
-    for x in [-17,17]:
+    for x in [-43,17]:
         for z in [-319,-330,-341]:part(world,'Lookout post',(x,2.1,z),(.35,3,.35),'A08361','Wood')
         part(world,'Lookout rail',(x,3.35,-330),(.25,.22,23),'C0A17A','Wood')
     for x in [-9,9]:
@@ -59,6 +59,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
     patches=[(-40,-140,26,44),(-64,-213,35,48),(47,-173,29,54),(82,-231,36,42),
              (-117,-113,25,30),(102,-112,29,32),(-49,108,35,21),(59,77,28,30)]
     def allowed(x,z):
+        if 7<x<113 and -120<z<-35:return False
         if distance_to_path(x,z)<11 or height_at(x,z)<-.2 or height_at(x,z)>5:return False
         if any(abs(x-cx)<35 and abs(z-cz)<29 for cx,cz in centers):return False
         if abs(x)<35 and z>0:return False
@@ -88,9 +89,9 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
     # An easy route into and out of the shallows, with posts continuing below water.
     for k in range(12):
         part(world,'Water access step',(0,.64-k*.42,-343-k*1.4),(10,.45,1.65),'C6B59B','WoodPlanks')
-    for x in [-15,15]:part(world,'Lookout foundation',(x,-3,-333),(1,8,1),'887B65','Wood')
+    for x in [-40,-15,15]:part(world,'Lookout foundation',(x,-3,-333),(1,8,1),'887B65','Wood')
     add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum)
-    return {'version':'6.4','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
+    return {'version':'6.5','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
             'lake':coast['ocean'],'seaLevel':coast['seaLevel'],'coastFile':'coast.json',
             'backdrop':'atmosphere','sceneryGeometry':'navigable-terrain','clouds':'native-and-3d',
             'views':{'sunset':{'position':[0,6,-180],'target':[35,27,-850]},'lake':{'position':[70,24,-270],'target':[0,-1,-345]},

@@ -1,4 +1,4 @@
-"""Build v6.4: native coastal terrain, clustered nature and original company visuals."""
+"""Build v6.5: native coastal terrain, clustered nature and original company visuals."""
 import json,math,random
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
@@ -135,19 +135,22 @@ for x in [-50,-18]:part(world,'Arrival bollard',(x,2.1,94),(.8,3,.8),'6C6370','W
 from pier_sculpture import add_thumbs_up
 thumb=add_thumbs_up(world,part,obj,cf)
 for primitive in thumb['Children']:
-    part_records[id(primitive)]['matrix']=primitive['Properties']['CFrame'][3:]
-sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.4','FFFFFF',INK)
+    record=part_records[id(primitive)];record['matrix']=primitive['Properties']['CFrame'][3:]
+    record['thumbStage']=primitive['Children'][-1]['Properties']['Value'];record['thumb']=True
+from advanced_room import add_room
+add_room(world,part,obj,sign,actor)
+sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.5','FFFFFF',INK)
 # Short inset chevrons mark forward travel without a screen-size route diagram.
 for z in [92,43,35,0,-19,-60]:
     for side in [-1,1]:part(world,'Forward route arrow',(-34+side*.5,1.03,z),(1.5,.055,.18),PINK,'SmoothPlastic',rot=(0,side*38,0),collide=False)
 # New-world data remains independent of every previous training implementation.
-env.update(version='6.4',views={'pier':{'position':[8,10,-307],'target':[-10,4.4,-325]},'sunset':{'position':[0,8,-205],'target':[70,34,-850]},'overview':{'position':[164,143,172],'target':[0,3,-30]},'agency':{'position':[-10,19,113],'target':[-34,6,63]},'garden':{'position':[-5,20,49],'target':[-47,5,8]}})
-route={'version':'6.4','spawn':list(SPAWN),'path':PATH,'targets':TARGETS,'requiredStops':['Manager','beauty_sample','Mailbox']}
+env.update(version='6.5',views={'challenge':{'position':[60,12,-47],'target':[60,11,-110]},'pier':{'position':[-41,12,-295],'target':[-29,8,-328]},'sunset':{'position':[0,8,-205],'target':[70,34,-850]},'overview':{'position':[164,143,172],'target':[0,3,-30]},'agency':{'position':[-10,19,113],'target':[-34,6,63]},'garden':{'position':[-5,20,49],'target':[-47,5,8]}})
+route={'version':'6.5','spawn':list(SPAWN),'path':PATH,'targets':TARGETS,'requiredStops':['Manager','beauty_sample','Mailbox']}
 (ROOT/'route.json').write_text(json.dumps(route,ensure_ascii=False,indent=2),encoding='utf-8')
 (ROOT/'src/shared/RouteData.json').write_text(json.dumps(route,ensure_ascii=False,indent=2),encoding='utf-8')
 model=obj('TrainingMap','Model',children=[obj('Architecture','Folder',children=world)]);model.pop('Name',None)
 for name,value in [('map/TrainingMap.model.json',model),('scene.json',scene),('environment.json',env)]:
     (ROOT/name).write_text(json.dumps(value,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
-project={'name':'SIRIAI Recruiter Island v6.4','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True},'Clouds':{'$className':'Clouds','$properties':{'Cover':.28,'Density':.25,'Color':rgb('E1D5C6')}}}},'Lighting':{'$properties':{'Ambient':rgb('9B9488'),'OutdoorAmbient':rgb('B6AC98'),'Brightness':2,'ClockTime':17.7,'GeographicLatitude':28,'GlobalShadows':True,'ShadowSoftness':.7,'ColorShift_Top':rgb('F6BD93'),'EnvironmentDiffuseScale':.85,'EnvironmentSpecularScale':.65},'Atmosphere':{'$className':'Atmosphere','$properties':{'Density':.24,'Offset':.12,'Color':rgb('DBCAAE'),'Decay':rgb('9DABB5'),'Haze':1.2,'Glare':.15}},'Sky':{'$className':'Sky','$properties':{'CelestialBodiesShown':False,'StarCount':0}},'Bloom':{'$className':'BloomEffect','$properties':{'Intensity':.14,'Size':24,'Threshold':1.5}}},'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
+project={'name':'SIRIAI Recruiter Island v6.5','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True},'Clouds':{'$className':'Clouds','$properties':{'Cover':.28,'Density':.25,'Color':rgb('E1D5C6')}}}},'Lighting':{'$properties':{'Ambient':rgb('9B9488'),'OutdoorAmbient':rgb('B6AC98'),'Brightness':2,'ClockTime':17.7,'GeographicLatitude':28,'GlobalShadows':True,'ShadowSoftness':.7,'ColorShift_Top':rgb('F6BD93'),'EnvironmentDiffuseScale':.85,'EnvironmentSpecularScale':.65},'Atmosphere':{'$className':'Atmosphere','$properties':{'Density':.24,'Offset':.12,'Color':rgb('DBCAAE'),'Decay':rgb('9DABB5'),'Haze':1.2,'Glare':.15}},'Sky':{'$className':'Sky','$properties':{'CelestialBodiesShown':False,'StarCount':0}},'Bloom':{'$className':'BloomEffect','$properties':{'Intensity':.14,'Size':24,'Threshold':1.5}}},'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'AdvancedEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
 (ROOT/'default.project.json').write_text(json.dumps(project,indent=2),encoding='utf-8')
-print('v6 fresh world:',len(scene),'parts, 3 job locations, 4 NPCs, 3 shared work targets; no scenery images')
+print('v6 fresh world:',len(scene),'parts, 3 job locations, 7 NPCs, 3 shared work targets; no scenery images')

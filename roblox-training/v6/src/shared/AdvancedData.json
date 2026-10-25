@@ -1,0 +1,151 @@
+{
+  "room": {
+    "center": [
+      60,
+      0,
+      -80
+    ],
+    "halfSize": [
+      46,
+      14,
+      34
+    ],
+    "arrival": [
+      60,
+      4,
+      -61
+    ],
+    "lookAt": [
+      60,
+      10,
+      -108
+    ]
+  },
+  "rewardPerClear": 100,
+  "challenges": [
+    {
+      "id": "scout",
+      "title": "인플루언서 선별",
+      "timed": true,
+      "seconds": 30,
+      "rounds": [
+        {
+          "conditions": "뷰티 릴스 · 팔로워 5천~3만\n최근 14일 안에 뷰티 릴스 게시",
+          "options": [
+            {
+              "id": "beauty",
+              "name": "@beauty_note",
+              "image": "creator1",
+              "facts": "팔로워 1.8만\n뷰티 릴스 · 3일 전 게시",
+              "correct": true,
+              "feedback": "분야·팔로워·최근 게시 조건이 모두 맞아요."
+            },
+            {
+              "id": "large",
+              "name": "@glow_daily",
+              "image": "creator4",
+              "facts": "팔로워 4.2만\n뷰티 릴스 · 2일 전 게시",
+              "feedback": "이번 캠페인은 팔로워 3만 이하예요."
+            },
+            {
+              "id": "travel",
+              "name": "@trip_frame",
+              "image": "creator7",
+              "facts": "팔로워 1.6만\n여행 사진 · 1일 전 게시",
+              "feedback": "이번에는 여행 사진이 아닌 뷰티 릴스 계정을 찾아요."
+            }
+          ]
+        },
+        {
+          "conditions": "뷰티 릴스 · 팔로워 1만~5만\n최근 7일 안에 뷰티 릴스 게시",
+          "options": [
+            {
+              "id": "fresh",
+              "name": "@skin_story",
+              "image": "creator2",
+              "facts": "팔로워 2.4만\n뷰티 릴스 · 2일 전 게시",
+              "correct": true,
+              "feedback": "세 가지 모집 조건을 모두 충족했어요."
+            },
+            {
+              "id": "small",
+              "name": "@daily_glow",
+              "image": "creator5",
+              "facts": "팔로워 8천\n뷰티 릴스 · 1일 전 게시",
+              "feedback": "이번 캠페인은 팔로워 1만 이상이에요."
+            },
+            {
+              "id": "old",
+              "name": "@beauty_archive",
+              "image": "creator3",
+              "facts": "팔로워 3.1만\n뷰티 릴스 · 30일 전 게시",
+              "feedback": "최근 7일 안의 뷰티 릴스가 필요해요."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fee",
+      "title": "고료 조정 문의",
+      "timed": false,
+      "rounds": [
+        {
+          "conditions": "DM에는 기본 고료 10만 원이 적혀 있어요.\n“15만 원으로 조정할 수 있을까요?”",
+          "options": [
+            {
+              "id": "confirm",
+              "name": "민지",
+              "answer": "희망 고료를 전달드리고,\n확인 후 안내드릴게요.",
+              "correct": true,
+              "feedback": "희망 금액 15만 원을 비고에 남기고 담당자에게 공유해요."
+            },
+            {
+              "id": "promise",
+              "name": "도윤",
+              "answer": "네, 15만 원으로\n확정해드릴게요!",
+              "feedback": "확인 전에는 조정된 고료를 확정할 수 없어요."
+            },
+            {
+              "id": "reject",
+              "name": "하린",
+              "answer": "고료 조정은\n무조건 불가능해요.",
+              "feedback": "조정 요청을 임의로 거절하지 말고 담당자에게 공유해요."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conditions",
+      "title": "모르는 조건 문의",
+      "timed": false,
+      "rounds": [
+        {
+          "conditions": "안내받은 가이드에는 얼굴 노출 조건이 없어요.\n“얼굴 전체가 꼭 나와야 하나요?”",
+          "options": [
+            {
+              "id": "ask",
+              "name": "민지",
+              "answer": "담당자에게 확인한 후\n안내드릴게요.",
+              "correct": true,
+              "feedback": "계정과 질문을 담당자에게 전달하고, 확인된 내용으로 답해요."
+            },
+            {
+              "id": "must",
+              "name": "도윤",
+              "answer": "네, 얼굴 전체가\n반드시 나와야 해요.",
+              "feedback": "가이드에 없는 필수 조건을 만들어 안내하면 안 돼요."
+            },
+            {
+              "id": "optional",
+              "name": "하린",
+              "answer": "아니요, 얼굴은\n안 나와도 괜찮아요.",
+              "feedback": "선택 사항인지도 확인이 필요해요. 담당자에게 먼저 물어봐요."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

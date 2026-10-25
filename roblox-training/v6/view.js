@@ -4,7 +4,7 @@ const viewer=document.querySelector('#viewer'),loading=document.querySelector('#
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 try{
  await document.fonts.ready;
- const [parts,env,rasterAssets,coast]=await Promise.all(['scene.json','environment.json','raster-assets.json','coast.json'].map(u=>fetch('./v6/'+u).then(r=>{if(!r.ok)throw Error(u);return r.json()})));
+ const [parts,env,rasterAssets,coast,thumbData,advancedData]=await Promise.all(['scene.json','environment.json','raster-assets.json','coast.json','src/shared/ThumbData.json','src/shared/AdvancedData.json'].map(u=>fetch('./v6/'+u).then(r=>{if(!r.ok)throw Error(u);return r.json()})));
  const scene=new THREE.Scene();scene.fog=new THREE.FogExp2('#c5bba5',.00068);
  const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;viewer.prepend(renderer.domElement);
@@ -38,8 +38,10 @@ try{
     let fontSize=Math.min(110,canvas.height/(lines.length+1.1));for(const line of lines)fontSize=Math.min(fontSize,940/Math.max(1,[...line].reduce((n,c)=>n+(/[\u3131-\uD79D]/.test(c)?1:.58),0)));
     ctx.fillStyle='#ffffff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`700 ${fontSize}px Pretendard,sans-serif`;lines.forEach((line,i)=>ctx.fillText(line,512,(canvas.height-(lines.length-1)*fontSize*1.3)/2+i*fontSize*1.3));const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return texture;
   }
+  const thumbs=[];
   for(const p of parts){
     if(p.name==='Coast ground preview'||p.name==='Solid sea floor'||p.name==='Mountain terrain preview'||p.name.startsWith('Target_'))continue;
+    if(p.thumb){thumbs.push(p);continue;}
     const geom=p.shape==='Wedge'?wedge:p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box,m=material(p),key=geom.uuid+m.uuid+Boolean(p.shadow);
     if(!p.name.startsWith('Pixel twilight')){if(!batches.has(key))batches.set(key,{geom,material:m,shadow:p.shadow!==false&&p.material!=='Neon'&&p.transparency<.6&&!p.name.startsWith('Distant')&&!p.name.startsWith('Floating')&&!p.name.startsWith('Cyan'),parts:[]});batches.get(key).parts.push(p);}partCount++;
     if(p.label||p.art||p.raster){
@@ -62,6 +64,41 @@ try{
     const mesh=new THREE.InstancedMesh(batch.geom,batch.material,batch.parts.length);mesh.castShadow=batch.shadow;mesh.receiveShadow=!batch.parts[0].wind;
     batch.parts.forEach((p,i)=>{dummy.position.fromArray(p.position);if(p.matrix){const m=p.matrix;rotationMatrix.set(m[0],m[1],m[2],0,m[3],m[4],m[5],0,m[6],m[7],m[8],0,0,0,0,1);dummy.quaternion.setFromRotationMatrix(rotationMatrix);}else{dummy.rotation.set(...p.rotation.map(v=>v*Math.PI/180),'XYZ');}dummy.scale.fromArray(p.size);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});mesh.computeBoundingSphere();scene.add(mesh);
   }
+  const thumbMeshes=thumbs.map(p=>{
+    const geom=p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box;
+    const mesh=new THREE.Mesh(geom,new THREE.MeshStandardMaterial({color:p.color,roughness:.48,metalness:.12}));
+    const m=p.matrix;rotationMatrix.set(m[0],m[1],m[2],0,m[3],m[4],m[5],0,m[6],m[7],m[8],0,0,0,0,1);mesh.quaternion.setFromRotationMatrix(rotationMatrix);
+    mesh.castShadow=true;scene.add(mesh);return {p,mesh};
+  });
+  function thumbStage(stage){
+    const item=thumbData.stages[stage],origin=thumbData.origin;
+    for(const {p,mesh} of thumbMeshes){
+      mesh.visible=p.thumbStage<=stage&&!(p.thumbStage===8&&stage===10);
+      mesh.position.set(...p.position.map((v,i)=>origin[i]+(v-origin[i])*item.scale));mesh.scale.set(...p.size.map(v=>v*item.scale));
+      mesh.material.color.set(stage>=7&&p.thumbStage===0&&!p.name.includes('pedestal')?'#ffce53':p.color);
+    }
+    const label=document.querySelector('#thumb-label');if(label)label.textContent=item.title+' · '+stage+'/10';
+    window.__thumbStage=stage;
+  }
+  const slider=document.querySelector('#thumb-stage');const initial=Math.max(0,Math.min(10,Number(new URLSearchParams(location.search).get('thumb')??7)));
+  if(slider){slider.value=initial;slider.addEventListener('input',()=>{thumbStage(Number(slider.value));view('pier');});}thumbStage(initial);
+  // Static display of the same first challenge data; actual interactions run in Roblox.
+  const round=advancedData.challenges[0].rounds[0];
+  async function boardTexture(p){
+    let canvas=document.createElement('canvas');canvas.width=p.name==='ConditionBoard'?1640:750;canvas.height=p.name==='ConditionBoard'?170:465;let ctx=canvas.getContext('2d');
+    ctx.fillStyle=p.name==='ConditionBoard'?'#27242f':'#f9f6ee';ctx.fillRect(0,0,canvas.width,canvas.height);
+    function lines(value,x,y,size,color='#25212d'){ctx.font='700 '+size+'px Pretendard,sans-serif';ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';value.split('\n').forEach((t,i)=>ctx.fillText(t,x,y+i*size*1.3));}
+    if(p.name==='ConditionBoard'){lines(round.conditions,680,57,40,'#f9f6ee');lines('30초',1490,85,36,'#f9f6ee');}
+    else{
+      const n=Number(p.name.slice(-1)),o=round.options[n-1];lines(n+'  '+o.name,375,45,34);
+      let image=new Image();image.src='./v6/'+rasterAssets[o.image].file;await image.decode();ctx.drawImage(image,30,93,260,260);
+      lines(o.facts,550,160,30);
+      ctx.fillStyle='#df1940';ctx.fillRect(30,372,690,74);lines('이 크리에이터 선택',375,409,30,'#fff');
+    }
+    const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0],p.size[1]),new THREE.MeshBasicMaterial({map:texture,toneMapped:false}));mesh.position.set(p.position[0],p.position[1],p.position[2]+p.size[2]/2+.04);scene.add(mesh);
+  }
+  await Promise.all(parts.filter(p=>p.name==='ConditionBoard'||p.name.startsWith('ChoiceBoard')).map(boardTexture));
   // The same height samples used for native terrain drive this continuous preview mesh.
   const positions=[],colours=[],indices=[];const sand=new THREE.Color('#ccba96'),meadow=new THREE.Color('#aab78a'),rock=new THREE.Color('#9b998b');
   for(let x=0;x<coast.nx;x++)for(let z=0;z<coast.nz;z++){

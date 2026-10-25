@@ -1,10 +1,10 @@
-"""Package the already-built v6.4 place and its exact editable sources."""
+"""Package the already-built v6.5 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.4'
-BINARY='SIRIAI_Recruiter_Island_v6_4.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_4_Source.zip'
+VERSION='6.5'
+BINARY='SIRIAI_Recruiter_Island_v6_5.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_5_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,10 +14,10 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_4')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_5')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_4/downloads/'+BINARY)==place.read_bytes()
+ assert archive.read('SIRIAI_Recruiter_Island_v6_5/downloads/'+BINARY)==place.read_bytes()
 release={'version':VERSION,'date':'2026-10-25','status':'review-build','verification':{
  'chapterMenu':'seven illustrated native tiles; direct teleport/start, progress and replay; responsive menu; reference screenshots inspected, game not directly played',
  'chapterProgress':'arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout',
@@ -26,7 +26,11 @@ release={'version':VERSION,'date':'2026-10-25','status':'review-build','verifica
  'setupFlow':'progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance',
  'guideHandoff':'native instructions with web/email anchors; no external URLs or browser API calls in native setup UI',
  'coreFlow':'seven phases at three forward stops; ordinary reply and separate selection notice',
- 'optionalAppendix':'completion-only reference; no required steps, remotes, progress or payout mutations',
+ 'advancedGames':'three optional world-space games; explicit start, server-owned 30s scout deadline, untimed NPC answers; immediate retry, stale attempt and outside-room rejection',
+ 'advancedRewards':'100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming',
+ 'rewardEvolution':'11 sculpture stages from baby to king; local geometry and accessories; non-blocking 3D growth preview',
+ 'advancedChecks':'51 engine/session + 19 actual client UI + 9 actual server integration + 219 actual reward-client adapter checks passed',
+ 'optionalAppendix':'completion-only read-only reference remains alongside the optional minigames',
  'requiredRoute':'133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry',
  'phoneInput':'no click activation handler; deliberate equip, P and explicit button only',
  'resumeAndTravel':'passed exported server/client callback adapters, current target and revision enforced',

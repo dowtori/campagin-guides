@@ -17,7 +17,7 @@ floors=[p['Properties'] for p in parts if p.get('Name')=='Solid sea floor'];asse
 for x in range(-1020,1021,60):
  for z in range(-1080,761,60):assert any(abs(x-f['CFrame'][0])<=f['Size'][0]/2 and abs(z-f['CFrame'][2])<=f['Size'][2]/2 and f['CanCollide'] for f in floors)
 assert len([p for p in nodes if p['ClassName']=='ProximityPrompt'])==3
-assert len([p for p in nodes if p['ClassName']=='Humanoid'])==4
+assert len([p for p in nodes if p['ClassName']=='Humanoid'])==7
 assert all(n['Properties']['RequiresNeck']==False for n in nodes if n['ClassName']=='Humanoid')
 for name in ['Manager','beauty_sample','Mailbox']:
  assert len([p for p in parts if p.get('Name')=='Target_'+name])==1

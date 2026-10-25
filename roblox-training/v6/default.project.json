@@ -1,5 +1,5 @@
 {
-  "name": "SIRIAI Recruiter Island v6.4",
+  "name": "SIRIAI Recruiter Island v6.5",
   "tree": {
     "$className": "DataModel",
     "Workspace": {
@@ -99,6 +99,9 @@
     },
     "ReplicatedStorage": {
       "CampusEvent": {
+        "$className": "RemoteEvent"
+      },
+      "AdvancedEvent": {
         "$className": "RemoteEvent"
       },
       "CampusShared": {

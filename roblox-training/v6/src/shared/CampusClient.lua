@@ -1,4 +1,4 @@
--- SIRIAI v6.4: one visible action, deliberate phone access, resumable work.
+-- SIRIAI v6.5: one visible action, deliberate phone access, resumable work.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
@@ -7,6 +7,8 @@ local UIS=game:GetService('UserInputService')
 local data=require(script.Parent:WaitForChild('CaseData'))
 local Raster=require(script.Parent:WaitForChild('RasterRenderer'))
 local remote=RS:WaitForChild('CampusEvent')
+local Reward=require(script.Parent:WaitForChild('RewardPolicy'))
+local rewardView,advancedView
 local player=Players.LocalPlayer
 local status=gui:FindFirstChild('Status');if status then status:Destroy()end
 local C={paper=Color3.fromRGB(250,249,247),ink=Color3.fromRGB(29,27,34),pink=Color3.fromRGB(223,25,64),gray=Color3.fromRGB(99,94,106),line=Color3.fromRGB(230,227,232),soft=Color3.fromRGB(239,236,240),white=Color3.new(1,1,1),green=Color3.fromRGB(60,105,80)}
@@ -60,7 +62,7 @@ local function prompts()
  for _,o in ipairs(promptList)do
   if o:IsA('ProximityPrompt')then
    local id=o.Parent:FindFirstChild('ActionID');id=id and id.Value
-   o.Enabled=not panel.Visible and not state.complete and id==q.target
+   if id then o.Enabled=not panel.Visible and not state.complete and id==q.target end
   end
  end
 end
@@ -68,6 +70,8 @@ local function visibility(show)
  panel.Visible=show;hud.Visible=not show;phoneButton.Visible=not show;helpButton.Visible=not show;prompts()
 end
 local function closePanel()visibility(false);mode=nil end
+if world and world:FindFirstChild('PierThumbsUp',true) then rewardView=require(script.Parent:WaitForChild('RewardClient')).start(gui,notice)end
+if world and world:FindFirstChild('AdvancedRoom',true) then advancedView=require(script.Parent:WaitForChild('AdvancedClient')).start(gui,closePanel,notice,function()closePanel();remote:FireServer({kind='rest'})end)end
 local close=btn(panel,'×',closePanel);close.Name='ClosePanel';close.Position=UDim2.new(1,-54,0,12);close.Size=UDim2.fromOffset(42,42)
 local function action(caption,fn,enabled)
  primary.Text=caption;primary.Active=enabled~=false;primary.BackgroundColor3=enabled==false and C.line or C.pink;primary.TextColor3=enabled==false and C.gray or C.white;doPrimary=fn
@@ -230,6 +234,8 @@ render=function(profileId)
 end
 local marker,highlight=nil,nil
 local function update()
+ if rewardView then rewardView.sync(state)end
+ if advancedView then advancedView.sync(Reward.summary(state))end
  local q=data.phases[state.phase]
  phaseText.Text=state.complete and '첫 캠페인 완료!' or q.title
  objective.Text=state.complete and '바다로 이동 →' or q.place..' · 바로 이동 →'
@@ -250,7 +256,7 @@ end
 objective.Activated:Connect(function()navigation(state.complete and 'rest' or 'travel')end)
 local appendix
 appendix=function(item)
- if not state.complete then return end
+ if not Reward.summary(state).unlocked then return end
  mode='appendix'
  if item then
   clear(item.title,'부록 / 필요할 때만')
@@ -345,6 +351,13 @@ local function phone(refresh)
    if pending then return end
    pending=true;closePanel();remote:FireServer({kind='chapter',revision=state.revision,chapter=chapter.id})
   end)
+ end
+ local earned=Reward.summary(state)
+ if earned.unlocked then
+  if advancedView then btn(body,earned.king and '왕따봉 해금! · 심화 다시 도전' or '심화 도전 · 왕따봉 해금  '..earned.bonus..'/3',advancedView.enter)end
+ end
+ if earned.basic>0 then
+  btn(body,'따봉 보러 가기  ·  '..earned.score..'점',function()navigation('rest')end)
  end
  if state.complete then
   btn(body,'필요할 때 보는 부록',function()appendix()end)

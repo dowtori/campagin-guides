@@ -1,5 +1,5 @@
 {
-  "version": "6.4",
+  "version": "6.5",
   "date": "2026-10-25",
   "status": "review-build",
   "verification": {
@@ -10,7 +10,11 @@
     "setupFlow": "progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance",
     "guideHandoff": "native instructions with web/email anchors; no external URLs or browser API calls in native setup UI",
     "coreFlow": "seven phases at three forward stops; ordinary reply and separate selection notice",
-    "optionalAppendix": "completion-only reference; no required steps, remotes, progress or payout mutations",
+    "advancedGames": "three optional world-space games; explicit start, server-owned 30s scout deadline, untimed NPC answers; immediate retry, stale attempt and outside-room rejection",
+    "advancedRewards": "100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming",
+    "rewardEvolution": "11 sculpture stages from baby to king; local geometry and accessories; non-blocking 3D growth preview",
+    "advancedChecks": "51 engine/session + 19 actual client UI + 9 actual server integration + 219 actual reward-client adapter checks passed",
+    "optionalAppendix": "completion-only read-only reference remains alongside the optional minigames",
     "requiredRoute": "133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry",
     "phoneInput": "no click activation handler; deliberate equip, P and explicit button only",
     "resumeAndTravel": "passed exported server/client callback adapters, current target and revision enforced",
@@ -21,13 +25,13 @@
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_4.rbxl": {
-      "bytes": 2566258,
-      "sha256": "3443fccbccb52cc88ef8e6636900428b4167fda3d302ecb9167a581c0fa18dcf"
+    "SIRIAI_Recruiter_Island_v6_5.rbxl": {
+      "bytes": 2559094,
+      "sha256": "fffe37f8927f78e136f0d8a4db24a98eebc5a39e939d3cbbd17415769484d1ad"
     },
-    "SIRIAI_Recruiter_Island_v6_4_Source.zip": {
-      "bytes": 12030036,
-      "sha256": "02ff38a0524ead824e9e576bb478a46f55234f028e198f7feeacebdf34459e2b"
+    "SIRIAI_Recruiter_Island_v6_5_Source.zip": {
+      "bytes": 11984016,
+      "sha256": "1f840bda7bcf4e064076142e4fed2fbe62943ec809c6c8fd9ebd5de0f3280908"
     }
   }
 }

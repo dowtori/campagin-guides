@@ -61,6 +61,7 @@ def add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum):
     cache={};instances=[];wedges=0
     def place(name,x,z,scale,angle,foliage='879669'):
         nonlocal wedges
+        if 7<x<113 and -120<z<-30:return
         if name not in cache:cache[name]=read_obj(name)
         ground=height_at(x,z);rotation=math.radians(angle);co,si=math.cos(rotation),math.sin(rotation)
         model=obj('Kenney '+name,'Model');folder['Children'].append(model);children=model['Children']
