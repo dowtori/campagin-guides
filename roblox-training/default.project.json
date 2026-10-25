@@ -1,0 +1,83 @@
+{
+  "name": "SIRIAI Training Campus",
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "$properties": {
+        "Gravity": 196.2,
+        "FallenPartsDestroyHeight": -35
+      },
+      "TrainingMap": {
+        "$path": "map/TrainingMap.model.json"
+      }
+    },
+    "Lighting": {
+      "$properties": {
+        "Ambient": [
+          0.7254901960784313,
+          0.7098039215686275,
+          0.6823529411764706
+        ],
+        "OutdoorAmbient": [
+          0.8313725490196079,
+          0.8431372549019608,
+          0.8509803921568627
+        ],
+        "Brightness": 2.3,
+        "ClockTime": 14,
+        "GlobalShadows": true,
+        "ShadowSoftness": 0.25
+      },
+      "Atmosphere": {
+        "$className": "Atmosphere",
+        "$properties": {
+          "Density": 0.18,
+          "Offset": 0.1,
+          "Color": [
+            0.8431372549019608,
+            0.8862745098039215,
+            0.8980392156862745
+          ],
+          "Decay": [
+            0.6627450980392157,
+            0.7529411764705882,
+            0.8156862745098039
+          ],
+          "Haze": 0.7
+        }
+      },
+      "Bloom": {
+        "$className": "BloomEffect",
+        "$properties": {
+          "Intensity": 0.15,
+          "Size": 24,
+          "Threshold": 1.25
+        }
+      }
+    },
+    "ReplicatedStorage": {
+      "TrainingEvent": {
+        "$className": "RemoteEvent"
+      }
+    },
+    "ServerScriptService": {
+      "$path": "src/server"
+    },
+    "StarterPlayer": {
+      "$properties": {
+        "CameraMaxZoomDistance": 65,
+        "CameraMinZoomDistance": 5,
+        "CharacterWalkSpeed": 20,
+        "CharacterJumpPower": 50
+      },
+      "StarterPlayerScripts": {
+        "$path": "src/client"
+      }
+    },
+    "SoundService": {
+      "$properties": {
+        "RespectFilteringEnabled": true
+      }
+    }
+  }
+}
