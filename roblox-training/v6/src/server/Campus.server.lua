@@ -52,7 +52,7 @@ for id,target in pairs(targets)do
 end
 local function phone(player)
     if player.Backpack:FindFirstChild('리크루터 폰') or (player.Character and player.Character:FindFirstChild('리크루터 폰'))then return end
-    local tool=Instance.new('Tool');tool.Name='리크루터 폰';tool.CanBeDropped=false;tool.RequiresHandle=true;tool.ManualActivationOnly=true;tool.ToolTip='장착하거나 P 키로 이어하기 · 목표 위치 이동'
+    local tool=Instance.new('Tool');tool.Name='리크루터 폰';tool.CanBeDropped=false;tool.RequiresHandle=true;tool.ManualActivationOnly=true;tool.ToolTip='P · 이어하기 / 챕터 선택'
     local handle=Instance.new('Part');handle.Name='Handle';handle.Size=Vector3.new(.72,1.15,.16);handle.Color=Color3.fromRGB(30,28,35);handle.Material=Enum.Material.SmoothPlastic;handle.CanCollide=false;handle.Massless=true;handle.Parent=tool
     local gui=Instance.new('SurfaceGui');gui.Name='RasterArt';gui.Face=Enum.NormalId.Front;gui.Parent=handle
     local key=Instance.new('StringValue');key.Name='RasterKey';key.Value='logoWhite';key.Parent=handle
@@ -72,19 +72,25 @@ remote.OnServerEvent:Connect(function(player,packet)
     local s=state(player)
     if packet.kind=='hello'then send(player,'state');if s.phase>1 then phone(player)end
     elseif packet.kind=='interact'then if type(packet.target)=='string'then interact(player,packet.target)end
-    elseif packet.kind=='resume' or packet.kind=='travel'then
+    elseif packet.kind=='resume' or packet.kind=='travel' or packet.kind=='chapter'then
         if packet.revision~=s.revision then send(player,'state');return end
-        if s.complete then send(player,'finished');return end
-        local phase=data.phases[s.phase];local target=targets[phase.target]
         local character=player.Character;local root=character and character:FindFirstChild('HumanoidRootPart')
-        if not root or not target then return end
+        if not root then send(player,'notice',{text='캐릭터가 준비되면 다시 눌러주세요.'});return end
+        local changed=false
+        if packet.kind=='chapter' then
+            local ok,result=Engine.choose(s,packet.chapter,data)
+            if not ok then send(player,'notice',{text=result});return end
+            changed=result
+        elseif s.complete then send(player,'finished');return end
+        local phase=data.phases[s.phase];local target=targets[phase.target]
+        if not target then return end
         -- Every target has a clear arrival pad in front of it. Clients cannot choose
-        -- coordinates or skip a phase; moving never advances the campaign record.
+        -- coordinates. Chapter selection never marks skipped work complete.
         local destination=target.Position+Vector3.new(0,0,7)
         character:PivotTo(CFrame.lookAt(destination,target.Position))
         root.AssemblyLinearVelocity=Vector3.new(0,0,0)
         root.AssemblyAngularVelocity=Vector3.new(0,0,0)
-        if packet.kind=='resume' then send(player,'open',{profile=phase.target})
+        if packet.kind=='resume' or packet.kind=='chapter' then send(player,'open',{profile=phase.target,resetDraft=changed and s.completed[phase.id]==true})
         else send(player,'arrived',{text=phase.place..'에 도착했어요.'})end
     elseif packet.kind=='apply'then
         if packet.revision~=s.revision or s.complete then send(player,'state');return end
@@ -94,7 +100,7 @@ remote.OnServerEvent:Connect(function(player,packet)
         if ok then
             if phase.id=='brief'then phone(player)end
             if phase.id=='send'then envelope(player)end
-            send(player,'done',{text=phase.done,continueHere=not s.complete and phase.target==data.phases[s.phase].target})
+            send(player,'done',{text=s.complete and '모든 챕터 완료' or '다음: '..data.phases[s.phase].title,continueHere=not s.complete and phase.target==data.phases[s.phase].target})
         else send(player,'notice',{text=reason})end
     elseif packet.kind=='home'then
         local character=player.Character
@@ -112,4 +118,4 @@ Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()task.wait(1);if state(player).phase>1 then phone(player)end;send(player,'state')end)
 end)
 Players.PlayerRemoving:Connect(function(player)states[player]=nil end)
-print('[SIRIAI v6.3.1] Recruiter Island ready: NPC quests, phone tool, one campaign')
+print('[SIRIAI v6.4] Recruiter Island ready: NPC quests, phone tool, one campaign')

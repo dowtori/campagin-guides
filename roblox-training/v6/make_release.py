@@ -1,10 +1,10 @@
-"""Package the already-built v6.3.1 place and its exact editable sources."""
+"""Package the already-built v6.4 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.3.1'
-BINARY='SIRIAI_Recruiter_Island_v6_3_1.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_3_1_Source.zip'
+VERSION='6.4'
+BINARY='SIRIAI_Recruiter_Island_v6_4.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_4_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,11 +14,14 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_3_1')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_4')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_3_1/downloads/'+BINARY)==place.read_bytes()
+ assert archive.read('SIRIAI_Recruiter_Island_v6_4/downloads/'+BINARY)==place.read_bytes()
 release={'version':VERSION,'date':'2026-10-25','status':'review-build','verification':{
+ 'chapterMenu':'seven illustrated native tiles; direct teleport/start, progress and replay; responsive menu; reference screenshots inspected, game not directly played',
+ 'chapterProgress':'arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout',
+ 'copyAudit':'removed repeated setup summaries, redundant send instructions, phone travel duplication and implementation explanations',
  'pierSculpture':'original solid thumbs-up; old pier logo removed; front/side geometry preview inspected; center path and water steps clear',
  'setupFlow':'progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance',
  'guideHandoff':'native instructions with web/email anchors; no external URLs or browser API calls in native setup UI',

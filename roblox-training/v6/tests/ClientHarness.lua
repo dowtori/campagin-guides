@@ -24,6 +24,10 @@ function H.remote:FireServer(packet)
  if packet.kind=='hello'then self.OnClientEvent:Fire({kind='state',state=H.state})
  elseif packet.kind=='resume'then self.OnClientEvent:Fire({kind='open',state=H.state,profile=data.phases[H.state.phase].target})
  elseif packet.kind=='travel'then self.OnClientEvent:Fire({kind='arrived',state=H.state,text='도착'})
+ elseif packet.kind=='chapter'then
+  assert(packet.revision==H.state.revision,'valid chapter revision')
+  local ok,changed=Engine.choose(H.state,packet.chapter,data);assert(ok)
+  self.OnClientEvent:Fire({kind='open',state=H.state,profile=data.phases[H.state.phase].target,resetDraft=changed and H.state.completed[packet.chapter]==true})
  elseif packet.kind=='apply'then
   assert(packet.revision==H.state.revision,'valid client revision')
   local q=data.phases[H.state.phase]

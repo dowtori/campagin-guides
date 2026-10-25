@@ -1,12 +1,12 @@
-# Siriai Recruiter Island v6.3.1
+# Siriai Recruiter Island v6.4
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_4.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
-5. 폰의 **이어서 하기**는 현재 작업 장소로 이동해 중단한 화면을 열고, **목표 위치로 이동**은 장소만 옮깁니다. 화면의 현재 목표를 눌러도 바로 이동합니다. 완료 후에는 바다로 이동하거나 선택 부록을 볼 수 있습니다.
+5. 폰에서 **챕터 그림**을 누르면 그 장소로 이동해 바로 시작합니다. **이어서 하기**는 현재 작업을 엽니다. 완료 표시는 실제로 마친 챕터에만 생기고, 완료한 챕터도 다시 열 수 있습니다. 모든 챕터를 마치면 바다로 이동하거나 선택 부록을 볼 수 있습니다.
 6. 작업 중에는 폰·다른 상호작용이 화면을 덮지 않습니다. 연결·발송·응대의 중간 단계는 창을 닫아도 이어집니다. 재접속하면 새 연습을 시작합니다.
 
 웹 링크는 공간 미리보기와 파일 배포용입니다. 본인 Roblox 계정에서 경험으로 게시한 뒤 생성되는 링크로 접속할 수 있습니다.
@@ -24,6 +24,16 @@
 실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
+
+## v6.4: 그림 메뉴로 챕터 선택
+
+[Conveyor Sushi Restaurant](https://www.roblox.com/games/11848247239/Conveyor-Sushi-Restaurant)의 주문 메뉴에서 참고한 큰 그림 타일을 폰에 적용했습니다. 가로 화면은 첫 챕터를 넓게 놓은 7개 타일, 세로 화면은 2열 스크롤입니다. 그림을 누르면 선택한 작업 장소로 이동해 화면이 바로 열립니다. 현재 챕터와 완료 표시를 구분하고, 이어하기 버튼은 아래에 고정했습니다. 폰·작업 화면 사이의 좌클릭 충돌 방지도 유지합니다.
+
+챕터 순서는 자유입니다. 건너뛴 챕터는 완료로 기록하지 않으며, 현재 챕터를 마치면 다음 미완료 챕터로 이어집니다. 마지막부터 시작하면 남은 앞쪽 챕터로 돌아갑니다. 후반 챕터는 해당 장면의 연습 기록을 제공하며, 그 입력을 실제로 완료한 앞 단계의 기록으로 만들지 않습니다. 재학습은 보수 예시를 중복 합산하지 않습니다. 아직 끝내지 않은 설정·발송 화면은 다른 챕터에 들렀다 와도 이어집니다.
+
+설정 완료 화면의 반복 설명과 중복 카드, 발송 버튼과 같은 뜻의 안내, 폰의 중복 이동 버튼과 구현 설명을 제거했습니다. 설정 방법 이해 확인, 안내서로 설정 후 돌아오기, DM에 포함된 기본 고료, 지원·최종 선정 구분과 정산 기준은 남겼습니다.
+
+참고 게임의 음식 이미지·로고·배경은 사용하지 않았습니다. 메뉴에는 시리아이 원본 자료와 이 맵의 크리에이터 이미지, 직접 만든 네이티브 UI 도형을 사용했습니다.
 
 ## v6.3: 채워서 이해하고 실제 설정으로
 
@@ -58,8 +68,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_4.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_4.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py

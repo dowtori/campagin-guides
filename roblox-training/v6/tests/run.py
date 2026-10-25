@@ -3,7 +3,7 @@ import argparse
 import xml.etree.ElementTree as ET,subprocess,tempfile,shutil,json
 ROOT=Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser();parser.add_argument('--luau',required=True);args=parser.parse_args()
-xml=ET.parse(ROOT/'downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxlx').getroot()
+xml=ET.parse(ROOT/'downloads/SIRIAI_Recruiter_Island_v6_4.rbxlx').getroot()
 items=list(xml.iter('Item'));modules={}
 def name(it):return it.find("Properties/string[@name='Name']").text
 def source(it):return it.find("Properties/*[@name='Source']").text
@@ -30,6 +30,6 @@ with tempfile.TemporaryDirectory(prefix='native-',dir=ROOT/'tests') as path:
  serverHeader="local H=require('./ServerHarness')\nlocal game,workspace,Instance,Vector3,CFrame,UDim2,Color3,Enum,TweenInfo,task=H.game,H.workspace,H.Instance,H.Vector3,H.CFrame,H.UDim2,H.Color3,H.Enum,H.TweenInfo,H.task\n"
  (p/'CampusServer.lua').write_text(serverHeader+server+'\nreturn true',encoding='utf-8')
  luau=Path(args.luau).resolve()
- for test in ['case.spec.lua','client.spec.lua','setup.spec.lua','mobile.spec.lua','server.spec.lua','coast.spec.lua','water.spec.lua']:subprocess.run([str(luau),str(p/test)],cwd=p,check=True)
+ for test in ['case.spec.lua','client.spec.lua','setup.spec.lua','chapter-client.spec.lua','mobile.spec.lua','server.spec.lua','chapters.spec.lua','coast.spec.lua','water.spec.lua']:subprocess.run([str(luau),str(p/test)],cwd=p,check=True)
 print('PASS: actual Rojo-exported module sources, 4 humanoid NPCs, 3 prompts, 2 server scripts and 3 client scripts')
 print('Not verified: actual Roblox engine rendering, physics, UI text layout and multiplayer play sessions. Studio is not installed on this host.')

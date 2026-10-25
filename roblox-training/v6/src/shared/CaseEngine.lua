@@ -1,6 +1,17 @@
--- A single guided campaign. Actions are checked against the actual work record.
+-- Guided campaign with freely selectable chapters; only finished actions earn a checkmark.
 local Engine={}
-function Engine.new()return {phase=1,revision=0,complete=false,record={}}end
+function Engine.new()return {phase=1,revision=0,complete=false,record={},completed={}}end
+function Engine.choose(state,id,data)
+    if type(id)~='string' then return false,'챕터를 선택해주세요.' end
+    local index=nil
+    for i,q in ipairs(data.phases)do if q.id==id then index=i;break end end
+    if not index then return false,'챕터를 찾을 수 없어요.' end
+    if state.phase==index and not state.complete then return true,false end
+    -- Later chapters supply their scenario inputs, never fabricated completion.
+    state.exampleRecord=index>=6 and {sent=1,applied=index>=7} or nil
+    state.phase=index;state.complete=false;state.revision+=1
+    return true,true
+end
 function Engine.apply(state,action,p,data)
     if state.complete then return false,'이미 완료한 캠페인입니다.'end
     p=type(p)=='table' and p or {}
@@ -12,7 +23,9 @@ function Engine.apply(state,action,p,data)
     elseif phase=='discover'then ok=p.handle==data.lead.handle and p.reviewed==true and p.historyChecked==true
     elseif phase=='send'then ok=p.handle==data.lead.handle and p.fee==data.lead.fee and p.sent==true and p.status=='DM 발송'
     elseif phase=='reply'then ok=p.replied==true and p.applicationRead==true
-    elseif phase=='settle'then ok=state.record.sent==1 and state.record.applied==true and p.reviewed==true and p.selectionRead==true end
+    elseif phase=='settle'then
+        local example=state.exampleRecord or {}
+        ok=(state.record.sent==1 or example.sent==1) and (state.record.applied==true or example.applied==true) and p.reviewed==true and p.selectionRead==true end
     if not ok then return false,'화면의 작업 안내와 기록을 확인해주세요.'end
     if phase=='profile' or phase=='connect'then
         state.record.setup=state.record.setup or {};state.record.setup[phase]={completion=p.completion,selfReported=true}
@@ -21,9 +34,17 @@ function Engine.apply(state,action,p,data)
     elseif phase=='reply'then state.record.applied=true
     elseif phase=='settle'then
         state.record.selected=data.result.selected;state.record.selection=data.result.selection
-        state.record.total=state.record.sent*300+state.record.selected*2000 end
+        state.record.total=(state.record.sent or state.exampleRecord.sent)*300+state.record.selected*2000 end
+    state.completed[phase]=true
     state.revision+=1
-    if state.phase==#data.phases then state.complete=true else state.phase+=1 end
+    -- Continue forward, then return to the first unfinished chapter. Replaying never
+    -- duplicates settlement and jumping never checks off a chapter that was skipped.
+    local nextPhase=nil
+    for offset=1,#data.phases do
+        local i=(state.phase+offset-1)%#data.phases+1
+        if not state.completed[data.phases[i].id] then nextPhase=i;break end
+    end
+    if nextPhase then state.phase=nextPhase else state.complete=true end
     return true
 end
 return Engine

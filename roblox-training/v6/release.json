@@ -1,8 +1,11 @@
 {
-  "version": "6.3.1",
+  "version": "6.4",
   "date": "2026-10-25",
   "status": "review-build",
   "verification": {
+    "chapterMenu": "seven illustrated native tiles; direct teleport/start, progress and replay; responsive menu; reference screenshots inspected, game not directly played",
+    "chapterProgress": "arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout",
+    "copyAudit": "removed repeated setup summaries, redundant send instructions, phone travel duplication and implementation explanations",
     "pierSculpture": "original solid thumbs-up; old pier logo removed; front/side geometry preview inspected; center path and water steps clear",
     "setupFlow": "progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance",
     "guideHandoff": "native instructions with web/email anchors; no external URLs or browser API calls in native setup UI",
@@ -18,13 +21,13 @@
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_3_1.rbxl": {
-      "bytes": 2562735,
-      "sha256": "94c37871240db6f9ee4592a829ef1ba17d5b804e315db5e930b20900612e8c3b"
+    "SIRIAI_Recruiter_Island_v6_4.rbxl": {
+      "bytes": 2566258,
+      "sha256": "3443fccbccb52cc88ef8e6636900428b4167fda3d302ecb9167a581c0fa18dcf"
     },
-    "SIRIAI_Recruiter_Island_v6_3_1_Source.zip": {
-      "bytes": 12021723,
-      "sha256": "c1796c3e3c879b8918d0b93d9617f6b568e1a8ba5cf9dc14ca4f5535ce011401"
+    "SIRIAI_Recruiter_Island_v6_4_Source.zip": {
+      "bytes": 12030036,
+      "sha256": "02ff38a0524ead824e9e576bb478a46f55234f028e198f7feeacebdf34459e2b"
     }
   }
 }
