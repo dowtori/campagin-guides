@@ -41,11 +41,11 @@ def height_at(x,z):
 def write_coast_data():
     step=8;x0,z0=-768,-992;nx,nz=193,217
     heights=[round(height_at(x0+x*step,z0+z*step),3) for x in range(nx) for z in range(nz)]
-    data={'version':'6.1.0','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
+    data={'version':'6.2.0','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
           'seaLevel':SEA_LEVEL,'minY':-40,'maxY':176,'voxelSize':4,'chunkCells':32,
           'adaptiveChunkHeight':True,'hikePath':HIKE,
           'ocean':{'center':[0,-21,-500],'size':[2400,38,2800]},
-          'rescue':{'minY':-38,'maxX':1030,'minZ':-1090,'maxZ':760,'shore':[0,5,-326],'arrival':[0,5,60]},
+          'rescue':{'minY':-38,'maxX':1030,'minZ':-1090,'maxZ':760,'shore':[0,5,-326],'arrival':[-34,5,100]},
           'materialColors':{'Sand':'CCBA96','Ground':'AAB78A','Grass':'AAB78A','Rock':'9B998B'},
           'waterColor':'7C9EAB','waterTransparency':.48,'waterReflectance':.42,'waveSize':.14,'waveSpeed':5}
     (ROOT/'coast.json').write_bytes(json.dumps(data,separators=(',',':')).encode())

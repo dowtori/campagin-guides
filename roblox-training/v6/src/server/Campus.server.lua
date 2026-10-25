@@ -43,7 +43,7 @@ end
 local function interact(player,id)
     local s=state(player);if s.complete then send(player,'finished');return end
     local phase=data.phases[s.phase]
-    local allowed=id==phase.target or (phase.id=='discover' and (id=='tiny_sample' or id=='trip_sample'))
+    local allowed=id==phase.target
     if not allowed then send(player,'notice',{text='먼저 '..data.phases[s.phase].title..' · 분홍 표식을 따라가세요.'});return end
     if near(player,targets[id])then send(player,'open',{profile=id})end
 end
@@ -94,18 +94,22 @@ remote.OnServerEvent:Connect(function(player,packet)
         if ok then
             if phase.id=='brief'then phone(player)end
             if phase.id=='send'then envelope(player)end
-            send(player,'done',{text=phase.done})
+            send(player,'done',{text=phase.done,continueHere=not s.complete and phase.target==data.phases[s.phase].target})
         else send(player,'notice',{text=reason})end
     elseif packet.kind=='home'then
         local character=player.Character
-        if character then character:PivotTo(CFrame.new(0,5,100));send(player,'state')end
+        if character then character:PivotTo(CFrame.new(-34,5,100));send(player,'state')end
     elseif packet.kind=='rest'then
         local character=player.Character
         if character then character:PivotTo(CFrame.new(0,5,-326));send(player,'state')end
-    elseif packet.kind=='restart' and s.complete then states[player]=Engine.new();send(player,'state')end
+    elseif packet.kind=='restart' and s.complete then
+        states[player]=Engine.new()
+        if player.Character then player.Character:PivotTo(CFrame.new(-34,5,100))end
+        send(player,'state')
+    end
 end)
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()task.wait(1);if state(player).phase>1 then phone(player)end;send(player,'state')end)
 end)
 Players.PlayerRemoving:Connect(function(player)states[player]=nil end)
-print('[SIRIAI v6.1] Recruiter Island ready: NPC quests, phone tool, one campaign')
+print('[SIRIAI v6.2] Recruiter Island ready: NPC quests, phone tool, one campaign')

@@ -3,13 +3,13 @@ import argparse
 import xml.etree.ElementTree as ET,subprocess,tempfile,shutil,json
 ROOT=Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser();parser.add_argument('--luau',required=True);args=parser.parse_args()
-xml=ET.parse(ROOT/'downloads/SIRIAI_Recruiter_Island_v6_1.rbxlx').getroot()
+xml=ET.parse(ROOT/'downloads/SIRIAI_Recruiter_Island_v6_2.rbxlx').getroot()
 items=list(xml.iter('Item'));modules={}
 def name(it):return it.find("Properties/string[@name='Name']").text
 def source(it):return it.find("Properties/*[@name='Source']").text
 for it in items:
  if it.attrib['class']=='ModuleScript':modules[name(it)]=source(it)
-assert sum(i.attrib['class']=='ProximityPrompt' for i in items)==8
+assert sum(i.attrib['class']=='ProximityPrompt' for i in items)==3
 assert sum(i.attrib['class']=='Humanoid' for i in items)==4
 assert sum(i.attrib['class']=='Script' for i in items)==2
 assert sum(i.attrib['class']=='LocalScript' for i in items)==3
@@ -31,5 +31,5 @@ with tempfile.TemporaryDirectory(prefix='native-',dir=ROOT/'tests') as path:
  (p/'CampusServer.lua').write_text(serverHeader+server+'\nreturn true',encoding='utf-8')
  luau=Path(args.luau).resolve()
  for test in ['case.spec.lua','client.spec.lua','mobile.spec.lua','server.spec.lua','coast.spec.lua','water.spec.lua']:subprocess.run([str(luau),str(p/test)],cwd=p,check=True)
-print('PASS: actual Rojo-exported module sources, 4 humanoid NPCs, 8 prompts, 2 server scripts and 3 client scripts')
+print('PASS: actual Rojo-exported module sources, 4 humanoid NPCs, 3 prompts, 2 server scripts and 3 client scripts')
 print('Not verified: actual Roblox engine rendering, physics, UI text layout and multiplayer play sessions. Studio is not installed on this host.')

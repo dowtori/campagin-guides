@@ -16,13 +16,13 @@ assert len([p for p in parts if p.get('Name')=='Sky cloud puff'])==42
 floors=[p['Properties'] for p in parts if p.get('Name')=='Solid sea floor'];assert len(floors)==20
 for x in range(-1020,1021,60):
  for z in range(-1080,761,60):assert any(abs(x-f['CFrame'][0])<=f['Size'][0]/2 and abs(z-f['CFrame'][2])<=f['Size'][2]/2 and f['CanCollide'] for f in floors)
-assert len([p for p in nodes if p['ClassName']=='ProximityPrompt'])==8
+assert len([p for p in nodes if p['ClassName']=='ProximityPrompt'])==3
 assert len([p for p in nodes if p['ClassName']=='Humanoid'])==4
 assert all(n['Properties']['RequiresNeck']==False for n in nodes if n['ClassName']=='Humanoid')
-for name in ['Manager','ProfileDesk','ConnectDesk','beauty_sample','tiny_sample','trip_sample','Mailbox','ReplyDesk']:
+for name in ['Manager','beauty_sample','Mailbox']:
  assert len([p for p in parts if p.get('Name')=='Target_'+name])==1
 for name in ['Arrival title','Arrival direction']:
- p=next(p for p in parts if p.get('Name')==name);assert abs(p['Properties']['CFrame'][0])>20,'arrival signs must not span the main path'
+ p=next(p for p in parts if p.get('Name')==name);assert abs(p['Properties']['CFrame'][0]+34)>20,'arrival signs must not span the main path'
 assert len([p for p in parts if p.get('Name')=='Water access step'])==12
 # Compare source geometry and native wedges independently for rock and pine assets.
 instances=json.loads((R/'nature-instances.json').read_text());models=next(n for n in nodes if n.get('Name')=='ImportedNature')['Children']
@@ -49,4 +49,4 @@ for width in [360,390,768,1440]:
  hud_right=width*.035+min(width-126,360);phone_left=width*.965-90
  assert hud_right+4<phone_left
 assert len([p for p in parts if p['ClassName']=='WedgePart'])>10000
-print(f'PASS: {len(parts)} parts; actual 3D sun/ridges/clouds; no image walls; continuous seabed, original OBJ bounds, eight targets, source branding and HUD/control separation')
+print(f'PASS: {len(parts)} parts; actual 3D sun/ridges/clouds; no image walls; continuous seabed, original OBJ bounds, three targets, source branding and HUD/control separation')

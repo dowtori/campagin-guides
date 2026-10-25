@@ -1,0 +1,8 @@
+"""Shared walking route: one forward pass through three work locations."""
+SPAWN=(-34,100)
+PATH=[(-34,100),(-34,82),(-34,50),(-34,24),(-34,-8),(-34,-40),(-34,-63),(0,-94),(0,-140),(0,-180),(0,-220),(-5,-255),(4,-285),(0,-330)]
+TARGETS={
+ 'Manager':{'position':(-34,5,82),'caption':'캠페인 준비','place':'준비 테라스'},
+ 'beauty_sample':{'position':(-34,5,24),'caption':'크리에이터 살펴보기','place':'크리에이터 정원'},
+ 'Mailbox':{'position':(-34,5,-40),'caption':'DM과 회신 확인','place':'DM 데스크'},
+}

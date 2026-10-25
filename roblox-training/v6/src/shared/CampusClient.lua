@@ -1,4 +1,4 @@
--- SIRIAI v6.1: one visible action, deliberate phone access, resumable work.
+-- SIRIAI v6.2: one visible action, deliberate phone access, resumable work.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
@@ -26,7 +26,7 @@ end
 local hud=make('Frame',gui,{Name='ObjectiveHUD',Position=UDim2.new(.035,0,0,74),Size=UDim2.new(1,-126,0,92),BackgroundColor3=C.ink,BackgroundTransparency=.06,BorderSizePixel=0});round(hud,14)
 make('UISizeConstraint',hud,{MaxSize=Vector2.new(360,92)})
 local phaseText=txt(hud,'첫 캠페인 받기',20,C.white,28);phaseText.Position=UDim2.fromOffset(14,12);phaseText.Size=UDim2.new(1,-28,0,28);phaseText.Font=Enum.Font.GothamBold
-local objective=txt(hud,'매니저 · E / 터치',14,C.white,38);objective.Position=UDim2.fromOffset(14,47);objective.Size=UDim2.new(1,-28,0,38)
+local objective=make('TextButton',hud,{Text='준비 테라스로 이동 →',TextSize=14,TextColor3=C.white,Font=Enum.Font.Gotham,TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,BackgroundTransparency=1,BorderSizePixel=0});objective.Position=UDim2.fromOffset(14,47);objective.Size=UDim2.new(1,-28,0,38)
 local phoneButton=btn(gui,'폰  [P]');phoneButton.Name='PhoneButton';phoneButton.Size=UDim2.fromOffset(90,44);phoneButton.AnchorPoint=Vector2.new(1,0);phoneButton.Position=UDim2.new(.965,0,0,74)
 local helpButton=btn(gui,'?');helpButton.Size=UDim2.fromOffset(44,44);helpButton.AnchorPoint=Vector2.new(1,0);helpButton.Position=UDim2.new(.965,0,0,126)
 local toast=txt(gui,'',17,C.white,64);toast.AnchorPoint=Vector2.new(.5,1);toast.Position=UDim2.new(.5,0,1,UIS.TouchEnabled and -220 or -138);toast.Size=UDim2.new(.9,0,0,64);toast.BackgroundColor3=C.ink;toast.BackgroundTransparency=.04;toast.Visible=false;round(toast)
@@ -54,7 +54,7 @@ local function prompts()
  for _,o in ipairs(promptList)do
   if o:IsA('ProximityPrompt')then
    local id=o.Parent:FindFirstChild('ActionID');id=id and id.Value
-   o.Enabled=not panel.Visible and not state.complete and (id==q.target or (q.id=='discover' and (id=='tiny_sample' or id=='trip_sample')))
+   o.Enabled=not panel.Visible and not state.complete and id==q.target
   end
  end
 end
@@ -174,50 +174,24 @@ render=function(profileId)
    action('DM 발송으로 저장',function()submit({handle=data.lead.handle,fee=data.lead.fee,sent=true,status='DM 발송'})end)
   end
  elseif q.id=='reply'then
-  if d.step==1 then
-   screen('고료 조정을 원해요',1,3)
-   card('@beauty_sample','고료를 15만 원으로\n조정할 수 있을까요?')
-   txt(body,'조정 가능 여부는 확인 후 안내해요.',18)
-   action('확인 후 안내하겠다고 답장',function()d.step=2;render()end)
-  elseif d.step==2 then
-   screen('희망 금액을 기록해요',2,3)
-   card('보낸 답장','희망 고료를 전달드리고,\n확인 후 안내드릴게요 :)')
-   card('시트 비고','희망 고료 15만 원 / 조정 요청')
-   action('비고에 저장',function()d.step=3;render()end)
-  else
-   screen('담당자에게 공유해요',3,3)
-   card('단톡에 전달할 내용','@beauty_sample\n희망 고료 15만 원\n고료 조정 요청')
-   action('계정과 희망 금액 공유',function()submit({fee=150000,replied=true,shared=true})end)
-  end
- elseif q.id=='handoff'then
-  if d.step==1 then
-   screen('모르는 조건이 나왔어요',1,3)
-   card('@beauty_sample','얼굴 전체 노출이\n꼭 필요한가요?')
-   txt(body,'가이드에 없는 조건은 담당자에게 물어봐요.',18)
-   action('담당자에게 확인 요청',function()d.step=2;render()end)
-  elseif d.step==2 then
-   screen('확인된 내용으로 답해요',2,3)
-   card('담당자의 답변','이번 캠페인은\n얼굴 전체 노출이 필요해요.')
-   action('이 내용으로 회신',function()d.step=3;render()end)
-  else
-   screen('최종 선정 소식이 왔어요',3,3)
-   card('브랜드 최종 선정','@beauty_sample',C.green)
-   txt(body,'지원 완료와 최종 선정은 달라요.\n지금은 최종 선정 안내까지 도착했어요.',18)
-   action('선정 안내 확인',function()submit({asked=true,replied=true,selectionRead=true})end)
-  end
+  screen('지원 완료 소식이 왔어요')
+  card('@beauty_sample','안내해주신 캠페인에 지원했어요!')
+  txt(body,'감사합니다. 선정되면 안내드릴게요 :)',18)
+  action('이렇게 답장하기',function()submit({replied=true,applicationRead=true})end)
  elseif q.id=='settle'then
-  screen('첫 캠페인을 마쳤어요')
+  screen('이번 모집을 마무리해요')
+  txt(body,'이후 도착한 브랜드 안내: @beauty_sample 최종 선정',17,C.green)
   card('유효 DM 1건 + 최종 선정 1명','300원 + 2,000원')
   card('세전 보수 예시','2,300원',C.pink)
   detail('유효 발송 1건당 300원, 최종 선정 1명당 2,000원입니다. 월 1회, 계약서의 정산 기준과 지급일에 따라 지급해요.','정산 기준 보기')
-  action('첫 캠페인 마치기',function()submit({reviewed=true})end)
+  action('첫 캠페인 마치기',function()submit({reviewed=true,selectionRead=true})end)
  end
 end
 local marker,highlight=nil,nil
 local function update()
  local q=data.phases[state.phase]
  phaseText.Text=state.complete and '첫 캠페인 완료!' or q.title
- objective.Text=state.complete and '폰에서 쉬러 가기' or q.place..' · E / 터치'
+ objective.Text=state.complete and '바다로 이동 →' or q.place..' · 바로 이동 →'
  if marker then marker:Destroy()end;if highlight then highlight:Destroy()end
  if not state.complete then
   local world=workspace:FindFirstChild('TrainingMap');local p=world and world:FindFirstChild('Target_'..q.target,true)
@@ -232,12 +206,32 @@ end
 local function navigation(kind)
  closePanel();remote:FireServer({kind=kind,revision=state.revision})
 end
+objective.Activated:Connect(function()navigation(state.complete and 'rest' or 'travel')end)
+local appendix
+appendix=function(item)
+ if not state.complete then return end
+ mode='appendix'
+ if item then
+  clear(item.title,'부록 / 필요할 때만')
+  card('이런 문의가 오면',item.question)
+  card('답장 예시',item.reply)
+  txt(body,item.note,18)
+  action('부록 목록으로',function()appendix()end)
+ else
+  clear('필요할 때 보는 부록','기본 과정 완료')
+  for _,topic in ipairs(data.appendix)do
+   local item=topic;btn(body,item.title,function()appendix(item)end)
+  end
+  action('닫고 쉬기',closePanel)
+ end
+end
 local function phone()
  -- Neither a tool equip nor a late packet can interrupt an active work screen.
  if panel.Visible or pending then return end
  mode='phone';clear('리크루터 폰','SIRIAI / 빠른 이동')
  if state.complete then
   card('첫 캠페인 완료','유효 DM 1건 · 최종 선정 1명')
+  btn(body,'필요할 때 보는 부록',function()appendix()end)
   btn(body,'처음부터 다시',function()drafts={};navigation('restart')end)
   action('노을 바다로 가기',function()navigation('rest')end)
  else
@@ -271,8 +265,10 @@ remote.OnClientEvent:Connect(function(packet)
   if mode=='work' and panel.Visible then return end
   render(packet.profile)
  elseif packet.kind=='done'then
-  pending=false;closePanel();notice('✓ '..packet.text)
-  if state.complete then phone()end
+  pending=false;closePanel()
+  if packet.continueHere then render(data.phases[state.phase].target)
+  elseif state.complete then phone()
+  else notice('✓ '..packet.text)end
  elseif packet.kind=='phone' or packet.kind=='finished'then phone()
  elseif packet.kind=='arrived'then closePanel();notice(packet.text)
  elseif packet.kind=='notice'then pending=false;notice(packet.text)end

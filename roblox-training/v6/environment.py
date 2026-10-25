@@ -1,8 +1,8 @@
-"""Native v6.1: navigable coastal ridges, a 3D red sun and drifting cloud models."""
+"""Native v6.2: navigable coastal ridges, a 3D red sun and drifting cloud models."""
 from coastal_environment import add_coast,height_at,coast_distance,HIKE
 from nature_models import add_nature
 import math,random
-PATH=[(0,100),(0,74),(0,42),(0,20),(0,-20),(0,-60),(0,-100),(0,-140),(0,-180),(0,-220),(-5,-255),(4,-285),(0,-330)]
+from layout import PATH
 def distance_to_path(x,z):
     result=10000
     for (ax,az),(bx,bz) in zip(PATH,PATH[1:]):
@@ -48,7 +48,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         seat=part(world,'Sunset seat',(x,1.9,-332),(6,.55,2.3),'A88861','Wood');seat['ClassName']='Seat';seat['Properties']['CanTouch']=True
         part(world,'Seat back',(x,3,-330.9),(6,1.9,.3),'B6966D','Wood')
         for dx in [-2.3,2.3]:part(world,'Seat feet',(x+dx,1.2,-332),(.4,1.3,1.9),'876D51','Wood')
-    for x,z in [(s,z) for z in [52,14,-23,-62,-101,-140,-179,-218,-259,-298,-337] for s in [-8,8]]:
+    for x,z in [(cx+s,z) for cx,z in [(-34,43),(-34,-15),(-34,-60),(0,-101),(0,-140),(0,-179),(0,-218),(0,-259),(0,-298),(0,-337)] for s in [-8,8]]:
         part(world,'Path lantern post',(x,1.55,z),(.22,1.2,.22),'8F7655','Wood')
         lamp=part(world,'Path lantern',(x,2.35,z),(.7,.85,.7),'FFDC98','Neon',collide=False)
         lamp['Children'].append(obj('Glow','PointLight',{'Color':rgb('FFD598'),'Brightness':.5,'Range':13,'Shadows':False}))
@@ -90,7 +90,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         part(world,'Water access step',(0,.64-k*.42,-343-k*1.4),(10,.45,1.65),'C6B59B','WoodPlanks')
     for x in [-15,15]:part(world,'Lookout foundation',(x,-3,-333),(1,8,1),'887B65','Wood')
     add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum)
-    return {'version':'6.1.0','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
+    return {'version':'6.2.0','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
             'lake':coast['ocean'],'seaLevel':coast['seaLevel'],'coastFile':'coast.json',
             'backdrop':'atmosphere','sceneryGeometry':'navigable-terrain','clouds':'native-and-3d',
             'views':{'sunset':{'position':[0,6,-180],'target':[35,27,-850]},'lake':{'position':[70,24,-270],'target':[0,-1,-345]},
