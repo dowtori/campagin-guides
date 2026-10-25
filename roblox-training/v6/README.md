@@ -1,8 +1,8 @@
-# Siriai Recruiter Island v6.3
+# Siriai Recruiter Island v6.3.1
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_3.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
@@ -35,6 +35,10 @@
 
 설정 예시와 돌아오기 안내는 현재 플레이 세션에서 창을 닫았다 열어도 유지됩니다. 재접속 시 새 연습을 시작하는 기존 동작은 유지됩니다.
 
+## v6.3.1: 나루터 조형물
+
+나루터 끝의 평면 로고판을 제거하고, 길 옆에 둥근 따봉 조형물과 낮은 받침을 배치했습니다. 엄지·접힌 손가락·손목에 실제 두께가 있는 기본 입체로 직접 제작했습니다. 중앙 진입로와 물가 계단, 벤치 정면을 비워 두었습니다. 웹 미리보기의 **나루터** 시점에서 볼 수 있습니다.
+
 ## 지형과 물
 
 실제 높이 데이터로 연결된 능선과 두 개의 원경 섬을 생성합니다. 해·산을 그려 놓은 이미지 벽은 없습니다. 붉은 태양은 별도의 구체이며 native Atmosphere·Clouds와 움직이는 입체 구름을 사용합니다.
@@ -54,8 +58,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py

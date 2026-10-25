@@ -18,7 +18,7 @@ try{
   const wedge=new THREE.BufferGeometry();
   wedge.setAttribute('position',new THREE.Float32BufferAttribute([-.5,-.5,-.5,-.5,-.5,.5,-.5,.5,.5,.5,-.5,-.5,.5,-.5,.5,.5,.5,.5],3));
   wedge.setIndex([0,1,2,3,5,4,0,3,4,0,4,1,1,4,5,1,5,2,0,2,5,0,5,3]);wedge.computeVertexNormals();
-  const materials=new Map(),batches=new Map(),dummy=new THREE.Object3D();let partCount=0;
+  const materials=new Map(),batches=new Map(),dummy=new THREE.Object3D(),rotationMatrix=new THREE.Matrix4();let partCount=0;
   function material(p){
     const key=p.color+p.transparency+p.material+p.wind;
     if(!materials.has(key)){
@@ -60,7 +60,7 @@ try{
   }
   for(const batch of batches.values()){
     const mesh=new THREE.InstancedMesh(batch.geom,batch.material,batch.parts.length);mesh.castShadow=batch.shadow;mesh.receiveShadow=!batch.parts[0].wind;
-    batch.parts.forEach((p,i)=>{dummy.position.fromArray(p.position);dummy.rotation.set(...p.rotation.map(v=>v*Math.PI/180),'XYZ');dummy.scale.fromArray(p.size);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});mesh.computeBoundingSphere();scene.add(mesh);
+    batch.parts.forEach((p,i)=>{dummy.position.fromArray(p.position);if(p.matrix){const m=p.matrix;rotationMatrix.set(m[0],m[1],m[2],0,m[3],m[4],m[5],0,m[6],m[7],m[8],0,0,0,0,1);dummy.quaternion.setFromRotationMatrix(rotationMatrix);}else{dummy.rotation.set(...p.rotation.map(v=>v*Math.PI/180),'XYZ');}dummy.scale.fromArray(p.size);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});mesh.computeBoundingSphere();scene.add(mesh);
   }
   // The same height samples used for native terrain drive this continuous preview mesh.
   const positions=[],colours=[],indices=[];const sand=new THREE.Color('#ccba96'),meadow=new THREE.Color('#aab78a'),rock=new THREE.Color('#9b998b');
@@ -93,7 +93,7 @@ try{
  function view(name){mode=name;const v=env.views[name]||env.views.overview;camera.position.fromArray(v.position);controls.target.fromArray(v.target);controls.update();document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));}
  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>view(b.dataset.view)));
  function resize(){renderer.setSize(viewer.clientWidth,viewer.clientHeight,false);camera.aspect=viewer.clientWidth/viewer.clientHeight;camera.fov=viewer.clientWidth<600?72:52;camera.updateProjectionMatrix();}
- new ResizeObserver(resize).observe(viewer);resize();view('overview');
+ new ResizeObserver(resize).observe(viewer);resize();const requestedView=new URLSearchParams(location.search).get('view');view(Object.hasOwn(env.views,requestedView)?requestedView:'overview');
  let last=performance.now();
  function draw(now){requestAnimationFrame(draw);const dt=Math.min(.1,(now-last)/1000);last=now;if(!reduceMotion)time.value+=dt;controls.update();sky.position.copy(camera.position);renderer.render(scene,camera);window.__mapRendered=true;window.__mapStats={parts:partCount,drawCalls:renderer.info.render.calls,view:mode,scenery:'3D terrain + sphere sun + cloud geometry'};}
  requestAnimationFrame(draw);loading.remove();window.__mapReady=true;

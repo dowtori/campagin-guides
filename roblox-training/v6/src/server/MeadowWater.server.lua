@@ -6,7 +6,7 @@ local Coast=require(script.Parent:WaitForChild('Coast'))
 local terrain=workspace.Terrain
 local map=workspace:WaitForChild('TrainingMap')
 local previews=map:WaitForChild('Architecture'):WaitForChild('CoastPreview')
-workspace:SetAttribute('SiriaiWorldVersion','6.3.0')
+workspace:SetAttribute('SiriaiWorldVersion','6.3.1')
 workspace:SetAttribute('SiriaiOceanReady',false)
 workspace:SetAttribute('SiriaiOceanStatus','해안과 바다를 준비하고 있어요')
 workspace.FallenPartsDestroyHeight=-4096

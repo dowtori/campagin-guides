@@ -1,8 +1,9 @@
 {
-  "version": "6.3.0",
+  "version": "6.3.1",
   "date": "2026-10-25",
   "status": "review-build",
   "verification": {
+    "pierSculpture": "original solid thumbs-up; old pier logo removed; front/side geometry preview inspected; center path and water steps clear",
     "setupFlow": "progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance",
     "guideHandoff": "native instructions with web/email anchors; no external URLs or browser API calls in native setup UI",
     "coreFlow": "seven phases at three forward stops; ordinary reply and separate selection notice",
@@ -17,13 +18,13 @@
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_3.rbxl": {
-      "bytes": 2562374,
-      "sha256": "a429ff967c997c51d26c3760f2e800564d22b3f31286b5fcd11a8c82fc3a77e5"
+    "SIRIAI_Recruiter_Island_v6_3_1.rbxl": {
+      "bytes": 2562735,
+      "sha256": "94c37871240db6f9ee4592a829ef1ba17d5b804e315db5e930b20900612e8c3b"
     },
-    "SIRIAI_Recruiter_Island_v6_3_Source.zip": {
-      "bytes": 12040554,
-      "sha256": "2e2eb91ee191354d7d6dc69e5de9ec2a526374ba7b1421dc5ee42b2644b16209"
+    "SIRIAI_Recruiter_Island_v6_3_1_Source.zip": {
+      "bytes": 12021723,
+      "sha256": "c1796c3e3c879b8918d0b93d9617f6b568e1a8ba5cf9dc14ca4f5535ce011401"
     }
   }
 }

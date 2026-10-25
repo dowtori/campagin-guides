@@ -3,7 +3,7 @@ import argparse
 import xml.etree.ElementTree as ET,subprocess,tempfile,shutil,json
 ROOT=Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser();parser.add_argument('--luau',required=True);args=parser.parse_args()
-xml=ET.parse(ROOT/'downloads/SIRIAI_Recruiter_Island_v6_3.rbxlx').getroot()
+xml=ET.parse(ROOT/'downloads/SIRIAI_Recruiter_Island_v6_3_1.rbxlx').getroot()
 items=list(xml.iter('Item'));modules={}
 def name(it):return it.find("Properties/string[@name='Name']").text
 def source(it):return it.find("Properties/*[@name='Source']").text

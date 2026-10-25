@@ -1,5 +1,7 @@
 # 배포 자료 출처
 
+- **나루터 따봉 조형물**: 이번 작업에서 직접 설계한 native Part 입체 조형물입니다. 외부 이모지 이미지나 모델을 사용하지 않았습니다. 생성 소스는 `pier_sculpture.py`입니다.
+
 - **시리아이 로고·프로필 6장·설정 캡처**: 사용자가 이 작업에 제공한 기존 자료. 파일별 SHA-256은 `assets/provenance.json`에 기록합니다. 브랜드 이미지 생성으로 대체하지 않았습니다.
 - **가상 크리에이터 게시물**: built-in image_gen으로 새로 생성한 3×3 사진 시트에서 잘라 사용했습니다. 생성 프롬프트는 `assets/generation-prompt.json`, 원본은 `assets/creator-contact-sheet.jpg`입니다. 실제 계정이나 실존 인물을 나타내지 않습니다.
 - **자연물**: [Kenney Nature Kit](https://kenney.nl/assets/nature-kit), CC0 1.0. 원본 `assets/nature/kenney/License.txt`, 사용한 OBJ와 MTL을 포함합니다. 원본 형상을 실제 정점·면으로 가져옵니다. v6.1에서 잎·줄기·바위의 색을 해안 장면의 팔레트에 맞췄습니다.
