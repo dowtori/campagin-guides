@@ -6,7 +6,8 @@ local Coast=require(script.Parent:WaitForChild('Coast'))
 local terrain=workspace.Terrain
 local map=workspace:WaitForChild('TrainingMap')
 local previews=map:WaitForChild('Architecture'):WaitForChild('CoastPreview')
-workspace:SetAttribute('SiriaiWorldVersion','6.4')
+local oceanPreviews=map:WaitForChild('Architecture'):WaitForChild('OceanPreview')
+workspace:SetAttribute('SiriaiWorldVersion','6.9')
 workspace:SetAttribute('SiriaiOceanReady',false)
 workspace:SetAttribute('SiriaiOceanStatus','해안과 바다를 준비하고 있어요')
 workspace.FallenPartsDestroyHeight=-4096
@@ -95,6 +96,8 @@ local ok,reason=xpcall(function()
         end
     end
     for _,p in ipairs(previews:GetChildren())do if p:IsA('BasePart')then p.Transparency=1;p.CanCollide=false;p.CanQuery=false end end
+    -- Remove the editor-only surface only once real water and coastline are ready.
+    for _,p in ipairs(oceanPreviews:GetChildren())do if p:IsA('BasePart')then p.Transparency=1;p.CanCollide=false;p.CanTouch=false;p.CanQuery=false end end
     workspace:SetAttribute('SiriaiOceanReady',true)
     workspace:SetAttribute('SiriaiOceanStatus','얕은 물가와 수영 가능한 바다')
 end,debug.traceback)

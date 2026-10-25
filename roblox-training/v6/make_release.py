@@ -1,10 +1,10 @@
-"""Package the already-built v6.8 place and its exact editable sources."""
+"""Package the already-built v6.9 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.8'
-BINARY='SIRIAI_Recruiter_Island_v6_8.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_8_Source.zip'
+VERSION='6.9'
+BINARY='SIRIAI_Recruiter_Island_v6_9.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_9_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,10 +14,10 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_8')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_9')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_8/downloads/'+BINARY)==place.read_bytes()
+ assert archive.read('SIRIAI_Recruiter_Island_v6_9/downloads/'+BINARY)==place.read_bytes()
 release={'version':VERSION,'date':'2026-10-26','status':'review-build','verification':{
  'chapterMenu':'seven native icon tiles; grouped number/title; 44–54px completion stamps; direct entry and replay; three-size native-property render checks; reference screenshot inspected, game not directly played',
  'chapterProgress':'arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout',
@@ -30,14 +30,17 @@ release={'version':VERSION,'date':'2026-10-26','status':'review-build','verifica
  'advancedRewards':'100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming',
  'rewardEvolution':'11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal and exaggerated growth; 160x190 model preview',
  'advancedChecks':'exported engine/session, client, server and reward adapter checks; compact room bounds and world-panel aspect ratios checked',
- 'optionalAppendix':'completion-only read-only reference remains alongside the optional minigames',
+ 'optionalAppendix':'ten completion-only read-only topics; no new mandatory stages or tests',
  'requiredRoute':'133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry',
  'phoneInput':'no click activation handler; deliberate equip, P and explicit button only',
  'resumeAndTravel':'passed exported server/client callback adapters, current target and revision enforced',
  'nativeClientAndServerCallbacks':'passed desktop and touch adapters, full campaign and partial task resume',
- 'nativeWaterServer':'passed API/compatibility/failure/rescue adapters',
+ 'nativeWaterServer':'136 API/compatibility/failure/rescue checks; preview hidden only after native water succeeds',
+ 'editorWater':'20 serialized noncolliding water surface tiles at sea level -2; 2400x2800 coverage; verified in exported place, geometry and web comparison, not in Studio',
+ 'workflowAudit':'anonymized operational chat compared in workflow-audit-v6.9.md; campaign-specific intake and approval ranges; actual followers, assigned targets, contact history, completion reports and final selection distinction',
+ 'revisedScenarios':'254 checks across all eight scenario variants and every answer; correct/wrong outcomes, timing, immediate retry and compensation isolation',
  'terrainAndGeometry':'passed original geometry bounds, clear paths, continuous seabed',
- 'visualCriteria':'pre-implementation phone hierarchy/copy criteria and results in design-review-v6.8.md; 1440x900, 390x844 and 844x390 native-property renders; Roblox engine rendering remains unverified',
+ 'visualCriteria':'pre-implementation water/workflow criteria and results in design-review-v6.9.md; desktop/mobile native-property renders of revised lessons, web editor-geometry comparison and fee room inspected; Roblox engine rendering remains unverified',
  'webViewsAndMobilePage':'desktop world views inspected with browser; no new real-device play verification',
  'robloxStudioPlay':'not tested; Studio unavailable'},'files':{}}
 for name in [BINARY,ZIP]:

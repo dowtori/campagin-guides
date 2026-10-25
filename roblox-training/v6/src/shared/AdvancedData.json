@@ -30,56 +30,89 @@
       "seconds": 30,
       "rounds": [
         {
-          "conditions": "뷰티 릴스 · 팔로워 5천~3만\n최근 14일 안에 뷰티 릴스 게시",
+          "conditions": "스킨케어 · 팔로워 1천~5만\n광고 릴스 경험 · 제품 사용 장면",
           "options": [
             {
               "id": "beauty",
-              "name": "@beauty_note",
+              "name": "@skin_note",
               "image": "creator1",
-              "facts": "팔로워 1.8만\n뷰티 릴스\n3일 전 게시",
+              "facts": "팔로워 1.8만\n스킨케어 광고\n제품 사용 릴스",
               "correct": true,
-              "feedback": "분야·팔로워·최근 게시 조건이 모두 맞아요."
+              "feedback": "모집 범위와 스킨케어 광고 경험, 제품 사용 장면이 맞아요."
             },
             {
               "id": "large",
               "name": "@glow_daily",
               "image": "creator4",
-              "facts": "팔로워 4.2만\n뷰티 릴스\n2일 전 게시",
-              "feedback": "이번 캠페인은 팔로워 3만 이하예요."
+              "facts": "팔로워 6.2만\n스킨케어 광고\n제품 사용 릴스",
+              "correct": false,
+              "feedback": "이번 모집 상한은 5만 명이에요."
             },
             {
               "id": "travel",
               "name": "@trip_frame",
               "image": "creator7",
-              "facts": "팔로워 1.6만\n여행 사진\n1일 전 게시",
-              "feedback": "이번에는 여행 사진이 아닌 뷰티 릴스 계정을 찾아요."
+              "facts": "팔로워 1.6만\n여행 콘텐츠\n스킨케어 없음",
+              "correct": false,
+              "feedback": "팔로워가 맞아도 이번 캠페인에 필요한 광고 경험이 없어요."
             }
           ]
         },
         {
-          "conditions": "뷰티 릴스 · 팔로워 1만~5만\n최근 7일 안에 뷰티 릴스 게시",
+          "conditions": "스킨케어 · 팔로워 1천 이상 · 광고 경험\n이번에는 관련 업체 2개월 내 접촉 제외",
           "options": [
             {
-              "id": "fresh",
+              "id": "living",
+              "name": "@skin_note",
+              "image": "creator2",
+              "facts": "팔로워 8천\n스킨케어 광고\n최근 접촉 없음",
+              "correct": true,
+              "feedback": "이번 모집 조건과 접촉 제외 기준을 모두 확인했어요."
+            },
+            {
+              "id": "contacted",
+              "name": "@skin_day",
+              "image": "creator5",
+              "facts": "팔로워 2.4만\n스킨케어 광고\n관련 업체와\n지난주 DM",
+              "correct": false,
+              "feedback": "이번 캠페인은 관련 업체와 최근 2개월 내 접촉한 계정을 제외해요."
+            },
+            {
+              "id": "genre",
+              "name": "@makeup_note",
+              "image": "creator3",
+              "facts": "팔로워 3.1만\n메이크업 광고\n스킨케어 없음",
+              "correct": false,
+              "feedback": "이번에는 메이크업이 아닌 스킨케어 광고 경험을 확인해요."
+            }
+          ]
+        },
+        {
+          "conditions": "이번 모집: 스킨케어 · 팔로워 1만 이상\n고료 표에 1만 미만 구간도 있어요",
+          "options": [
+            {
+              "id": "fits",
               "name": "@skin_story",
               "image": "creator2",
-              "facts": "팔로워 2.4만\n뷰티 릴스\n2일 전 게시",
+              "facts": "팔로워 1.5만\n스킨케어 광고\n영상·반응 양호",
               "correct": true,
-              "feedback": "세 가지 모집 조건을 모두 충족했어요."
+              "feedback": "고료 표와 별개로 이번 모집 하한 1만 명을 지켰어요."
             },
             {
               "id": "small",
-              "name": "@daily_glow",
-              "image": "creator5",
-              "facts": "팔로워 8천\n뷰티 릴스\n1일 전 게시",
-              "feedback": "이번 캠페인은 팔로워 1만 이상이에요."
+              "name": "@tiny_glow",
+              "image": "creator4",
+              "facts": "팔로워 6천\n스킨케어 광고\n영상·반응 양호",
+              "correct": false,
+              "feedback": "고료 표에 해당 구간이 있어도 모집 하한을 낮출 수는 없어요."
             },
             {
-              "id": "old",
-              "name": "@beauty_archive",
-              "image": "creator3",
-              "facts": "팔로워 3.1만\n뷰티 릴스\n30일 전 게시",
-              "feedback": "최근 7일 안의 뷰티 릴스가 필요해요."
+              "id": "genre",
+              "name": "@travel_note",
+              "image": "creator8",
+              "facts": "팔로워 2만\n여행 사진 위주\n스킨케어 없음",
+              "correct": false,
+              "feedback": "팔로워 수만 맞는 계정 대신 캠페인에 맞는 콘텐츠를 확인해요."
             }
           ]
         }
@@ -91,26 +124,54 @@
       "timed": false,
       "rounds": [
         {
-          "conditions": "DM에는 기본 고료 10만 원이 적혀 있어요.\n“15만 원으로 조정할 수 있을까요?”",
+          "conditions": "이번 접수: 지원서의 희망 고료 칸\n기본 10만 원 → 15만 원 요청 · 조정 승인 없음",
           "options": [
             {
               "id": "confirm",
               "name": "민지",
-              "answer": "희망 고료를 전달드리고,\n확인 후 안내드릴게요.",
-              "correct": true,
-              "feedback": "희망 금액 15만 원을 비고에 남기고 담당자에게 공유해요."
+              "answer": "지원서에 희망 금액을\n적어주세요. 확인 후\n안내드릴게요.",
+              "feedback": "이 연습의 지정 접수 방식으로 안내하고 희망 금액·접수 상황을 비고에 기록해요. 실제 접수 방식은 캠페인마다 달라요.",
+              "correct": true
             },
             {
               "id": "promise",
               "name": "도윤",
               "answer": "네, 15만 원으로\n확정해드릴게요!",
-              "feedback": "확인 전에는 조정된 고료를 확정할 수 없어요."
+              "feedback": "사전 승인 없이 조정 고료를 확정하지 않아요.",
+              "correct": false
             },
             {
               "id": "reject",
               "name": "하린",
               "answer": "고료 조정은\n무조건 불가능해요.",
-              "feedback": "조정 요청을 임의로 거절하지 말고 담당자에게 공유해요."
+              "feedback": "희망 금액은 캠페인별 지정 방식으로 접수해요. 임의로 거절하지 않아요.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "conditions": "이번 캠페인: 15만 원까지 조정 승인됨\n“기본 10만 원을 15만 원으로 조정할까요?”",
+          "options": [
+            {
+              "id": "approved",
+              "name": "민지",
+              "answer": "네, 승인된 범위라\n15만 원으로\n안내드릴 수 있어요.",
+              "feedback": "사전 승인된 범위 안에서 응대하고 확정 금액을 비고에 기록해요.",
+              "correct": true
+            },
+            {
+              "id": "reject",
+              "name": "도윤",
+              "answer": "조정은 무조건\n안 됩니다.",
+              "feedback": "이번에는 15만 원까지 사전 승인된 범위가 있어요.",
+              "correct": false
+            },
+            {
+              "id": "extra",
+              "name": "하린",
+              "answer": "20만 원까지\n맞춰드릴게요.",
+              "feedback": "사전 승인 범위를 넘어 임의로 제안하지 않아요.",
+              "correct": false
             }
           ]
         }
@@ -118,30 +179,84 @@
     },
     {
       "id": "conditions",
-      "title": "모르는 조건 문의",
+      "title": "선정·진행 문의",
       "timed": false,
       "rounds": [
         {
-          "conditions": "안내받은 가이드에는 얼굴 노출 조건이 없어요.\n“얼굴 전체가 꼭 나와야 하나요?”",
+          "conditions": "지원은 완료했지만 최종 선정 안내는 없어요.\n“내일 매장에 바로 방문해도 될까요?”",
+          "options": [
+            {
+              "id": "wait",
+              "name": "민지",
+              "answer": "최종 선정된 분께\n담당자가 안내드려요.\n방문 일정도 확인해 주세요.",
+              "feedback": "지원 완료는 최종 선정이 아니에요. 담당자의 선정·일정 안내를 확인한 뒤 방문하도록 안내해요.",
+              "correct": true
+            },
+            {
+              "id": "go",
+              "name": "도윤",
+              "answer": "지원했으니\n바로 방문하시면 돼요.",
+              "feedback": "지원만으로 방문을 안내하면 안 돼요. 최종 선정과 일정 확인이 먼저예요.",
+              "correct": false
+            },
+            {
+              "id": "reject",
+              "name": "하린",
+              "answer": "연락이 없으니\n미선정이에요.",
+              "feedback": "연락이 없다는 이유로 미선정을 단정하지 않아요. 캠페인·계정을 확인해 담당자에게 연결해요.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "conditions": "가이드에는 얼굴 노출 조건이 없어요.\n“얼굴 전체가 꼭 나와야 하나요?”",
           "options": [
             {
               "id": "ask",
               "name": "민지",
               "answer": "담당자에게 확인한 후\n안내드릴게요.",
-              "correct": true,
-              "feedback": "계정과 질문을 담당자에게 전달하고, 확인된 내용으로 답해요."
+              "feedback": "캠페인·계정·질문을 함께 공유하고, 확인된 내용으로 답해요.",
+              "correct": true
             },
             {
               "id": "must",
               "name": "도윤",
               "answer": "네, 얼굴 전체가\n반드시 나와야 해요.",
-              "feedback": "가이드에 없는 필수 조건을 만들어 안내하면 안 돼요."
+              "feedback": "가이드에 없는 필수 조건을 만들어 안내하면 안 돼요.",
+              "correct": false
             },
             {
               "id": "optional",
               "name": "하린",
               "answer": "아니요, 얼굴은\n안 나와도 괜찮아요.",
-              "feedback": "선택 사항인지도 확인이 필요해요. 담당자에게 먼저 물어봐요."
+              "feedback": "선택 사항인지도 확인이 필요해요. 담당자에게 먼저 물어봐요.",
+              "correct": false
+            }
+          ]
+        },
+        {
+          "conditions": "시트에 “브랜드 전달 완료”라고 적혀 있어요.\n“그럼 최종 선정된 건가요?”",
+          "options": [
+            {
+              "id": "verify",
+              "name": "민지",
+              "answer": "전달과 선정은 달라요.\n최종 선정 여부를\n확인해드릴게요.",
+              "feedback": "브랜드 전달 상태나 행 색상만으로 최종 선정 여부를 판단하지 않아요.",
+              "correct": true
+            },
+            {
+              "id": "selected",
+              "name": "도윤",
+              "answer": "네, 전달 완료면\n최종 선정이에요.",
+              "feedback": "브랜드에 지원 정보를 전달한 것과 최종 선정은 다른 단계예요.",
+              "correct": false
+            },
+            {
+              "id": "color",
+              "name": "하린",
+              "answer": "행 색이 바뀌었으니\n선정됐어요.",
+              "feedback": "색상의 의미는 캠페인마다 다를 수 있어요. 담당자에게 확인된 선정 안내를 기준으로 답해요.",
+              "correct": false
             }
           ]
         }

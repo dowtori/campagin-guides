@@ -1,4 +1,4 @@
--- SIRIAI v6.8: one visible action, deliberate phone access, resumable work.
+-- SIRIAI v6.9: one visible action, deliberate phone access, resumable work.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
@@ -182,7 +182,8 @@ render=function(profileId)
  local function screen(heading,step,total)clear(heading,q.title..(total and ('  ·  '..step..' / '..total) or ''))end
  if q.id=='brief'then
   screen('인플루언서 모집을\n로블록스에서!')
-  card('오늘 찾을 크리에이터','뷰티 릴스\n팔로워 5천~3만')
+  card('이번 연습의 모집 기준','스킨케어 광고 릴스 경험\n팔로워 1천~5만')
+  detail('시리아이가 모집 기준·레퍼런스·수량·마감, 지정 시트와 DM 문구를 안내해요. 캠페인이 바뀌면 기준도 다시 확인해요.','실제 업무 시작할 때')
   action('첫 캠페인 맡기',function()submit({reviewed=true})end)
  elseif q.id=='profile' or q.id=='connect'then
   setupLesson(q,d)
@@ -192,11 +193,12 @@ render=function(profileId)
   images({'creator'..p.posts[1],'creator'..p.posts[2],'creator'..p.posts[3]},138)
   card(p.genre,tostring(p.followers)..' 팔로워')
   txt(body,p.recent,18)
+  detail(data.searchGuide,'어디서 찾나요?')
   if not p.fits then
-   txt(body,p.followers<5000 and '이번 기준은 팔로워 5천 명 이상이에요.' or '이번에는 뷰티 릴스 계정을 찾아요.',18,C.gray)
+   txt(body,p.followers<data.minimumFollowers and '이번 기준은 팔로워 1천 명 이상이에요.' or '이번에는 스킨케어 광고 릴스 경험을 확인해요.',18,C.gray)
    action('다른 계정 살펴보기',closePanel)
   elseif d.checked then
-   txt(body,'✓ 기존 접촉 없음',17,C.green)
+   txt(body,'✓ '..p.history,17,C.green)
    action('시트에 저장',function()submit({handle=p.handle,reviewed=true,historyChecked=true})end)
   else
    action('기존 접촉 이력 확인',function()d.checked=true;render(p.id)end)
@@ -204,26 +206,28 @@ render=function(profileId)
  elseif q.id=='send'then
   if d.step==1 then
    screen('DM 보낼 계정',1,3)
-   card('진행 시트','@beauty_sample\n팔로워 1.8만 · 연락전')
-   action('1만~3만 구간 문구 열기',function()d.step=2;render()end)
+   card('지정 캠페인 · 발송 대상','@beauty_sample\n실제 팔로워 1.8만 · 연락전')
+   detail('시트와 인스타그램 수치가 다르면 실제 팔로워 수를 확인해 반영해요. 지정된 캠페인 탭과 대상만 발송해요.','발송 전 확인')
+   action('1만~5만 미만 문구 열기',function()d.step=2;render()end)
   elseif d.step==2 then
    screen('DM 미리보기',2,3)
-   card('@beauty_sample에게','안녕하세요, 시리아이입니다 :)\n뷰티 릴스 캠페인 협업을 제안드립니다.\n제안 고료 10만 원\n관심 있으시면 지원 부탁드립니다.')
+   card('@beauty_sample에게','안녕하세요, 시리아이입니다 :)\n스킨케어 릴스 캠페인 협업을 제안드립니다.\n제안 고료 10만 원\n관심 있으시면 지원 부탁드립니다.')
    action('DM 보내기',function()d.step=3;render()end)
   else
    screen('발송 기록',3,3)
-   card('DM을 보냈어요','@beauty_sample',C.green)
-   card('변경할 상태','연락전 → DM 발송')
+   card('시트 기록','@beauty_sample\n연락전 → DM 발송')
+   card('완료 공유','연습 캠페인\n발송 1건 · 특이사항 없음')
    action('DM 발송으로 저장',function()submit({handle=data.lead.handle,fee=data.lead.fee,sent=true,status='DM 발송'})end)
   end
  elseif q.id=='reply'then
   screen('도착한 회신')
   card('@beauty_sample','안내해주신 캠페인에 지원했어요!')
-  txt(body,'감사합니다. 선정되면 안내드릴게요 :)',18)
+  txt(body,'감사합니다. 최종 선정된 분께 담당자가 개별 안내드릴게요 :)',18)
   action('이렇게 답장하기',function()submit({replied=true,applicationRead=true})end)
  elseif q.id=='settle'then
   screen('정산 확인')
-  txt(body,'브랜드 최종 선정: @beauty_sample',17,C.green)
+  txt(body,'담당자 확인 · 최종 선정: @beauty_sample',17,C.green)
+  txt(body,'지원·전달 완료는 최종 선정과 달라요.',17)
   card('유효 DM 1건 + 최종 선정 1명','300원 + 2,000원')
   card('세전 보수 예시','2,300원',C.pink)
   detail('월 1회, 계약서의 정산 기준과 지급일에 따라 지급해요.','지급 일정 보기')

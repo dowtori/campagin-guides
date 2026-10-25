@@ -43,7 +43,7 @@ try{
   const thumbs=[];
   for(const p of parts){
     if(portrait&&!p.thumb)continue;
-    if(p.name==='Coast ground preview'||p.name==='Solid sea floor'||p.name==='Mountain terrain preview'||p.name.startsWith('Target_'))continue;
+    if(p.name==='Ocean water preview'||p.name==='Coast ground preview'||p.name==='Solid sea floor'||p.name==='Mountain terrain preview'||p.name.startsWith('Target_'))continue;
     if(p.thumb){thumbs.push(p);continue;}
     if(p.answerNPC&&previewChallenge.timed)continue; // The scout round hides NPCs in the native client too.
     const geom=p.shape==='Wedge'?wedge:p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box,m=material(p),key=geom.uuid+m.uuid+Boolean(p.shadow);
@@ -95,14 +95,18 @@ try{
     const condition=p.name==='ConditionBoard',consoleBoard=p.name==='ChallengeConsole';
     let canvas=document.createElement('canvas');canvas.width=condition?1560:consoleBoard?960:750;canvas.height=condition?195:consoleBoard?320:465;let ctx=canvas.getContext('2d');
     ctx.fillStyle=condition||consoleBoard?'#27242f':'#f9f6ee';ctx.fillRect(0,0,canvas.width,canvas.height);
-    function lines(value,x,y,size,color='#25212d'){ctx.font='700 '+size+'px Pretendard,sans-serif';ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';value.split('\n').forEach((t,i)=>ctx.fillText(t,x,y+i*size*1.3));}
-    if(condition){lines(round.conditions,650,68,44,'#f9f6ee');lines(previewChallenge.timed?'30초':'시간제한 없음',1415,98,26,'#f9f6ee');}
+    function lines(value,x,y,size,color='#25212d',maxWidth=690){
+      ctx.font='700 '+size+'px Pretendard,sans-serif';ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+      const rows=[];for(const paragraph of value.split('\n')){let line='';for(const char of paragraph){if(line&&ctx.measureText(line+char).width>maxWidth){rows.push(line.trim());line=char;}else line+=char;}rows.push(line.trim());}
+      rows.forEach((line,i)=>ctx.fillText(line,x,y+i*size*1.3));
+    }
+    if(condition){lines(round.conditions,650,68,44,'#f9f6ee',1232);lines(previewChallenge.timed?'30초':'시간제한 없음',1415,98,26,'#f9f6ee');}
     else if(consoleBoard){
       advancedData.challenges.map(c=>c.title).forEach((title,i)=>{ctx.fillStyle=advancedData.challenges[i].id===previewChallenge.id?'#df1940':'#534b5c';ctx.fillRect(i*320+12,8,296,70);lines(title,i*320+160,43,26,'#fff');});
       lines(previewChallenge.timed?'벽면에서 한 명을 선택!':'NPC의 답변 중 하나를 선택!',480,172,40,'#f9f6ee');
     }else{
       const n=Number(p.name.slice(-1)),o=round.options[n-1];lines(n+'  '+o.name,375,45,38);
-      if(previewChallenge.timed){let image=new Image();image.src='./v6/'+rasterAssets[o.image].file;await image.decode();ctx.drawImage(image,30,93,260,260);lines(o.facts,550,132,44);}else{lines(o.answer,375,155,44);}
+      if(previewChallenge.timed){let image=new Image();image.src='./v6/'+rasterAssets[o.image].file;await image.decode();ctx.drawImage(image,30,93,260,260);lines(o.facts,550,132,44,'#25212d',345);}else{lines(o.answer,375,155,44);}
       ctx.fillStyle='#df1940';ctx.fillRect(30,372,690,74);lines(previewChallenge.timed?'이 크리에이터 선택':'이 답변 선택',375,409,30,'#fff');
     }
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;

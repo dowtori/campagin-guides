@@ -1,5 +1,5 @@
 {
-  "version": "6.8",
+  "version": "6.9",
   "date": "2026-10-26",
   "status": "review-build",
   "verification": {
@@ -14,25 +14,28 @@
     "advancedRewards": "100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming",
     "rewardEvolution": "11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal and exaggerated growth; 160x190 model preview",
     "advancedChecks": "exported engine/session, client, server and reward adapter checks; compact room bounds and world-panel aspect ratios checked",
-    "optionalAppendix": "completion-only read-only reference remains alongside the optional minigames",
+    "optionalAppendix": "ten completion-only read-only topics; no new mandatory stages or tests",
     "requiredRoute": "133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry",
     "phoneInput": "no click activation handler; deliberate equip, P and explicit button only",
     "resumeAndTravel": "passed exported server/client callback adapters, current target and revision enforced",
     "nativeClientAndServerCallbacks": "passed desktop and touch adapters, full campaign and partial task resume",
-    "nativeWaterServer": "passed API/compatibility/failure/rescue adapters",
+    "nativeWaterServer": "136 API/compatibility/failure/rescue checks; preview hidden only after native water succeeds",
+    "editorWater": "20 serialized noncolliding water surface tiles at sea level -2; 2400x2800 coverage; verified in exported place, geometry and web comparison, not in Studio",
+    "workflowAudit": "anonymized operational chat compared in workflow-audit-v6.9.md; campaign-specific intake and approval ranges; actual followers, assigned targets, contact history, completion reports and final selection distinction",
+    "revisedScenarios": "254 checks across all eight scenario variants and every answer; correct/wrong outcomes, timing, immediate retry and compensation isolation",
     "terrainAndGeometry": "passed original geometry bounds, clear paths, continuous seabed",
-    "visualCriteria": "pre-implementation phone hierarchy/copy criteria and results in design-review-v6.8.md; 1440x900, 390x844 and 844x390 native-property renders; Roblox engine rendering remains unverified",
+    "visualCriteria": "pre-implementation water/workflow criteria and results in design-review-v6.9.md; desktop/mobile native-property renders of revised lessons, web editor-geometry comparison and fee room inspected; Roblox engine rendering remains unverified",
     "webViewsAndMobilePage": "desktop world views inspected with browser; no new real-device play verification",
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_8.rbxl": {
-      "bytes": 3456748,
-      "sha256": "2708f686f7ee3aba3bdfa634572bd0095153b23ca26ffcedba7c47bc0a0085c1"
+    "SIRIAI_Recruiter_Island_v6_9.rbxl": {
+      "bytes": 3461699,
+      "sha256": "9e9fb03f590cd209972cb54af7a97491f648f0926107acc9164245a9f0ec6d16"
     },
-    "SIRIAI_Recruiter_Island_v6_8_Source.zip": {
-      "bytes": 15651181,
-      "sha256": "30ba4c3548d03b9fdc6673aa58537c91c883248bb99d2a7da3988e434c7b6fb3"
+    "SIRIAI_Recruiter_Island_v6_9_Source.zip": {
+      "bytes": 15666815,
+      "sha256": "238d73572686375432f19fea66fd7f19270ee45a1f06c6dfda11f8bd9a84eb3a"
     }
   }
 }

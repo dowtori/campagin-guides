@@ -1,8 +1,8 @@
-# Siriai Recruiter Island v6.8
+# Siriai Recruiter Island v6.9
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_8.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_9.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
@@ -24,6 +24,14 @@
 실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
+
+## v6.9: 편집 화면의 바다 · 실제 업무 기준
+
+- Studio에서 파일을 열면 비충돌 수면 미리보기가 보입니다. 플레이 시 실제 Terrain Water·해안 생성이 완료된 뒤 미리보기만 숨깁니다. 편집 수면 자체에는 수영 물리가 없습니다.
+- 실제 팔로워 확인, 지정된 발송 대상, 완료 수량 공유와 담당자의 최종 선정 안내를 기본 과정에 반영했습니다.
+- 고료 조정은 캠페인별 지정 접수 방식과 사전 승인 범위를 따릅니다. 지원·브랜드 전달·최종 선정은 구분합니다.
+- 심화 선별에는 광고 경험·제품 사용·접촉 이력·모집 하한을 반영했습니다. 임의의 최근 7일·14일 조건은 제거했습니다. 선별만 30초, 응대는 시간제한이 없습니다.
+- [수정 전 판정 기준](design-review-v6.9.md) · [익명화한 업무 대조표](workflow-audit-v6.9.md). 기본 과정 7개는 유지하며 상세 예외는 선택 심화·부록에 둡니다.
 
 ## v6.8: 큰 챕터 메뉴와 완료 표시
 
@@ -91,7 +99,7 @@
 
 실제 높이 데이터로 연결된 능선과 두 개의 원경 섬을 생성합니다. 해·산을 그려 놓은 이미지 벽은 없습니다. 붉은 태양은 별도의 구체이며 native Atmosphere·Clouds와 움직이는 입체 구름을 사용합니다.
 
-수면 아래 실제 Terrain Water와 모래 해저를 채웁니다. 물가 계단에서 들어갈 수 있고 바깥은 수영할 깊이입니다. 지형 편집은 작은 구역으로 나눠 엔진 voxel 편집 한도보다 작게 처리합니다. 연속된 보조 해저와 낙하·범위 이탈 시 비치명적 복귀가 있습니다. 지형 API가 실패하면 지면 미리보기와 복귀 기능을 유지합니다.
+편집 화면에는 저장된 비충돌 수면을 표시합니다. 플레이 시작 시 실제 Terrain Water와 모래 해저를 채우고, 생성 완료 후 편집 수면을 숨깁니다. 물가 계단에서 들어갈 수 있고 바깥은 수영할 깊이입니다. 지형 편집은 작은 구역으로 나눠 엔진 voxel 편집 한도보다 작게 처리합니다. 연속된 보조 해저와 낙하·범위 이탈 시 비치명적 복귀가 있습니다. 지형 API가 실패하면 지면 미리보기와 복귀 기능을 유지합니다.
 
 ## 자료와 라이선스
 
@@ -106,8 +114,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_8.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_8.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_9.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_9.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py

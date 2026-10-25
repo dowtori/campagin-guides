@@ -1,5 +1,5 @@
 {
-  "name": "SIRIAI Recruiter Island v6.8",
+  "name": "SIRIAI Recruiter Island v6.9",
   "tree": {
     "$className": "DataModel",
     "Workspace": {
@@ -17,7 +17,16 @@
       "Terrain": {
         "$className": "Terrain",
         "$properties": {
-          "Decoration": true
+          "Decoration": true,
+          "WaterColor": [
+            0.48627450980392156,
+            0.6196078431372549,
+            0.6705882352941176
+          ],
+          "WaterTransparency": 0.48,
+          "WaterReflectance": 0.42,
+          "WaterWaveSize": 0.14,
+          "WaterWaveSpeed": 5
         },
         "Clouds": {
           "$className": "Clouds",

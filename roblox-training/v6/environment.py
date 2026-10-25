@@ -1,4 +1,4 @@
-"""Native v6.8: navigable coastal ridges, a 3D red sun and drifting cloud models."""
+"""Native v6.9: navigable coastal ridges, a 3D red sun and drifting cloud models."""
 from coastal_environment import add_coast,height_at,coast_distance,HIKE
 from nature_models import add_nature
 import math,random
@@ -94,7 +94,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         part(world,'Water access step',(0,.64-k*.42,-343-k*1.4),(10,.45,1.65),'C6B59B','WoodPlanks')
     for x in [-40,-15,15]:part(world,'Lookout foundation',(x,-3,-333),(1,8,1),'887B65','Wood')
     add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum)
-    return {'version':'6.8','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
+    return {'version':'6.9','title':'갈대 바다와 입체 능선','path':PATH,'reedClusters':len(positions),'sun':[112,103,-1250],
             'lake':coast['ocean'],'seaLevel':coast['seaLevel'],'coastFile':'coast.json',
             'backdrop':'atmosphere','sceneryGeometry':'navigable-terrain','clouds':'native-and-3d',
             'views':{'sunset':{'position':[0,6,-180],'target':[35,27,-850]},'lake':{'position':[70,24,-270],'target':[0,-1,-345]},

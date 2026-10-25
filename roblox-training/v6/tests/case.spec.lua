@@ -34,5 +34,5 @@ expect(s.record.setup.profile.completion=='already_done' and s.record.setup.conn
 expect(s.record.setup.profile.selfReported and s.record.setup.connect.selfReported,'outside setup is self-reported, not claimed as verified')
 local setup=Engine.new();setup.phase=2
 expect(not Engine.apply(setup,'profile',{assembled=true,understood=true,completion='opened_guide'},data),'opening a guide does not complete setup')
-expect(#data.appendix==2,'optional edge-case reference topics')
+expect(#data.appendix==10,'optional edge-case reference topics')
 print('PASS: '..n..' campaign checks; ordinary response, separate final notice, no forced exception practice')

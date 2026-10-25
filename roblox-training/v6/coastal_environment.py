@@ -41,7 +41,7 @@ def height_at(x,z):
 def write_coast_data():
     step=8;x0,z0=-768,-992;nx,nz=193,217
     heights=[round(height_at(x0+x*step,z0+z*step),3) for x in range(nx) for z in range(nz)]
-    data={'version':'6.8','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
+    data={'version':'6.9','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
           'seaLevel':SEA_LEVEL,'minY':-40,'maxY':176,'voxelSize':4,'chunkCells':32,
           'adaptiveChunkHeight':True,'hikePath':HIKE,
           'ocean':{'center':[0,-21,-500],'size':[2400,38,2800]},
@@ -55,7 +55,15 @@ def write_coast_data():
 def add_coast(world,part,obj,cf):
     from nature_models import triangle
     data=write_coast_data();folder=obj('CoastPreview','Folder');world.append(folder)
-    # Preview colliders remain until native terrain is ready. No pretend-water surface.
+    # Saved editor surface: visible without running scripts, never a walking floor.
+    water=obj('OceanPreview','Folder');world.append(water)
+    ocean=data['ocean'];left=ocean['center'][0]-ocean['size'][0]/2;back=ocean['center'][2]-ocean['size'][2]/2
+    for x in range(0,ocean['size'][0],600):
+        for z in range(0,ocean['size'][2],560):
+            sx=min(600,ocean['size'][0]-x);sz=min(560,ocean['size'][2]-z)
+            p=part(water['Children'],'Ocean water preview',(left+x+sx/2,SEA_LEVEL-.06,back+z+sz/2),(sx,.12,sz),data['waterColor'],'Glass',trans=.22,collide=False)
+            p['Properties'].update(CastShadow=False,CanCollide=False,CanTouch=False,CanQuery=False,Reflectance=.16)
+    # Land colliders remain until native terrain is ready.
     for x in range(-368,369,16):
         for z in range(-448,641,16):
             h=height_at(x,z)

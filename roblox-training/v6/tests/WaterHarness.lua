@@ -37,12 +37,14 @@ function H.terrain:WriteVoxels(region,resolution,materials,occupancies)
  H.chunks+=1
 end
 H.preview={GetChildren=function()return H.previewParts end}
-H.map={WaitForChild=function()return {WaitForChild=function()return H.preview end}end}
+H.oceanPreview={GetChildren=function()return H.oceanParts end}
+H.map={WaitForChild=function()return {WaitForChild=function(_,name)return name=='OceanPreview' and H.oceanPreview or H.preview end}end}
 H.workspace={Terrain=H.terrain,WaitForChild=function()return H.map end,SetAttribute=function(_,key,value)H.attributes[key]=value end}
 H.game={GetService=function(_,name)return name=='Players' and H.players or H.run end}
 function H.reset(channels,failAll)
  H.channels=channels;H.failAll=failAll;H.attributes={};H.fills={};H.chunks=0;H.waterVoxels=0;H.returns=0;H.warning=nil
  H.run.Heartbeat.listeners={};H.humanoid.Health=100;H.root.Position=H.Vector3.new(0,0,60)
+ H.oceanParts={{Transparency=.22,CanCollide=false,CanTouch=false,CanQuery=false,IsA=function()return true end}}
  H.previewParts={{Transparency=0,CanCollide=true,IsA=function()return true end}}
 end
 return H

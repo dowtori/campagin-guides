@@ -11,6 +11,15 @@ nodes=list(walk(model));parts=[n for n in nodes if n['ClassName'] in ['Part','We
 assert all(max(p['Properties']['Size'])<=2048 for p in parts)
 assert all(p['Properties']['Anchored'] for p in parts)
 assert not any('Pixel twilight' in p.get('Name','') or p.get('Name')=='Lake water preview' for p in parts)
+ocean=[p['Properties'] for p in parts if p.get('Name')=='Ocean water preview']
+assert len(ocean)==20
+assert sum(p['Size'][0]*p['Size'][2] for p in ocean)==2400*2800
+for p in ocean:
+ assert abs(p['CFrame'][1]+p['Size'][1]/2+2)<1e-6
+ assert 0<p['Transparency']<.4 and not p['CanCollide'] and not p['CanTouch'] and not p['CanQuery']
+for x in range(-1190,1200,40):
+ for z in range(-1890,900,40):
+  assert any(abs(x-p['CFrame'][0])<=p['Size'][0]/2 and abs(z-p['CFrame'][2])<=p['Size'][2]/2 for p in ocean),'editor ocean has no gaps'
 sun=next(p for p in parts if p.get('Name')=='Setting sun');assert sun['Properties']['Shape']=='Ball' and not sun.get('Children')
 clouds=[p for p in parts if p.get('Name')=='Sky cloud puff']
 assert len(clouds)==24 and all(p['Properties']['Size'][0]>p['Properties']['Size'][1]*2 for p in clouds)
