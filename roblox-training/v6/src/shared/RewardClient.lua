@@ -10,10 +10,11 @@ function Client.start(gui,notice)
  end
  local function pose(target,scale,bob)
   for _,v in ipairs(parts)do
-   local p=v.part;p.Size=v.size*scale;p.CFrame=CFrame.new(origin+v.offset*scale+Vector3.new(0,bob or 0,0))*v.rotation
+   local p=v.part;local k=v.level==0 and 1 or scale;local anchor=Vector3.new(0,.486,0)
+   p.Size=v.size*k;p.CFrame=CFrame.new(origin+anchor+(v.offset-anchor)*k+Vector3.new(0,v.level==0 and 0 or (bob or 0),0))*v.rotation
    p.Transparency=table.find(config.stages[target+1].groups,v.level) and 0 or 1
-   p.Color=v.level==0 and not p.Name:find('pedestal') and not p.Name:find('thumbnail') and Color3.fromRGB(unpack(config.stages[target+1].color)) or v.color
-   p.Material=v.level==6 and Enum.Material.Neon or Enum.Material.SmoothPlastic
+   p.Color=v.level>0 and Color3.fromRGB(unpack(config.stages[target+1].color)) or v.color
+   p.Material=Enum.Material.SmoothPlastic
   end
  end
  -- A small non-blocking 3D preview of the actual sculpture accompanies each growth.
@@ -22,8 +23,8 @@ function Client.start(gui,notice)
  local function showPreview(token)
   local old=preview:FindFirstChild('RewardModel');if old then old:Destroy()end
   local copy=model:Clone();copy.Name='RewardModel';copy.Parent=preview
-  local scale=config.stages[stage+1].scale
-  camera.CFrame=CFrame.lookAt(origin+Vector3.new(11,7,20)*scale,origin+Vector3.new(0,3,0)*scale);camera.FieldOfView=34
+  local item=config.stages[stage+1];local scale=item.scale;local h=item.thumbHeight*.9
+  camera.CFrame=CFrame.lookAt(origin+Vector3.new(14,h*.88,19)*scale,origin+Vector3.new(0,h*.45,0)*scale);camera.FieldOfView=34
   local work=gui:FindFirstChild('WorkPanel')
   preview.Visible=not(work and work.Visible and work.AbsolutePosition.X<190)
   task.delay(5,function()if serial==token then preview.Visible=false end end)

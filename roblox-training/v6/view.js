@@ -68,8 +68,9 @@ try{
     const mesh=new THREE.InstancedMesh(batch.geom,batch.material,batch.parts.length);mesh.castShadow=batch.shadow;mesh.receiveShadow=!batch.parts[0].wind;
     batch.parts.forEach((p,i)=>{dummy.position.fromArray(p.position);if(p.matrix){const m=p.matrix;rotationMatrix.set(m[0],m[1],m[2],0,m[3],m[4],m[5],0,m[6],m[7],m[8],0,0,0,0,1);dummy.quaternion.setFromRotationMatrix(rotationMatrix);}else{dummy.rotation.set(...p.rotation.map(v=>v*Math.PI/180),'XYZ');}dummy.scale.fromArray(p.size);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});mesh.computeBoundingSphere();scene.add(mesh);
   }
+  const handWedge=wedge.toNonIndexed();handWedge.computeVertexNormals();
   const thumbMeshes=thumbs.map(p=>{
-    const geom=p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box;
+    const geom=p.shape==='Wedge'?handWedge:p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box;
     const mesh=new THREE.Mesh(geom,new THREE.MeshStandardMaterial({color:p.color,roughness:.48,metalness:.12}));
     const m=p.matrix;rotationMatrix.set(m[0],m[1],m[2],0,m[3],m[4],m[5],0,m[6],m[7],m[8],0,0,0,0,1);mesh.quaternion.setFromRotationMatrix(rotationMatrix);
     mesh.castShadow=true;scene.add(mesh);return {p,mesh};
@@ -78,8 +79,10 @@ try{
     const item=thumbData.stages[stage],origin=thumbData.origin;
     for(const {p,mesh} of thumbMeshes){
       mesh.visible=item.groups.includes(p.thumbStage);
-      mesh.position.set(...p.position.map((v,i)=>origin[i]+(v-origin[i])*item.scale));mesh.scale.set(...p.size.map(v=>v*item.scale));
-      mesh.material.color.set(p.thumbStage===0&&!p.name.includes('pedestal')&&!p.name.includes('thumbnail')?'rgb('+item.color.join(',')+')':p.color);
+      const k=p.thumbStage===0?1:item.scale;
+      mesh.position.set(...p.position.map((v,i)=>origin[i]+(i===1?.486:0)+(v-origin[i]-(i===1?.486:0))*k));mesh.scale.set(...p.size.map(v=>v*k));
+      mesh.material.color.set(p.thumbStage>0?'rgb('+item.color.join(',')+')':p.color);
+      mesh.material.metalness=0;mesh.material.roughness=.6;
     }
     const label=document.querySelector('#thumb-label');if(label)label.textContent=item.title+' · '+stage+'/10';
     window.__thumbStage=stage;
@@ -134,7 +137,7 @@ try{
   }));water.rotation.x=-Math.PI/2;water.position.set(env.lake.center[0],coast.seaLevel,env.lake.center[2]);water.material.toneMapped=false;if(!portrait)scene.add(water);
 
  let mode='overview';
- function view(name){mode=name;camera.fov=name==='challengeEntry'?70:(viewer.clientWidth<600?72:52);camera.updateProjectionMatrix();const v=env.views[name]||env.views.overview;camera.position.fromArray(v.position);controls.target.fromArray(v.target);if(name==='thumbPortrait'){const k=thumbData.stages[Number(slider.value)].scale,o=thumbData.origin;camera.position.set(o[0]+11*k,o[1]+7*k,o[2]+20*k);controls.target.set(o[0],o[1]+3*k,o[2]);camera.fov=34;camera.updateProjectionMatrix();}controls.update();document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));}
+ function view(name){mode=name;camera.fov=name==='challengeEntry'?70:(viewer.clientWidth<600?72:52);camera.updateProjectionMatrix();const v=env.views[name]||env.views.overview;camera.position.fromArray(v.position);controls.target.fromArray(v.target);if(name==='thumbPortrait'){const item=thumbData.stages[Number(slider.value)],k=item.scale,h=item.thumbHeight*.9,o=thumbData.origin;camera.position.set(o[0]+14*k,o[1]+h*.88*k,o[2]+19*k);controls.target.set(o[0],o[1]+h*.45*k,o[2]);camera.fov=34;camera.updateProjectionMatrix();}controls.update();document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));}
  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>view(b.dataset.view)));
  function resize(){renderer.setSize(viewer.clientWidth,viewer.clientHeight,false);camera.aspect=viewer.clientWidth/viewer.clientHeight;camera.fov=mode==='thumbPortrait'?34:mode==='challengeEntry'?70:viewer.clientWidth<600?72:52;camera.updateProjectionMatrix();}
  new ResizeObserver(resize).observe(viewer);resize();const requestedView=new URLSearchParams(location.search).get('view');view(Object.hasOwn(env.views,requestedView)||requestedView==='thumbPortrait'?requestedView:'overview');

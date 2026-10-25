@@ -41,7 +41,7 @@ def height_at(x,z):
 def write_coast_data():
     step=8;x0,z0=-768,-992;nx,nz=193,217
     heights=[round(height_at(x0+x*step,z0+z*step),3) for x in range(nx) for z in range(nz)]
-    data={'version':'6.6','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
+    data={'version':'6.7','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
           'seaLevel':SEA_LEVEL,'minY':-40,'maxY':176,'voxelSize':4,'chunkCells':32,
           'adaptiveChunkHeight':True,'hikePath':HIKE,
           'ocean':{'center':[0,-21,-500],'size':[2400,38,2800]},

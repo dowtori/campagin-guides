@@ -30,25 +30,40 @@ local reward=require('./RewardClient').start(H.gui,function(t)table.insert(notif
 local state={completed={}};local n=0
 local function check(v,m)n+=1;assert(v,m)end
 reward.sync(state)
-local base=model:GetChildren()[1];local initial=base.Size.X
+local base=model:GetChildren()[1];local plinth=base.Size.X;local lastHeight=0
+local function checkPose(index)
+ local item=config.stages[index+1];local visible=0;local top=-math.huge;local bottom=math.huge
+ for _,p in ipairs(model:GetChildren())do
+  local level=p:FindFirstChild('ThumbStage').Value
+  check(p.Transparency==(table.find(item.groups,level) and 0 or 1),'exactly current silhouette visible')
+  if level>0 and p.Transparency==0 then
+   visible+=1;check(level==index+1,'no old-stage overlap')
+  end
+ end
+ check(base.Size.X==plinth,'pedestal stays the same size')
+ check(visible>0 and visible<=28,'compact native silhouette exists')
+ local height=(item.thumbHeight-.54)*.9*item.scale
+ check(height>lastHeight,'actual hand height grows');lastHeight=height
+end
+checkPose(0)
 for i,id in ipairs({'brief','profile','connect','discover','send','reply','settle'})do
  state.completed[id]=true;reward.sync(state);H.now+=1;H.run.RenderStepped:Fire()
  for _,fn in ipairs(H.delayed)do fn()end;H.delayed={}
- check(base.Size.X>initial,'each phase grows');initial=base.Size.X
+ checkPose(i)
  check(notifications[#notifications]:find(config.stages[i+1].title,1,true),'correct title')
- if i==4 then for _,part in ipairs(model:GetChildren())do if part.Name:find('sunglasses') or part.Name:find('cape')then check(part.Transparency==1,'work outfit replaces earlier glasses; cape remains locked')end end end
 end
 local count=#notifications;reward.sync(state);check(#notifications==count,'same phase no duplicate')
 state.advanced={completed={}}
 for i,id in ipairs({'scout','fee','conditions'})do
  state.advanced.completed[id]=true;reward.sync(state);H.now+=1;H.run.RenderStepped:Fire()
  for _,fn in ipairs(H.delayed)do fn()end;H.delayed={}
+ checkPose(7+i)
 end
 for _,p in ipairs(model:GetChildren())do
  local level=p:FindFirstChild('ThumbStage').Value
- check(p.Transparency==(table.find(config.stages[11].groups,level) and 0 or 1),'king only shows the expression, cape and crown')
+ check(p.Transparency==(table.find(config.stages[11].groups,level) and 0 or 1),'king only shows one unadorned hand and its fixed pedestal')
  check(type(p.Material)=='string','valid enum material')
 end
 check(notifications[#notifications]:find('왕따봉',1,true),'king notification')
 check(H.gui:FindFirstChild('ThumbEvolution'):FindFirstChild('RewardModel')~=nil,'actual 3D clone preview')
-print('PASS: '..n..' exported reward-client checks; all growth stages, accessories, names, materials and 3D reward preview')
+print('PASS: '..n..' exported reward-client checks; all growth stages, silhouettes, fixed pedestal, names, materials and 3D reward preview')

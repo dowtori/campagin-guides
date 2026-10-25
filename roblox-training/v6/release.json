@@ -1,5 +1,5 @@
 {
-  "version": "6.6",
+  "version": "6.7",
   "date": "2026-10-25",
   "status": "review-build",
   "verification": {
@@ -12,7 +12,7 @@
     "coreFlow": "seven phases at three forward stops; ordinary reply and separate selection notice",
     "advancedGames": "three optional world-space games; explicit start, server-owned 30s scout deadline, untimed NPC answers; immediate retry, stale attempt and outside-room rejection",
     "advancedRewards": "100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming",
-    "rewardEvolution": "11 stages with explicit non-accumulating accessory groups; 160x190 model preview; king silhouette keeps thumb clear of crown",
+    "rewardEvolution": "11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal and exaggerated growth; 160x190 model preview",
     "advancedChecks": "exported engine/session, client, server and reward adapter checks; compact room bounds and world-panel aspect ratios checked",
     "optionalAppendix": "completion-only read-only reference remains alongside the optional minigames",
     "requiredRoute": "133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry",
@@ -21,18 +21,18 @@
     "nativeClientAndServerCallbacks": "passed desktop and touch adapters, full campaign and partial task resume",
     "nativeWaterServer": "passed API/compatibility/failure/rescue adapters",
     "terrainAndGeometry": "passed original geometry bounds, clear paths, continuous seabed",
-    "visualCriteria": "pre-implementation criteria and results in design-review-v6.6.md; desktop world preview and native UI property-tree adapter inspected; final engine/device checks remain open",
+    "visualCriteria": "pre-implementation silhouette criteria and results in design-review-v6.7.md; small reward preview and pier comparisons; Roblox engine rendering remains unverified",
     "webViewsAndMobilePage": "desktop world views inspected with browser; no new real-device play verification",
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_6.rbxl": {
-      "bytes": 3451961,
-      "sha256": "b5e79b811bc2a368aa8c6735387d7de6f824a9b3c0a3e59aab15ca323c05af36"
+    "SIRIAI_Recruiter_Island_v6_7.rbxl": {
+      "bytes": 3457564,
+      "sha256": "39f84d941774814b59a5f6f3ceb481a44970363e1d856b39cc674cb3d896a50c"
     },
-    "SIRIAI_Recruiter_Island_v6_6_Source.zip": {
-      "bytes": 15608180,
-      "sha256": "8c31f1e28ee7ef97025b13c753e8db739e1a90a7ff114252d571fbed599348f3"
+    "SIRIAI_Recruiter_Island_v6_7_Source.zip": {
+      "bytes": 15649377,
+      "sha256": "88a97fb106aca32ad81123c8fba48b5a4e87b55b3a5099b2142021894b54e367"
     }
   }
 }

@@ -1,6 +1,6 @@
 # 배포 자료 출처
 
-- **나루터 따봉 조형물**: 이번 작업에서 직접 설계한 native Part 입체 조형물입니다. 외부 이모지 이미지나 모델을 사용하지 않았습니다. 생성 소스는 `pier_sculpture.py`입니다.
+- **나루터 따봉 조형물**: 이번 작업에서 직접 설계한 native Part/WedgePart 입체 조형물입니다. 외부 이모지 이미지나 모델을 사용하지 않았습니다. 생성 소스는 `pier_sculpture.py`입니다.
 
 - **시리아이 로고·프로필 6장·설정 캡처**: 사용자가 이 작업에 제공한 기존 자료. 파일별 SHA-256은 `assets/provenance.json`에 기록합니다. 브랜드 이미지 생성으로 대체하지 않았습니다.
 - **가상 크리에이터 게시물**: built-in image_gen으로 새로 생성한 3×3 사진 시트에서 잘라 사용했습니다. 생성 프롬프트는 `assets/generation-prompt.json`, 원본은 `assets/creator-contact-sheet.jpg`입니다. 실제 계정이나 실존 인물을 나타내지 않습니다.
@@ -10,3 +10,5 @@
 - **글꼴**: Pretendard / Inter Tight, 각 OFL 라이선스를 `assets/`에 포함했습니다. 웹에 사용하며 Roblox 텍스트는 엔진 기본 글꼴을 사용합니다.
 
 Fisch, Work at a Pizza Place, Bee Swarm Simulator는 플레이 구조와 공간 참고 자료입니다. 해당 게임의 모델·음악·캐릭터·썸네일은 이 배포물에 포함하지 않습니다. 구체적인 참고 범위는 `design-review.md`에 기록했습니다.
+
+따봉 v6.7은 Slap Battles의 장갑 진열과 Roblox의 과장된 크기 소품을 시각적으로 참고했습니다. 외부 게임의 손 모델·텍스처·썸네일은 배포하지 않습니다. 참고 링크와 채택 범위는 [v6.7 검토 기록](../design-review-v6.7.md)에 남겼습니다.
