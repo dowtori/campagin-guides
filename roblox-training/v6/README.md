@@ -1,12 +1,13 @@
-# Siriai Recruiter Island v6
+# Siriai Recruiter Island v6.1
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_1.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 왼쪽의 매니저에게 다가갑니다.
-3. **E / 화면 터치**로 첫 캠페인을 받습니다. 도구창의 리크루터 폰으로 진행 기록을 볼 수 있습니다.
+3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 분홍 퀘스트 표식을 따라 PC와 크리에이터, 우체통을 오가며 캠페인을 수행합니다.
-5. `?`에서 조작 안내·물가 이동·입구 복귀를 사용할 수 있습니다. 완료한 작업은 캐릭터 재생성·물가 이동 중 유지되며 재접속하면 새 연습을 시작합니다.
+5. 폰의 **이어서 하기**는 현재 작업 장소로 이동해 중단한 화면을 열고, **목표 위치로 이동**은 장소만 옮깁니다. 완료 후 폰에서 바다로 이동할 수 있습니다.
+6. 작업 중에는 폰·다른 상호작용이 화면을 덮지 않습니다. 연결·발송·응대의 중간 단계는 창을 닫아도 이어집니다. 재접속하면 새 연습을 시작합니다.
 
 웹 링크는 공간 미리보기와 파일 배포용입니다. 본인 Roblox 계정에서 경험으로 게시한 뒤 생성되는 링크로 접속할 수 있습니다.
 
@@ -14,7 +15,7 @@
 
 하나의 연습 캠페인을 처음부터 끝까지 따라갑니다. 먼저 기준과 작업 이유를 전달하고, 원본 프로필 자료 적용, 수집 도구 연결, 인원 확인·수집, DM 발송과 상태 변경, 고료 조정 요청 기록, 추가 조건 확인과 최종 선정 안내 확인, 기록 정리로 이어집니다. 순서 맞히기나 정답 카드 3개 중 고르기는 없습니다.
 
-실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 이 설명은 도움말에 두고 첫 화면의 주 안내와 구분했습니다.
+실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
 
@@ -28,7 +29,7 @@
 
 시리아이의 제공된 원본 로고, 프로필 게시물 6장과 설정 캡처를 포함했습니다. 브랜드 이미지를 임의로 생성하지 않았고 이미지 렌더링에 Pixelated 모드를 사용하지 않습니다. 가상 크리에이터 게시물 9장은 별도로 생성했으며 `assets/generation-prompt.json`에 생성 방식과 프롬프트를 남겼습니다.
 
-Kenney Nature Kit CC0 모델은 실제 OBJ 정점·면을 native WedgePart로 가져옵니다. 바람은 MIT WindShake의 고정 커밋 소스입니다. 각 출처와 라이선스를 배포물에 포함했습니다. 인기 게임의 캐릭터·지형·음악·썸네일은 배포물에 포함하지 않았습니다.
+Kenney Nature Kit CC0 모델은 실제 OBJ 정점·면을 native WedgePart로 가져옵니다. v6.1에서는 둥근 활엽수 수관·낮은 식물·해안 바위로 종류를 정리하고, 수관이 겹치는 작은 숲과 갈대 군락으로 배치했습니다. 나무·풀·바위의 색을 해안 팔레트로 통일했고, 평지를 Grass 재질과 native 잔디로 변경했습니다. 바람은 MIT WindShake의 고정 커밋 소스입니다. 각 출처와 라이선스를 배포물에 포함했습니다. 인기 게임의 캐릭터·지형·음악·썸네일은 배포물에 포함하지 않았습니다.
 
 ## 빌드
 
@@ -37,13 +38,17 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_1.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_1.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 ```
 
 내보낸 파일의 실제 ModuleScript·Script 소스를 검증에 사용합니다. 클라이언트와 서버의 콜백을 데스크톱·터치 모드 어댑터에서 실행하고 근접 거리·요청 순서·중복 완료·기록을 검사합니다. 물 서버는 실제 소스의 API 정상·호환·실패 경로를 확인합니다.
+
+## v6.1 검증
+
+폰을 든 상태의 일반 클릭 이벤트, 장착 이벤트, 작업 화면 중 폰 요청, 서버가 선택하는 이동 목적지, 진행 단계 건너뛰기 차단, 창을 닫았다 여는 연결·발송·응대 중간 단계, 전체 캠페인 완료를 검사합니다. 화면 제목은 26px, 본문 18px, 주요 버튼 17px이며 행동 버튼은 스크롤 영역 밖에 고정합니다. 상세 설명은 접어 두고 작업 중 HUD를 숨깁니다.
 
 ## 검증 한계
 

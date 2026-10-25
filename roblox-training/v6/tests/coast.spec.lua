@@ -9,7 +9,7 @@ for x=-720,720,60 do for z=-940,700,60 do for y=-40,172,12 do
  expect(solid>=0 and solid<=1 and liquid>=0 and liquid<=1,'valid native occupancy')
  expect(solid<1-1/256 or liquid==0,'no liquid in full solid cells')
 end end end
-expect(Coast.height(d,300,110)>100,'connected ridge has actual height')
+expect(Coast.height(d,300,110)>50,'connected ridge has actual height')
 expect(Coast.height(d,-480,-604)>130,'offshore peaks are actual terrain')
 expect(d.seaLevel-Coast.height(d,0,-550)>25,'deep offshore water')
 expect(Coast.rescue(d,0,-39,-500)~=nil,'fall below seabed returns alive')

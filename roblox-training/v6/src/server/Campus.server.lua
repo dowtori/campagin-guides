@@ -52,11 +52,12 @@ for id,target in pairs(targets)do
 end
 local function phone(player)
     if player.Backpack:FindFirstChild('리크루터 폰') or (player.Character and player.Character:FindFirstChild('리크루터 폰'))then return end
-    local tool=Instance.new('Tool');tool.Name='리크루터 폰';tool.CanBeDropped=false;tool.RequiresHandle=true
+    local tool=Instance.new('Tool');tool.Name='리크루터 폰';tool.CanBeDropped=false;tool.RequiresHandle=true;tool.ManualActivationOnly=true;tool.ToolTip='장착하거나 P 키로 이어하기 · 목표 위치 이동'
     local handle=Instance.new('Part');handle.Name='Handle';handle.Size=Vector3.new(.72,1.15,.16);handle.Color=Color3.fromRGB(30,28,35);handle.Material=Enum.Material.SmoothPlastic;handle.CanCollide=false;handle.Massless=true;handle.Parent=tool
     local gui=Instance.new('SurfaceGui');gui.Name='RasterArt';gui.Face=Enum.NormalId.Front;gui.Parent=handle
     local key=Instance.new('StringValue');key.Name='RasterKey';key.Value='logoWhite';key.Parent=handle
-    tool.Activated:Connect(function()send(player,'phone')end);tool.Parent=player.Backpack
+    -- Equipped is deliberate. Ordinary world/UI clicks must never open this menu.
+    tool.Equipped:Connect(function()send(player,'phone')end);tool.Parent=player.Backpack
 end
 local function envelope(player)
     local a=targets.Mailbox.Position;local b=targets.beauty_sample.Position
@@ -71,6 +72,20 @@ remote.OnServerEvent:Connect(function(player,packet)
     local s=state(player)
     if packet.kind=='hello'then send(player,'state');if s.phase>1 then phone(player)end
     elseif packet.kind=='interact'then if type(packet.target)=='string'then interact(player,packet.target)end
+    elseif packet.kind=='resume' or packet.kind=='travel'then
+        if packet.revision~=s.revision then send(player,'state');return end
+        if s.complete then send(player,'finished');return end
+        local phase=data.phases[s.phase];local target=targets[phase.target]
+        local character=player.Character;local root=character and character:FindFirstChild('HumanoidRootPart')
+        if not root or not target then return end
+        -- Every target has a clear arrival pad in front of it. Clients cannot choose
+        -- coordinates or skip a phase; moving never advances the campaign record.
+        local destination=target.Position+Vector3.new(0,0,7)
+        character:PivotTo(CFrame.lookAt(destination,target.Position))
+        root.AssemblyLinearVelocity=Vector3.new(0,0,0)
+        root.AssemblyAngularVelocity=Vector3.new(0,0,0)
+        if packet.kind=='resume' then send(player,'open',{profile=phase.target})
+        else send(player,'arrived',{text=phase.place..'에 도착했어요.'})end
     elseif packet.kind=='apply'then
         if packet.revision~=s.revision or s.complete then send(player,'state');return end
         local phase=data.phases[s.phase]
@@ -93,4 +108,4 @@ Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()task.wait(1);if state(player).phase>1 then phone(player)end;send(player,'state')end)
 end)
 Players.PlayerRemoving:Connect(function(player)states[player]=nil end)
-print('[SIRIAI v6] Recruiter Island ready: NPC quests, phone tool, one campaign')
+print('[SIRIAI v6.1] Recruiter Island ready: NPC quests, phone tool, one campaign')

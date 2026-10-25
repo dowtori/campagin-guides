@@ -6,7 +6,7 @@ local folder=root:WaitForChild('MeadowReeds')
 Wind:Init();Wind.RenderDistance=90;Wind.MaxRefreshRate=1/30
 Wind:SetDefaultSettings({WindDirection=Vector3.new(1,0,.35),WindSpeed=6,WindPower=.15})
 for _,p in ipairs(folder:GetDescendants())do
- if p:IsA('BasePart') and (p.Name=='Reed leaf' or p.Name=='Reed leaf back' or p.Name=='Reed plume')then p.PivotOffset=CFrame.new(0,-p.Size.Y*.47,0);Wind:AddObjectShake(p)end
+ if p:IsA('BasePart') and (p.Name=='Meadow blade')then p.PivotOffset=CFrame.new(0,-p.Size.Y*.47,0);Wind:AddObjectShake(p)end
 end
 local clouds={}
 for i,model in ipairs(root:WaitForChild('DriftingClouds'):GetChildren())do table.insert(clouds,{model=model,base=model:GetPivot(),phase=i})end

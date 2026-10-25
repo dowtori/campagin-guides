@@ -56,40 +56,40 @@ def triangle(parent,a,b,c,color,part,name):
     return count
 
 def add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum):
-    rng=random.Random(49125);folder=obj('ImportedNature','Folder');world.append(folder)
+    """Curated coastal groves; one palette, crown overlap, open sight lines."""
+    rng=random.Random(61025);folder=obj('ImportedNature','Folder');world.append(folder)
     cache={};instances=[];wedges=0
-    def place(name,x,z,scale,angle,tint=None):
+    def place(name,x,z,scale,angle,foliage='879669'):
         nonlocal wedges
         if name not in cache:cache[name]=read_obj(name)
         ground=height_at(x,z);rotation=math.radians(angle);co,si=math.cos(rotation),math.sin(rotation)
-        children=[];model=obj('Kenney '+name,'Model',children=children);folder['Children'].append(model)
+        model=obj('Kenney '+name,'Model');folder['Children'].append(model);children=model['Children']
         def transform(v):return (x+(v[0]*co+v[2]*si)*scale,ground+v[1]*scale-.07,z+(-v[0]*si+v[2]*co)*scale)
-        # obj() uses a new list for empty children, so keep its actual list.
-        children=model['Children']
-        for face,color in cache[name]:
-            points=[transform(v) for v in face]
-            wedges+=triangle(children,*points,tint or color,part,'Kenney '+name)
-        children.append(obj('OriginalSource','StringValue',{'Value':'Kenney Nature Kit 2.1 / CC0 / '+name+'.obj'}))
-        instances.append({'model':name,'position':[x,ground,z],'scale':scale,'rotation':angle,'tint':tint,'faces':len(cache[name])})
-    for x,z,scale in [(-131,-276,16),(-107,-295,11),(-83,-286,9),(73,-286,18),(115,-282,12),(150,-260,16),(-177,-173,12),(176,-120,13),(-135,100,15),(155,86,11)]:
-        place(rng.choice(['stone_largeA','stone_largeB']),x,z,scale,rng.uniform(0,360))
-    for _ in range(15):
-        x=rng.choice([-1,1])*rng.uniform(37,183);z=rng.uniform(-286,115)
-        if distance_to_path(x,z)<13:continue
-        if any(abs(x-s['position'][0])<28 and abs(z-s['position'][2])<28 for s in curriculum['stages']):continue
-        place('stone_smallA',x,z,rng.uniform(4,10),rng.uniform(0,360))
-    for _ in range(55):
-        x=rng.uniform(-190,190);z=rng.uniform(-299,124)
-        if distance_to_path(x,z)<9 or height_at(x,z)<-2.5:continue
-        if any(abs(x-s['position'][0])<26 and abs(z-s['position'][2])<25 for s in curriculum['stages']):continue
-        if abs(x)<29 and z>40:continue
-        place('grass_leafs',x,z,rng.uniform(6,10),rng.uniform(0,360),rng.choice(['9B9B69','ADAB78','B6AE79']))
-    for x,z,scale in [(-118,58,11),(-128,23,13),(-145,-22,12),(-152,-78,14),(-156,-131,12),(-153,-196,13),
-                      (124,52,12),(140,15,14),(152,-43,11),(156,-109,13),(154,-177,12),(136,-233,12),
-                      (-224,-170,15),(-244,-82,16),(-230,20,15),(-209,108,15),(221,154,16),(233,224,14),
-                      (-97,189,14),(-41,219,12),(40,223,13),(99,179,13)]:
-        place('tree_pineTallA' if x<0 else 'tree_pineDefaultB',x,z,scale,rng.uniform(0,360))
-    for x,z in [(-78,69),(-81,-18),(80,-2),(73,-84),(-90,-103)]:place('tree_oak_fall',x,z,10,rng.uniform(0,360))
-    for x,z in [(-66,57),(-10,55),(-78,-37),(-22,-26),(24,-38),(68,-59)]:place('plant_bushSmall',x,z,7,rng.uniform(0,360))
+        for face,original in cache[name]:
+            r,g,b=[int(original[i:i+2],16) for i in (0,2,4)]
+            # Keep the original topology; map the kit's saturated colours into the
+            # same restrained coastal palette. Bark and canopy remain distinct.
+            if name.startswith('stone'):color='A59E8D'
+            elif r>g*1.15:color='78614E'
+            elif r>235 and g>235 and b>235:color='B3AE95'
+            else:color=foliage
+            wedges+=triangle(children,*[transform(v) for v in face],color,part,'Kenney '+name)
+        children.append(obj('OriginalSource','StringValue',{'Value':'Kenney Nature Kit / CC0 / '+name+'.obj'}))
+        instances.append({'model':name,'position':[x,ground,z],'scale':scale,'rotation':angle,'tint':foliage,'faces':len(cache[name])})
+    # Three layered groves frame work areas. The centre stays open to the sea.
+    groves=[(-126,60),(-151,-65),(143,-46),(-136,165),(130,183)]
+    for gi,(cx,cz) in enumerate(groves):
+        for j,(dx,dz,scale) in enumerate([(-13,-8,29),(3,3,32),(17,-12,26),(-4,21,28),(21,18,24)]):
+            name='tree_oak' if j in (0,1) else 'tree_fat' if j in (2,3) else 'tree_default'
+            place(name,cx+dx,cz+dz,scale,rng.uniform(0,360),['819C73','75926A','69875F'][j%3])
+        for dx,dz in [(-17,9),(9,-21),(29,3)]:
+            place('plant_bushLarge',cx+dx,cz+dz,rng.uniform(9,13),rng.uniform(0,360),'8BA178')
+    # Shore rocks are seated in groups rather than scattered as tiny grey dots.
+    for cx,cz in [(-121,-279),(-78,-290),(77,-287),(141,-269),(-193,-187),(188,-178)]:
+        for dx,dz,scale in [(0,0,17),(-9,4,10),(12,2,12)]:
+            place('stone_largeC' if dx else 'stone_largeD',cx+dx,cz+dz,scale,rng.uniform(0,360))
+    # Low understorey borders terraces; it never intrudes into a work target.
+    for x,z,scale in [(-70,23,10),(-70,37,9),(-66,67,9),(-10,67,8),(-88,-78,10),(-42,-83,9),(-15,-61,8),(76,-55,10),(76,-33,10),(28,-65,8)]:
+        place('plant_bushLarge',x,z,scale,rng.uniform(0,360),'95AC82')
     (ROOT/'nature-instances.json').write_bytes(json.dumps(instances,separators=(',',':')).encode())
-    print(f'Kenney CC0: {len(instances)} original OBJ instances / {wedges} native wedge faces')
+    print(f'Nature: {len(instances)} curated CC0 instances / {wedges} wedges')

@@ -20,8 +20,8 @@ def height_at(x,z):
     if d<=-22:
         h=.12+.06*math.sin(x/21)*math.sin(z/31)
         # Slopes begin outside the campus. The southern ridge is connected dry land.
-        hills=max(bump(x,z,-277,-4,146,276,115),bump(x,z,300,110,165,284,133),
-                  bump(x,z,-78,391,299,219,158),bump(x,z,155,412,176,179,101))
+        hills=max(bump(x,z,-277,-4,146,276,58),bump(x,z,300,110,165,284,65),
+                  bump(x,z,-78,391,299,219,95),bump(x,z,155,412,176,179,77))
         # Irregular rock contours keep the ridge from reading as a smooth green dome.
         detail=(math.sin(x/27+z/43)+.55*math.sin(x/12-z/33))*min(3.2,hills*.045)
         h+=max(0,hills+detail)
@@ -41,12 +41,12 @@ def height_at(x,z):
 def write_coast_data():
     step=8;x0,z0=-768,-992;nx,nz=193,217
     heights=[round(height_at(x0+x*step,z0+z*step),3) for x in range(nx) for z in range(nz)]
-    data={'version':'6.0.0','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
+    data={'version':'6.1.0','step':step,'x0':x0,'z0':z0,'nx':nx,'nz':nz,'heights':heights,
           'seaLevel':SEA_LEVEL,'minY':-40,'maxY':176,'voxelSize':4,'chunkCells':32,
           'adaptiveChunkHeight':True,'hikePath':HIKE,
           'ocean':{'center':[0,-21,-500],'size':[2400,38,2800]},
           'rescue':{'minY':-38,'maxX':1030,'minZ':-1090,'maxZ':760,'shore':[0,5,-326],'arrival':[0,5,60]},
-          'materialColors':{'Sand':'B7AA8E','Ground':'A3A374','Grass':'99926A','Rock':'817E8D'},
+          'materialColors':{'Sand':'CCBA96','Ground':'AAB78A','Grass':'AAB78A','Rock':'9B998B'},
           'waterColor':'7C9EAB','waterTransparency':.48,'waterReflectance':.42,'waveSize':.14,'waveSpeed':5}
     (ROOT/'coast.json').write_bytes(json.dumps(data,separators=(',',':')).encode())
     (ROOT/'src/server/CoastData.json').write_bytes(json.dumps(data,separators=(',',':')).encode())
@@ -60,8 +60,8 @@ def add_coast(world,part,obj,cf):
         for z in range(-448,641,16):
             h=height_at(x,z)
             if h<-14:continue
-            color='B7AA8E' if h<-.15 or coast_distance(x,z)>-27 else '99926A'
-            p=part(folder['Children'],'Coast ground preview',(x,(h-40)/2,z),(16,h+40,16),color,'Sand' if color=='B7AA8E' else 'Ground')
+            color='CCBA96' if h<-.15 or coast_distance(x,z)>-27 else 'AAB78A'
+            p=part(folder['Children'],'Coast ground preview',(x,(h-40)/2,z),(16,h+40,16),color,'Sand' if color=='CCBA96' else 'Ground')
             p['Properties']['CastShadow']=False
     # Volumetric offshore islands also appear before Play, with the same sampled heights.
     def preview_part(parent,name,pos,size,color,material,shape,rot,collide):

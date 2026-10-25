@@ -26,7 +26,7 @@ for name in ['Arrival title','Arrival direction']:
 assert len([p for p in parts if p.get('Name')=='Water access step'])==12
 # Compare source geometry and native wedges independently for rock and pine assets.
 instances=json.loads((R/'nature-instances.json').read_text());models=next(n for n in nodes if n.get('Name')=='ImportedNature')['Children']
-for idx in [0,next(i for i,p in enumerate(instances) if p['model']=='tree_pineTallA')]:
+for idx in [0,next(i for i,p in enumerate(instances) if p['model']=='tree_oak')]:
  a=instances[idx];m=models[idx];verts=[]
  for line in (R/f"assets/nature/kenney/{a['model']}.obj").read_text().splitlines():
   if line.startswith('v '):verts.append(tuple(map(float,line.split()[1:4])))
@@ -46,7 +46,7 @@ wind=(R/'src/shared/ThirdParty/WindShake/init.lua').read_bytes();assert hashlib.
 assert 'Pixelated' not in (R/'src/shared/RasterRenderer.lua').read_text(encoding='utf-8')
 # Prevent the overlapping HUD/tool controls that a callback-only test cannot catch.
 for width in [360,390,768,1440]:
- hud_right=width*.035+min(width-170,380);phone_left=width*.965-132
+ hud_right=width*.035+min(width-126,360);phone_left=width*.965-90
  assert hud_right+4<phone_left
-assert len([p for p in parts if p['ClassName']=='WedgePart'])>14000
+assert len([p for p in parts if p['ClassName']=='WedgePart'])>10000
 print(f'PASS: {len(parts)} parts; actual 3D sun/ridges/clouds; no image walls; continuous seabed, original OBJ bounds, eight targets, source branding and HUD/control separation')

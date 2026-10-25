@@ -1,5 +1,5 @@
 {
-  "version": "6.0.0",
+  "version": "6.1.0",
   "date": "2026-10-25",
   "companySource": "Original company assets supplied in this task and used by dm-partner-guide",
   "companyAssets": {
@@ -85,7 +85,7 @@
       "name": "Kenney Nature Kit",
       "url": "https://kenney.nl/assets/nature-kit",
       "license": "CC0-1.0",
-      "implementation": "Original OBJ vertices/faces converted into native WedgePart geometry"
+      "implementation": "Original OBJ vertices/faces converted into native WedgePart geometry; recoloured coastal palette and clustered broadleaf groves in v6.1"
     },
     {
       "name": "WindShake",

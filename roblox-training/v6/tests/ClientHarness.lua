@@ -15,13 +15,15 @@ local map=Mock.Instance.new('Model');map.Name='TrainingMap';map.Parent=H.workspa
 for _,name in ipairs({'Manager','ProfileDesk','ConnectDesk','beauty_sample','Mailbox','ReplyDesk'})do
  local p=Mock.Instance.new('Part');p.Name='Target_'..name;p.Position=H.Vector3.new(0,4,0);p.Parent=map
 end
-H.player=Mock.Instance.new('Player');local char=Mock.Instance.new('Model');H.player.Character=char
+H.player=Mock.Instance.new('Player');H.player.DisplayName='테스트 파트너';local char=Mock.Instance.new('Model');H.player.Character=char
 local root=Mock.Instance.new('Part');root.Name='HumanoidRootPart';root.Position=H.Vector3.new(0,4,0);root.Parent=char
 H.gui=Mock.Instance.new('ScreenGui')
 H.remote=Mock.Instance.new('RemoteEvent');H.remote.Name='CampusEvent';H.remote.OnClientEvent=event()
 function H.remote:FireServer(packet)
  table.insert(H.packets,packet)
  if packet.kind=='hello'then self.OnClientEvent:Fire({kind='state',state=H.state})
+ elseif packet.kind=='resume'then self.OnClientEvent:Fire({kind='open',state=H.state,profile=data.phases[H.state.phase].target})
+ elseif packet.kind=='travel'then self.OnClientEvent:Fire({kind='arrived',state=H.state,text='도착'})
  elseif packet.kind=='apply'then
   assert(packet.revision==H.state.revision,'valid client revision')
   local q=data.phases[H.state.phase]

@@ -1,22 +1,24 @@
 {
-  "version": "6.0.0",
+  "version": "6.1.0",
   "date": "2026-10-25",
   "status": "review-build",
   "verification": {
-    "nativeClientAndServerCallbacks": "passed using exported-source adapters",
+    "phoneInput": "no click activation handler; deliberate equip, P and explicit button only",
+    "resumeAndTravel": "passed exported server/client callback adapters, current target and revision enforced",
+    "nativeClientAndServerCallbacks": "passed desktop and touch adapters, full campaign and partial task resume",
     "nativeWaterServer": "passed API/compatibility/failure/rescue adapters",
-    "terrainAndGeometry": "passed",
-    "webViewsAndMobilePage": "passed",
+    "terrainAndGeometry": "passed original geometry bounds, clear paths, continuous seabed",
+    "webViewsAndMobilePage": "passed local browser checks",
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6.rbxl": {
-      "bytes": 2721322,
-      "sha256": "fae7e2c7707e4864b09177a94c347d5d304883f6aafbd9eccb473eb36818d0a2"
+    "SIRIAI_Recruiter_Island_v6_1.rbxl": {
+      "bytes": 2561972,
+      "sha256": "e4bd85d400540caa36bc6820f74bff890271cdd0424bde19857b4d3f95c7fb12"
     },
-    "SIRIAI_Recruiter_Island_v6_Source.zip": {
-      "bytes": 12536439,
-      "sha256": "24086e2775dc71fb89eb6ed2163d4f4412631c230cc3b4e5c4e4ad5aaad99701"
+    "SIRIAI_Recruiter_Island_v6_1_Source.zip": {
+      "bytes": 12039970,
+      "sha256": "d1aa8f433d644854a7a22534a44df5adb7c5eeb714fbab87f6124c56d609faae"
     }
   }
 }

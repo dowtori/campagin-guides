@@ -1,4 +1,4 @@
-"""Build v5: safe shoreline, original company guide visuals, native nature imports."""
+"""Build v6.1: native coastal terrain, clustered nature and original company visuals."""
 import json,math,random
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
@@ -14,7 +14,7 @@ def obj(name,cls,props=None,children=None):return {'Name':name,'ClassName':cls,'
 def part(parent,name,pos,size,color=PAPER,material='SmoothPlastic',shape='Block',rot=(0,0,0),trans=0,collide=True):
     p=obj(name,'Part',{'Anchored':True,'CanCollide':collide,'CanTouch':False,'CanQuery':collide,'Size':list(size),'CFrame':cf(pos,rot),'Color':rgb(color),'Material':material,'Transparency':trans,'TopSurface':'Smooth','BottomSurface':'Smooth','Shape':shape,'CastShadow':material!='Neon' and not name.startswith(('Reed ','Kenney grass'))})
     if shape=='Wedge':p['ClassName']='WedgePart';p['Properties'].pop('Shape',None)
-    parent.append(p);record={'name':name,'position':list(pos),'size':list(size),'rotation':list(rot),'color':'#'+color,'shape':shape,'material':material,'transparency':trans,'shadow':material!='Neon' and not name.startswith(('Reed ','Kenney grass')),'wind':name.startswith('Reed ')};scene.append(record);part_records[id(p)]=record
+    parent.append(p);record={'name':name,'position':list(pos),'size':list(size),'rotation':list(rot),'color':'#'+color,'shape':shape,'material':material,'transparency':trans,'shadow':material!='Neon' and not name.startswith(('Reed ','Meadow ','Kenney grass')),'wind':name=='Meadow blade'};scene.append(record);part_records[id(p)]=record
     return p
 def sign(parent,name,pos,size,title,color=INK,bg=PAPER,rot=(0,0,0)):
     p=part(parent,name,pos,size,bg,rot=rot,collide=False)
@@ -122,14 +122,14 @@ sign(world,'Arrival direction',(26,3.5,97),(18,2.5,.3),'매니저에게 다가�
 for x in [-16,16]:part(world,'Arrival bollard',(x,2.1,94),(.8,3,.8),'6C6370','Wood')
 # Final reward is a real object beside the sea: a branded pin sculpture and seats.
 raster(world,'Lookout brand',(0,7,-341),(5,5,.3),'logoWhite',bg=INK)
-sign(world,'Version plate',(-13,2.2,110),(8,1.4,.2),'SIRIAI v6','FFFFFF',INK)
+sign(world,'Version plate',(-13,2.2,110),(8,1.4,.2),'SIRIAI v6.1','FFFFFF',INK)
 for x,z in [(-34,64),(-48,38),(-19,38),(-50,-28),(46,-30)]:
     part(world,'Quest paving marker',(x,1.01,z),(2.7,.12,2.7),PINK,'Neon',collide=False)
 # New-world data remains independent of every previous training implementation.
-env.update(version='6.0.0',views={'sunset':{'position':[0,8,-205],'target':[70,34,-850]},'overview':{'position':[164,143,172],'target':[0,3,-30]},'agency':{'position':[-12,17,103],'target':[-34,6,38]},'garden':{'position':[-19,18,-12],'target':[-50,5,-63]}})
+env.update(version='6.1.0',views={'sunset':{'position':[0,8,-205],'target':[70,34,-850]},'overview':{'position':[164,143,172],'target':[0,3,-30]},'agency':{'position':[-12,17,103],'target':[-34,6,38]},'garden':{'position':[-19,18,-12],'target':[-50,5,-63]}})
 model=obj('TrainingMap','Model',children=[obj('Architecture','Folder',children=world)]);model.pop('Name',None)
 for name,value in [('map/TrainingMap.model.json',model),('scene.json',scene),('environment.json',env)]:
     (ROOT/name).write_text(json.dumps(value,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
-project={'name':'SIRIAI Recruiter Island v6','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','Clouds':{'$className':'Clouds','$properties':{'Cover':.28,'Density':.25,'Color':rgb('D6C2D9')}}}},'Lighting':{'$properties':{'Ambient':rgb('8F7B9E'),'OutdoorAmbient':rgb('A494B7'),'Brightness':2,'ClockTime':18.05,'GeographicLatitude':28,'GlobalShadows':True,'ShadowSoftness':.7,'ColorShift_Top':rgb('F6BD93'),'EnvironmentDiffuseScale':.85,'EnvironmentSpecularScale':.65},'Atmosphere':{'$className':'Atmosphere','$properties':{'Density':.21,'Offset':.12,'Color':rgb('CDB1C9'),'Decay':rgb('8375A4'),'Haze':1.2,'Glare':.15}},'Sky':{'$className':'Sky','$properties':{'CelestialBodiesShown':False,'StarCount':0}},'Bloom':{'$className':'BloomEffect','$properties':{'Intensity':.14,'Size':24,'Threshold':1.5}}},'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
+project={'name':'SIRIAI Recruiter Island v6.1','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True},'Clouds':{'$className':'Clouds','$properties':{'Cover':.28,'Density':.25,'Color':rgb('E1D5C6')}}}},'Lighting':{'$properties':{'Ambient':rgb('9B9488'),'OutdoorAmbient':rgb('B6AC98'),'Brightness':2,'ClockTime':17.7,'GeographicLatitude':28,'GlobalShadows':True,'ShadowSoftness':.7,'ColorShift_Top':rgb('F6BD93'),'EnvironmentDiffuseScale':.85,'EnvironmentSpecularScale':.65},'Atmosphere':{'$className':'Atmosphere','$properties':{'Density':.24,'Offset':.12,'Color':rgb('DBCAAE'),'Decay':rgb('9DABB5'),'Haze':1.2,'Glare':.15}},'Sky':{'$className':'Sky','$properties':{'CelestialBodiesShown':False,'StarCount':0}},'Bloom':{'$className':'BloomEffect','$properties':{'Intensity':.14,'Size':24,'Threshold':1.5}}},'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
 (ROOT/'default.project.json').write_text(json.dumps(project,indent=2),encoding='utf-8')
 print('v6 fresh world:',len(scene),'parts, 3 job locations, 4 NPCs, 8 contextual targets; no scenery images')

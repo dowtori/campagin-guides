@@ -41,7 +41,7 @@ local MT={
  end
 }
 Mock.Instance={new=function(class)
-    return setmetatable({props={ClassName=class,Name=class,AbsoluteSize={X=Mock.width,Y=300}},events={Activated=event(),Destroying=event(),ChildAdded=event()},children={},changes={}},MT)
+    return setmetatable({props={ClassName=class,Name=class,AbsoluteSize={X=Mock.width,Y=300}},events={Equipped=event(),Activated=event(),Destroying=event(),ChildAdded=event()},children={},changes={}},MT)
 end}
 Mock.Color3={fromRGB=function(r,g,b)return {r,g,b}end,fromHex=function(s)return s end,new=function(r,g,b)return {r,g,b}end}
 Mock.UDim={new=function(s,o)return {Scale=s,Offset=o}end}
