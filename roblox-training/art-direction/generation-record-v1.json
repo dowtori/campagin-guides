@@ -1,0 +1,10 @@
+{
+  "title": "디지털 갈대 정원",
+  "createdAt": "2026-10-25",
+  "tool": "Built-in image_gen",
+  "purpose": "Original art-direction concept; not a Roblox runtime screenshot",
+  "prompt": "Use case: stylized-concept. Create a NEW original art-direction concept image for a Korean Roblox employee training world named Digital Reed Garden, landscape 16:9 composition. This is mood/concept art, not a fake screenshot of an existing game. Original scene: foreground of abundant golden reeds with feathered plumes, a narrow weathered boardwalk winding asymmetrically from the lower left through reeds to a calm lake on the right. Tiny warm timber open learning pavilions partially hidden among reeds on the left. Lavender and deep indigo twilight sky above apricot light at the horizon. Memorable original focal sculpture: TWO BROKEN OFFSET RHOMBUS FRAMES suspended above the lake, open empty center, made from dark ceramic voxel segments; slender cyan light along a few edges; a loose trail of tiny square amber and turquoise particles, no body parts. Calm and slightly uncanny, contemplative, nostalgic early computer dream atmosphere. Fine hand-dithered pixel art with convincing deliberate 2px clusters, crisp stepped silhouettes, limited 48-color palette, natural detailed pixel foliage, painterly pixel clouds, subtle static grain. Visually sophisticated game environment concept rather than isometric icon art. Wide spacious composition with the floating structure off-center right and a low horizon, eye-level perspective, layered atmospheric depth. No text, no logos, no desktop UI, no watermarks, no eyes, no hands, no human figures, no religious symbols, no blood, no grass-hill photo or recognizable operating-system wallpaper, no imitation of any particular artist or identifiable existing artwork. Do not reproduce the user's reference composition. Deliver only the original landscape illustration.",
+  "inputReferencePixelsUsed": false,
+  "referenceTreatment": "Mood analysis only. No supplied image pixels, desktop UI, eye or hands copied, extracted, embedded or distributed.",
+  "asset": "digital-reed-garden-concept.png"
+}
