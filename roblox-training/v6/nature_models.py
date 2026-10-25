@@ -93,7 +93,7 @@ def add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum):
         for dx,dz,scale in [(0,0,17),(-9,4,10),(12,2,12)]:
             place('stone_largeC' if dx else 'stone_largeD',cx+dx,cz+dz,scale,rng.uniform(0,360))
     # Low understorey borders terraces; it never intrudes into a work target.
-    for x,z,scale in [(-70,23,10),(-70,37,9),(-66,67,9),(-10,67,8),(-88,-78,10),(-42,-83,9),(-15,-61,8),(76,-55,10),(76,-33,10),(28,-65,8)]:
+    for x,z,scale in [(-70,23,10),(-70,37,9),(-66,67,9),(-10,67,8),(-88,-78,10),(-42,-83,9),(-15,-72,8),(76,-55,10),(76,-33,10),(52,-62,8)]:
         place('plant_bushLarge',x,z,scale,rng.uniform(0,360),'8E9C78')
     for x,z in [(-85,30),(-83,17),(-83,-3),(-70,-22),(-58,-23),(-9,51),(-9,67)]:
         for dx,dz,size in [(0,0,8),(3,2,5),(-2,3,6)]:place('plant_bushLarge',x+dx,z+dz,size,rng.uniform(0,360),'8E9C78')

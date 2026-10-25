@@ -1,6 +1,6 @@
 """Compact three-bay pavilion; scene and native boards have identical proportions."""
-def add_room(world,part,obj,sign,actor):
-    model=obj('AdvancedRoom','Model');world.append(model);c=model['Children']
+def add_room(world,part,obj,sign,actor,part_records):
+    model=obj('AdvancedRoom','Model');world.append(model);c=model['Children'];npcs=[]
     part(c,'Challenge floor',(60,.67,-73),(56,.5,36),'C5AD8D','WoodPlanks')
     part(c,'Challenge back wall',(60,13,-91),(56,24.5,1),'34343B')
     for x in [32,88]:
@@ -16,11 +16,26 @@ def add_room(world,part,obj,sign,actor):
         part(c,'Answer bay plinth',(x,1.05,-85),(12,.35,6),'D8C9B1','Sandstone')
         sign(c,'Choice floor number '+str(i),(x,1.26,-80.5),(3,3,.10),str(i),'FFFFFF','34343B',rot=(-90,0,0),collide=False)
         npc=actor('AnswerNPC'+str(i),x,-85,['6F8F8B','B5997E','A78F9E'][i-1],['51444A','242632','6C594C'][i-1])
+        npcs.append(npc)
         for p in npc['Children']:
             if p['ClassName'] in ['Part','WedgePart']:p['Properties'].update(CanCollide=False,CanQuery=False,Transparency=1)
     # A low desk is visible on arrival, below the answer buttons and NPC faces.
     part(c,'Challenge console pedestal',(60,1.9,-76),(12,2.0,2.2),'786B60','Wood')
     console=part(c,'ChallengeConsole',(60,3.35,-74.8),(13.5,4.5,.4),'27242F');console['Properties']['CanQuery']=True
-    for x in range(-32,61,2):part(c,'Challenge approach',(x,.83,-43),(2.1,.32,11),'B39770','WoodPlanks')
-    for z in range(-46,-56,-2):part(c,'Challenge approach',(60,.83,z),(11,.32,2.1),'B39770','WoodPlanks')
+    # Face the main boardwalk: rotate the whole pavilion and every NPC together.
+    # Old center (60,-73), opening toward +Z -> (26,-60), opening toward -X.
+    from nature_models import euler
+    def move(node):
+        f=node.get('Properties',{})
+        if 'CFrame' in f:
+            old=f['CFrame'];x,y,z=old[:3];m=old[3:]
+            matrix=[-v for v in m[6:9]]+m[3:6]+m[:3]
+            position=[26-(z+73),y,-60+(x-60)]
+            f['CFrame']=position+matrix
+            rec=part_records.get(id(node))
+            if rec:rec.update(position=position,rotation=list(euler(matrix)),matrix=matrix)
+        for child in node.get('Children',[]):move(child)
+    for node in [model]+npcs:move(node)
+    # One straight 42-stud branch from the existing boardwalk to the open front.
+    for x in range(-34,9,2):part(c,'Challenge approach',(x,.83,-60),(2.1,.32,11),'B39770','WoodPlanks')
     return model

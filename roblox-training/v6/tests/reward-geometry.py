@@ -35,7 +35,7 @@ for p in boards:
  assert f['CanQuery'] and f['CanCollide']
 console=next(n for n in nodes if n.get('Name')=='ChallengeConsole')['Properties']
 assert console['CFrame'][1]+console['Size'][1]/2<6.0,'low console clears NPC faces and answer buttons'
-assert console['CFrame'][0]==60,'central console reachable from entry'
+assert console['CFrame'][2]==-60,'central console reachable from entry'
 room=json.loads((r/'src/shared/AdvancedData.json').read_text(encoding='utf-8'))['room']
 floor=next(n for n in nodes if n.get('Name')=='Challenge floor')['Properties']
 assert floor['Size'][0]*floor['Size'][2]<=92*68*.5

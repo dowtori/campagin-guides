@@ -56,7 +56,7 @@ local session=Session.new(E,D,R,{
  clock=function()return clock end,rotation=function()return 0 end,
  send=function(p,packet)sent[p]=packet end,sync=function()end,notice=function(p,t)notices[p]=t end
 })
-session.handle('a',{kind='enter',id='scout'});check(positions.a.X==60,'server destination')
+session.handle('a',{kind='enter',id='scout'});check(positions.a.X==D.room.arrival[1],'server destination')
 session.handle('b',{kind='enter',id='fee'});check(states.a.advanced.run.id=='scout','players isolated')
 session.handle('a',{kind='start',token=states.a.advanced.run.token})
 session.handle('b',{kind='start',token=states.b.advanced.run.token})

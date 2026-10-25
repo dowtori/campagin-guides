@@ -30,7 +30,7 @@ for n in p:
   f=n['Properties'];x,y,z=f['CFrame'][:3]
   assert y-f['Size'][1]/2<=height_at(x,z)
   assert abs(y+f['Size'][1]/2-top)<1e-6
-items=list(ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_15.rbxlx').getroot().iter('Item'))
+items=list(ET.parse(R/'downloads/SIRIAI_Recruiter_Island_v6_16.rbxlx').getroot().iter('Item'))
 def prop(i,k):return i.find("Properties/*[@name='"+k+"']")
 light=next(i for i in items if i.get('class')=='Lighting')
 atmo=next(i for i in items if i.get('class')=='Atmosphere')

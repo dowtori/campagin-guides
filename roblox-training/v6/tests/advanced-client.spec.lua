@@ -18,7 +18,7 @@ local now=0;function H.workspace:GetServerTimeNow()return now end
 local state={completed={},record={}}
 for _,id in ipairs({'brief','profile','connect','discover','send','reply','settle'})do state.completed[id]=true end
 local session=Session.new(E,D,R,{state=function()return state end,clock=function()return now end,
- position=function()return {X=60,Y=4,Z=-80}end,rotation=function()return 1 end,travel=function()error('already inside')end,
+ position=function()return {X=D.room.arrival[1],Y=D.room.arrival[2],Z=D.room.arrival[3]}end,rotation=function()return 1 end,travel=function()error('already inside')end,
  send=function(_,packet)remote.OnClientEvent:Fire(packet)end,sync=function()end,notice=function()end})
 function remote:FireServer(p)session.handle('me',p)end
 local closed=0;local client=require('./AdvancedClient').start(H.gui,function()closed+=1 end,function()end)

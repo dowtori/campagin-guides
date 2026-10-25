@@ -13,7 +13,7 @@ H.send({kind='hello'});local s=H.last().state
 remote.OnServerEvent:Fire(H.player,{kind='enter',id='scout'});check(H.last().kind=='notice' and not s.advanced,'basic gate in server')
 for _,q in ipairs(data.phases)do s.completed[q.id]=true end
 remote.OnServerEvent:Fire(H.player,{kind='enter',id='scout'})
-check(H.root.Position.X==60 and H.root.Position.Z==D.room.arrival[3],'native teleport arrival')
+check(H.root.Position.X==D.room.arrival[1] and H.root.Position.Z==D.room.arrival[3],'native teleport arrival')
 check(packets[#packets].run.status=='brief','client receives world reading state')
 local token=s.advanced.run.token;remote.OnServerEvent:Fire(H.player,{kind='start',token=token})
 now=30;run.Heartbeat:Fire(.2);check(s.advanced.run.status=='timeout','server heartbeat timeout')

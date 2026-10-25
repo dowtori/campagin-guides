@@ -49,7 +49,7 @@ try{
     const geom=p.shape==='Wedge'?wedge:p.shape==='Ball'?sphere:p.shape==='Cylinder'?cylinder:box,m=material(p),key=geom.uuid+m.uuid+Boolean(p.shadow);
     if(!p.name.startsWith('Pixel twilight')){if(!batches.has(key))batches.set(key,{geom,material:m,shadow:p.shadow!==false&&p.material!=='Neon'&&p.transparency<.6&&!p.name.startsWith('Distant')&&!p.name.startsWith('Floating')&&!p.name.startsWith('Cyan'),parts:[]});batches.get(key).parts.push(p);}partCount++;
     if(p.label||p.art||p.raster){
-      const group=new THREE.Group();group.position.fromArray(p.position);group.rotation.set(...p.rotation.map(v=>v*Math.PI/180),'XYZ');
+      const group=new THREE.Group();group.position.fromArray(p.position);group.rotation.set(...p.rotation.map(v=>v*Math.PI/180),'XYZ');if(p.matrix){const m=p.matrix;rotationMatrix.set(m[0],m[1],m[2],0,m[3],m[4],m[5],0,m[6],m[7],m[8],0,0,0,0,1);group.quaternion.setFromRotationMatrix(rotationMatrix);}
       if(p.label){
         const ink=['#252420','#ff234b','#695540'].includes(p.color.toLowerCase())||p.name==='Back number';
         const plane=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0]*.94,p.size[1]*(p.art?.22:.9)),new THREE.MeshBasicMaterial({map:labelTexture(p.label,p.size[0],p.size[1]),transparent:true,color:p.labelColor||(ink?0xffffff:0x33291e),depthWrite:false}));plane.position.z=p.size[2]/2+.025;if(p.art)plane.position.y=-p.size[1]*.34;group.add(plane);
@@ -111,7 +111,7 @@ try{
       ctx.fillStyle='#df1940';ctx.fillRect(30,372,690,74);lines(previewChallenge.timed?'이 크리에이터 선택':'이 답변 선택',375,409,30,'#fff');
     }
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
-    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0],p.size[1]),new THREE.MeshBasicMaterial({map:texture,toneMapped:false}));mesh.position.set(p.position[0],p.position[1],p.position[2]+p.size[2]/2+.04);scene.add(mesh);
+    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(p.size[0],p.size[1]),new THREE.MeshBasicMaterial({map:texture,toneMapped:false}));const m=p.matrix||[1,0,0,0,1,0,0,0,1];const offset=p.size[2]/2+.04;mesh.position.set(p.position[0]+m[2]*offset,p.position[1]+m[5]*offset,p.position[2]+m[8]*offset);rotationMatrix.set(m[0],m[1],m[2],0,m[3],m[4],m[5],0,m[6],m[7],m[8],0,0,0,0,1);mesh.quaternion.setFromRotationMatrix(rotationMatrix);scene.add(mesh);
   }
   if(!portrait)await Promise.all(parts.filter(p=>p.name==='ConditionBoard'||p.name==='ChallengeConsole'||p.name.startsWith('ChoiceBoard')).map(boardTexture));
   // The same height samples used for native terrain drive this continuous preview mesh.

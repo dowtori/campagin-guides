@@ -41,6 +41,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         part(world,'Seat back',(x,3,-330.9),(6,1.9,.3),'B6966D','Wood')
         for dx in [-2.3,2.3]:part(world,'Seat feet',(x+dx,1.2,-332),(.4,1.3,1.9),'876D51','Wood')
     for x,z in [(cx+s,z) for cx,z in [(-34,43),(-34,-15),(-34,-60),(0,-101),(0,-140),(0,-179),(0,-218),(0,-259),(0,-298),(0,-337)] for s in [-8,8]]:
+        if x==-26 and z==-60:z=-52
         part(world,'Path lantern post',(x,1.55,z),(.22,1.2,.22),'8F7655','Wood')
         lamp=part(world,'Path lantern',(x,2.35,z),(.7,.85,.7),'FFDC98','Neon')
         lamp['Children'].append(obj('Glow','PointLight',{'Color':rgb('FFD598'),'Brightness':.5,'Range':13,'Shadows':False}))
@@ -52,6 +53,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
              (-117,-113,25,30),(102,-112,29,32),(-49,108,35,21),(59,77,28,30)]
     def allowed(x,z):
         if 7<x<113 and -120<z<-35:return False
+        if 2<x<50 and -95<z<-26:return False
         if distance_to_path(x,z)<11 or height_at(x,z)<-.2 or height_at(x,z)>5:return False
         if any(abs(x-cx)<35 and abs(z-cz)<29 for cx,cz in centers):return False
         if abs(x)<35 and z>0:return False
