@@ -3,8 +3,8 @@ local Players = game:GetService('Players')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local ProximityPromptService = game:GetService('ProximityPromptService')
 local HttpService = game:GetService('HttpService')
-local Curriculum = require(script.Parent.Curriculum)
-local Engine = require(script.Parent.TrainingEngine)
+local Curriculum = require(script.Parent:WaitForChild('Curriculum'))
+local Engine = require(script.Parent:WaitForChild('TrainingEngine'))
 local remote = ReplicatedStorage:WaitForChild('TrainingEvent')
 local map = workspace:WaitForChild('TrainingMap')
 local stations = map:WaitForChild('Stations')
@@ -16,7 +16,7 @@ end
 
 local function getSession(player)
     if not sessions[player] then
-        sessions[player] = {state = Engine.new(), token = '', checkpoint = 0, lastJump = -10, lastHello = -10}
+        sessions[player] = {state = Engine.new(), token = '', checkpoint = 0, lastJump = -10, lastHello = -10, lastOpen=-10}
     end
     return sessions[player]
 end
@@ -37,7 +37,7 @@ end
 local function publicStages()
     local result = {}
     for _, stage in ipairs(Curriculum.stages) do
-        table.insert(result, {id = stage.id, title = stage.title, subtitle = stage.subtitle, color = stage.color})
+        table.insert(result, {id = stage.id, title = stage.title, subtitle = stage.subtitle, color = stage.color, position=stage.position})
     end
     return result
 end
@@ -55,11 +55,11 @@ local function teleport(player, id)
     end
     local position, focus
     if id == 0 then
-        position, focus = Vector3.new(0, 4, 42), Vector3.new(0, 4, -30)
+        position, focus = Vector3.new(0, 4, 60), Vector3.new(0, 4, -30)
     elseif id == 8 then
-        position, focus = Vector3.new(0,4,-263), Vector3.new(-200,40,-615)
+        position, focus = Vector3.new(0,4,-326), Vector3.new(-65,40,-690)
     elseif id == 7 then
-        position, focus = Vector3.new(0, 4, -143), Vector3.new(0, 7, -158)
+        position, focus = Vector3.new(0, 4, -222), Vector3.new(0, 7, -235)
     else
         local p = Curriculum.stages[id].position
         position = Vector3.new(p[1], 4, p[3] + 13)
@@ -70,14 +70,20 @@ local function teleport(player, id)
     character:PivotTo(CFrame.lookAt(position, Vector3.new(focus.X, position.Y, focus.Z)))
 end
 
-local function atTerminal(player, id)
-    local root = player.Character and player.Character:FindFirstChild('HumanoidRootPart')
-    return root and (root.Position - terminals[id].Position).Magnitude <= 27
+local function atTerminal(player,id)
+    local stage=Curriculum.stages[id]
+    local root=player.Character and player.Character:FindFirstChild('HumanoidRootPart')
+    if not stage or not root then return false end
+    local p=stage.position
+    return math.abs(root.Position.X-p[1])<=26 and math.abs(root.Position.Z-p[3])<=25 and math.abs(root.Position.Y-4)<20
 end
 
 local function openStage(player, id)
+    if type(id)~='number' or id%1~=0 or not Curriculum.stages[id] then return end
     if not atTerminal(player, id) then return end
     local session = getSession(player)
+    if os.clock()-session.lastOpen<.4 then return end
+    session.lastOpen=os.clock()
     local ok, reason = Engine.open(session.state, Curriculum, id)
     if not ok then notice(player, reason) return end
     session.checkpoint = id
@@ -100,13 +106,15 @@ remote.OnServerEvent:Connect(function(player, packet)
         session.lastHello = os.clock()
         remote:FireClient(player, {kind = 'welcome', stages = publicStages(), snapshot = Engine.snapshot(session.state, Curriculum)})
         sync(player)
+    elseif packet.kind == 'open' then
+        openStage(player,packet.stage)
     elseif packet.kind == 'answer' then
         if type(packet.token) ~= 'string' or packet.token ~= session.token or not session.state.active then return end
         local activeId = session.state.active.stage
         if not atTerminal(player, activeId) then
             session.token = ''
             session.state.active = nil
-            remote:FireClient(player, {kind = 'close', text = '단말기 가까이에서 다시 시작해주세요.'})
+            remote:FireClient(player, {kind = 'close', text = '부스 안에서 미션 시작을 다시 눌러주세요.'})
             return
         end
         session.token = '' -- consume nonce before processing the answer
@@ -174,4 +182,4 @@ end
 Players.PlayerAdded:Connect(onPlayer)
 Players.PlayerRemoving:Connect(function(player) sessions[player] = nil end)
 for _, player in ipairs(Players:GetPlayers()) do onPlayer(player) end
-print('[SIRIAI] Training Campus loaded: 6 stations / 18 activities')
+print('[SIRIAI v4] Ready: 6 booths, 18 activities, E + on-screen mission entry')

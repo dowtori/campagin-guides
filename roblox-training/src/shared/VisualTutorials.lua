@@ -1,7 +1,8 @@
 -- Visual task workbenches. Every picture is drawn from original layered shapes;
 -- no uploaded image IDs, editable-image permissions or external services are required.
 local V = {}
-local Assets = require(script.Parent.VisualAssets)
+local Assets = require(script.Parent:WaitForChild('VisualAssets'))
+local Raster=require(script.Parent:WaitForChild('RasterRenderer'))
 local TweenService = game:GetService('TweenService')
 local C={paper=Color3.fromRGB(251,250,247),ink=Color3.fromRGB(28,27,25),muted=Color3.fromRGB(111,109,104),line=Color3.fromRGB(229,227,221),soft=Color3.fromRGB(239,237,231),pink=Color3.fromRGB(255,35,75),green=Color3.fromRGB(39,128,103),white=Color3.new(1,1,1)}
 local function color(s) return Color3.fromHex(s) end
@@ -33,6 +34,8 @@ local function tap(p,s,x,y,w,h,action,bg)
     return b
 end
 local function art(p,key,pos,size)
+    local actual=({brand='logo',mail='booth4',chat='booth5'})[key]
+    if actual then return Raster.draw(p,actual,pos,size) end
     local source=Assets[key] or Assets.empty
     local root=make('Frame',p,{Name='Art_'..key,Position=pos,Size=size,BackgroundColor3=color(source.bg),BorderSizePixel=0,ClipsDescendants=true})
     for _,s in ipairs(source.shapes) do
@@ -85,13 +88,27 @@ local function choices(ctx,items,change)
         end)
     end
 end
+local function referenceImage(ctx,key,title)
+    local toggle=ctx.button(ctx.body,title,{TextSize=14,Size=UDim2.new(1,0,0,46),BackgroundColor3=C.soft})
+    local panel=frame(ctx,440,C.white);panel.Visible=false
+    local loaded=false
+    toggle.Activated:Connect(function()
+        panel.Visible=not panel.Visible
+        if panel.Visible and not loaded then
+            loaded=true
+            local picture=Raster.draw(panel,key,UDim2.fromScale(.05,.03),UDim2.fromScale(.9,.94))
+            make('UIAspectRatioConstraint',picture,{AspectRatio=key=='settings' and 280/402 or 280/465,AspectType=Enum.AspectType.FitWithinMaxSize})
+        end
+    end)
+end
 local function profile(ctx,q)
     local f=frame(ctx,272,C.white)
     label(f,'교육용 프로필 미리보기',.04,8,.92,20,11,C.muted)
     local portrait=art(f,'empty',UDim2.new(.04,0,0,42),UDim2.new(.16,0,0,70))
     local stats=label(f,'siriai_partner\n게시물 6     팔로워 · 팔로잉',.24,39,.7,66,16,C.ink,true)
     local bio=label(f,'프로필을 준비해주세요.',.04,119,.92,50,16,C.ink)
-    for i,key in ipairs({'beauty','skincare','travel'}) do art(f,key,UDim2.new(.04+(i-1)*.31,0,0,184),UDim2.new(.29,0,0,73)) end
+    Raster.draw(f,'profile',UDim2.new(.04,0,0,184),UDim2.new(.29,0,0,73))
+    for i,key in ipairs({'skincare','travel'}) do art(f,key,UDim2.new(.35+(i-1)*.31,0,0,184),UDim2.new(.29,0,0,73)) end
     if q.visual.field=='photo' then
         selectable(ctx,q.visual.tiles,146,function(b,item)
             art(b,item.art,UDim2.fromOffset(10,10),UDim2.new(1,-20,0,90))
@@ -127,6 +144,7 @@ local function flow(ctx,q)
     end)
 end
 local function options(ctx)
+    referenceImage(ctx,'options','제공된 실제 크롬 화면 보기')
     local f=frame(ctx,338,C.white)
     box(f,0,0,1,38,C.line)
     label(f,'‹   chrome://extensions  /  IG Lead Saver',.04,4,.92,30,13,C.muted)
@@ -140,6 +158,7 @@ local function options(ctx)
     ctx.primary('화면에서 옵션을 눌러주세요',nil,false)
 end
 local function connection(ctx,q)
+    referenceImage(ctx,'settings','제공된 실제 IG Lead Saver 설정 화면 보기')
     local f=frame(ctx,490,C.white)
     label(f,'IG Lead Saver  ·  구글시트 연결 연습',.05,12,.9,29,20,C.ink,true)
     local status=label(f,'1 / 5   주소와 저장자 이름을 넣어주세요.',.05,47,.9,30,14,C.pink,true)

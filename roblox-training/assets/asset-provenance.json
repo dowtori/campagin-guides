@@ -1,0 +1,53 @@
+{
+  "version": "4.0.0",
+  "date": "2026-10-25",
+  "includedInNativeMap": true,
+  "display": "Original image pixel data is included in RasterAssets. Images display through EditableImage when available and merged pixel rectangles otherwise. No asset IDs or external image downloads are required to see the supplied images.",
+  "companyAssets": [
+    {
+      "files": [
+        "assets/siriai-symbol.png",
+        "assets/siriai-symbol-white.png"
+      ],
+      "source": "User-provided SIRIAI profile setup material, already used in the public DM partner guide",
+      "use": "In-world welcome/booth brand signs and native profile/HUD"
+    },
+    {
+      "file": "assets/siriai-wordmark-white.png",
+      "source": "User-provided SIRIAI March 2026 design pack",
+      "use": "Welcome wordmark"
+    },
+    {
+      "file": "assets/siriai-profile-gradient.jpg",
+      "source": "User-provided SIRIAI profile image",
+      "use": "Native profile preview"
+    },
+    {
+      "files": [
+        "assets/ig-lead-saver-settings.png",
+        "assets/chrome-extension-options.png"
+      ],
+      "source": "User-provided extension screenshots, already in the public DM partner guide",
+      "use": "Expandable actual screenshot reference in native and web tutorials"
+    }
+  ],
+  "generatedAssets": [
+    {
+      "file": "assets/world-sky.png",
+      "tool": "Built-in image_gen (edit from our own approved red-sun concept)",
+      "prompt": "Create one production texture for the SKY AND DISTANT HORIZON of the supplied original pixel-art game concept. Preserve its beautiful lavender/indigo sky, apricot horizon, crisp pixel clouds and a small muted crimson sun near the FAR RIGHT horizon. This is a texture asset, NOT a game screenshot or a full landscape concept. Wide landscape 16:9. The TOP 85 percent of the image must be ONLY open pixel-art sky: indigo/violet overhead, gentle apricot at the bottom, textured pixel cloud bands, very sparse tiny stars. The BOTTOM 15 percent contains ONLY far distant dark violet mountain silhouettes fading into warm horizontal haze; the mountain tops never extend above the lower quarter. Place a small crimson red sun above the far-right ridge, about 4 percent of image width. No foreground, no reeds, no lake, no water, no boardwalk, no pavilions, no floating diamonds, no structures or UI, no writing. The image will be placed behind actual 3D reeds, a 3D lake and 3D floating diamond sculptures. Match the original pixel-art rendering and color palette; no photorealism, no smooth 3D, no blackwork, no gore or thorns. Original production background asset based on our own concept.",
+      "use": "Native 360-degree twilight backdrops and web 3D background"
+    },
+    {
+      "file": "assets/booth-art-atlas.png",
+      "tool": "Built-in image_gen",
+      "prompt": "Create a production sprite atlas of SIX DISTINCT original pixel-art illustrations for six stations in a Korean employee training Roblox world. Exact 3 columns by 2 rows of equal rectangular panels filling one landscape canvas, no gutters, no borders between panels. All six illustrations are fully contained in their own equal panel; keep at least 12 percent safe space within each panel. Same art style in all: crisp richly shaded 16-bit pixel art, dimensional objects, sophisticated editorial illustration, dark navy ink and warm cream highlights, colored atmospheric backdrops. TOP LEFT (rose/pink): elegant profile portrait card with a circular avatar silhouette and a small camera, no real person. TOP MIDDLE (violet): a cable plug connecting two glowing nodes with a stylized small spreadsheet window, no text. TOP RIGHT (mint green): magnifying glass hovering above three creator portrait thumbnails, no real identities. BOTTOM LEFT (warm amber): an open envelope sending a message with a clear completion checkmark. BOTTOM MIDDLE (dusty coral): two contrasting speech bubbles and a small coin to represent discussing a fee. BOTTOM RIGHT (cobalt blue): a compact calculator, gold coin stack, a simple rising bar chart and a completion stamp. These are visually distinctive posters, not app icons with just flat shapes. No letters, words, numbers, logos, signatures, watermarks or named brands. No existing artwork, copyrighted character or real interface screenshot imitation. Each object should be readable from a distance. Harmonize with a violet twilight golden reed marsh but keep each panel's color identity obvious. Deliver only the six-panel image atlas.",
+      "use": "Six distinct native booth art panels and web 3D image panels"
+    }
+  ],
+  "thirdPartyReferenceImageIncluded": false,
+  "licenses": [
+    "vendor/THREE-LICENSE.txt",
+    "assets/Pretendard-LICENSE.txt"
+  ]
+}

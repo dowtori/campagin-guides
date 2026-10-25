@@ -2,13 +2,20 @@
 local RunService = game:GetService('RunService')
 local folder = workspace:WaitForChild('TrainingMap'):WaitForChild('Architecture'):WaitForChild('MeadowReeds')
 local reeds, active = {}, {}
-for _, model in ipairs(folder:GetChildren()) do
-    if model:IsA('Model') then
-        local base = model:GetPivot()
-        local ground = CFrame.new(base.Position.X,0.2,base.Position.Z)
-        table.insert(reeds,{model=model,base=base,ground=ground,offset=ground:ToObjectSpace(base),phase=base.Position.X*.07+base.Position.Z*.05})
-    end
+local registered={}
+local function register(model)
+    if not model:IsA('Model') or registered[model] then return end
+    registered[model]=true
+    task.spawn(function()
+        local stem=model:WaitForChild('Reed stem',15)
+        if not stem or not model.Parent then return end
+        local base=model:GetPivot()
+        local ground=CFrame.new(stem.Position.X,0.2,stem.Position.Z)
+        table.insert(reeds,{model=model,base=base,ground=ground,offset=ground:ToObjectSpace(base),phase=stem.Position.X*.07+stem.Position.Z*.05})
+    end)
 end
+folder.ChildAdded:Connect(register)
+for _,model in ipairs(folder:GetChildren())do register(model)end
 local elapsed, selectionClock, drawClock = 0,2,0
 RunService.Heartbeat:Connect(function(dt)
     elapsed += dt

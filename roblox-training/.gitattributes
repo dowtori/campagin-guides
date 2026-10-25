@@ -5,3 +5,5 @@ downloads/*.rbxlx -diff
 map/*.model.json linguist-generated=true
 scene.json linguist-generated=true
 vendor/** -whitespace linguist-vendored=true
+
+*.rbxl binary

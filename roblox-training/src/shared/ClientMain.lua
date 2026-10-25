@@ -1,14 +1,21 @@
+local Client={}
+function Client.start()
 -- Native responsive Roblox UI. Mouse, touch and ProximityPrompt inputs are supported.
 local Players = game:GetService('Players')
 local Prompts = game:GetService('ProximityPromptService')
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
 local TweenService = game:GetService('TweenService')
 local UserInputService = game:GetService('UserInputService')
-local Visual = require(script.Parent.VisualTutorials)
+local Visual = require(script.Parent:WaitForChild('VisualTutorials'))
+local Raster = require(script.Parent:WaitForChild('RasterRenderer'))
+local RunService = game:GetService('RunService')
 local player = Players.LocalPlayer
 local remote = ReplicatedStorage:WaitForChild('TrainingEvent')
+local oldGui=player:WaitForChild('PlayerGui'):FindFirstChild('SiriaiTraining')
+if oldGui then oldGui:Destroy() end
 local gui = Instance.new('ScreenGui')
 gui.Name, gui.ResetOnSpawn, gui.ZIndexBehavior = 'SiriaiTraining', false, Enum.ZIndexBehavior.Sibling
+gui.DisplayOrder=20
 gui.Parent = player:WaitForChild('PlayerGui')
 local C = {paper=Color3.fromRGB(251,250,247), ink=Color3.fromRGB(28,27,25), muted=Color3.fromRGB(111,109,104), line=Color3.fromRGB(229,227,221), soft=Color3.fromRGB(239,237,231), pink=Color3.fromRGB(255,35,75), green=Color3.fromRGB(39,128,103)}
 local stages, snapshot = {}, {progress=1,completed=0,flags={},total=6,finished=false}
@@ -38,11 +45,12 @@ local function button(parent, caption, props)
     return object
 end
 
-local hud = make('Frame',gui,{AnchorPoint=Vector2.new(0.5,0),Position=UDim2.new(.5,0,0,12),Size=UDim2.new(.94,0,0,92),BackgroundColor3=C.paper,BorderSizePixel=0})
+local hud = make('Frame',gui,{AnchorPoint=Vector2.new(0.5,0),Position=UDim2.new(.5,0,0,58),Size=UDim2.new(.94,0,0,92),BackgroundColor3=C.paper,BorderSizePixel=0})
 round(hud,18)
 make('UISizeConstraint',hud,{MaxSize=Vector2.new(840,92)})
-local hudBrand = text(hud,'SIRIAI  /  TRAINING CAMPUS',12,C.muted,true)
-hudBrand.Position,hudBrand.Size,hudBrand.AutomaticSize=UDim2.fromOffset(18,12),UDim2.new(1,-150,0,17),Enum.AutomaticSize.None
+Raster.draw(hud,'logo',UDim2.fromOffset(14,14),UDim2.fromOffset(24,24))
+local hudBrand = text(hud,'SIRIAI v4  /  TRAINING CAMPUS',12,C.muted,true)
+hudBrand.Position,hudBrand.Size,hudBrand.AutomaticSize=UDim2.fromOffset(47,12),UDim2.new(1,-150,0,17),Enum.AutomaticSize.None
 local hudTitle = text(hud,'캠퍼스에 오신 걸 환영해요',17,C.ink,true)
 hudTitle.Position,hudTitle.Size,hudTitle.AutomaticSize=UDim2.fromOffset(18,33),UDim2.new(1,-156,0,24),Enum.AutomaticSize.None
 hudTitle.TextWrapped,hudTitle.TextTruncate=false,Enum.TextTruncate.AtEnd
@@ -72,7 +80,7 @@ local secondary = button(footer,'닫기',{Size=UDim2.new(.3,-5,0,54),Position=UD
 local primary = button(footer,'시작하기',{Size=UDim2.new(.7,-5,0,54),Position=UDim2.new(.3,5,0,4),BackgroundColor3=C.pink,TextColor3=Color3.new(1,1,1),TextSize=16})
 local toast = make('TextLabel',gui,{AnchorPoint=Vector2.new(.5,0),Position=UDim2.new(.5,0,0,112),Size=UDim2.new(.9,0,0,65),BackgroundColor3=C.ink,BorderSizePixel=0,TextColor3=Color3.new(1,1,1),TextSize=15,Font=Enum.Font.Gotham,TextWrapped=true,Visible=false,ZIndex=5})
 round(toast,12) padding(toast,12) make('UISizeConstraint',toast,{MaxSize=Vector2.new(700,80)})
-local relaxButton = button(gui,'노을 산책  ↗',{AnchorPoint=Vector2.new(1,0),Position=UDim2.new(.97,0,0,112),Size=UDim2.fromOffset(144,36),TextSize=12,BackgroundColor3=Color3.fromRGB(241,222,187),BackgroundTransparency=.12})
+local relaxButton = button(gui,'노을 산책  ↗',{AnchorPoint=Vector2.new(1,0),Position=UDim2.new(.97,0,0,158),Size=UDim2.fromOffset(144,36),TextSize=12,BackgroundColor3=Color3.fromRGB(241,222,187),BackgroundTransparency=.12})
 local function setRelaxing(value)
     relaxing=value
     hud.Visible=not value
@@ -81,6 +89,24 @@ local function setRelaxing(value)
     if waypoint then waypoint.Enabled=not value end
     if nextHighlight then nextHighlight.Enabled=not value end
 end
+local nearbyId=nil
+local nearbyButton=button(gui,'부스 안에서 미션을 시작해요',{AnchorPoint=Vector2.new(.5,1),Position=UDim2.new(.5,0,1,UserInputService.TouchEnabled and -150 or -62),Size=UDim2.new(.86,0,0,52),TextSize=15,BackgroundColor3=C.pink,TextColor3=Color3.new(1,1,1),Visible=false})
+make('UISizeConstraint',nearbyButton,{MaxSize=Vector2.new(560,58)})
+nearbyButton.Activated:Connect(function()if nearbyId then remote:FireServer({kind='open',stage=nearbyId})end end)
+local proximityClock=0
+RunService.Heartbeat:Connect(function(dt)
+    proximityClock+=dt;if proximityClock<.2 then return end;proximityClock=0
+    nearbyId=nil
+    local root=player.Character and player.Character:FindFirstChild('HumanoidRootPart')
+    if root and not shade.Visible and not relaxing then
+        for _,stage in ipairs(stages) do
+            local p=stage.position
+            if p and math.abs(root.Position.X-p[1])<=24 and math.abs(root.Position.Z-p[3])<=23 and math.abs(root.Position.Y-4)<18 then nearbyId=stage.id break end
+        end
+    end
+    nearbyButton.Visible=nearbyId~=nil
+    if nearbyId then nearbyButton.Text=string.format('%02d %s  ·  미션 시작 [E]',nearbyId,stages[nearbyId].title) end
+end)
 local bodyOrder=0
 body.ChildAdded:Connect(function(child)
     if child:IsA('GuiObject') then bodyOrder+=1 child.LayoutOrder=bodyOrder end
@@ -101,6 +127,7 @@ local function clearBody()
     bodyOrder=0
 end
 local function show(tag,title)
+    nearbyButton.Visible=false
     setRelaxing(false)
     clearBody()
     headerTag.Text,headerTitle.Text=tag,title
@@ -311,9 +338,11 @@ end)
 mapButton.Activated:Connect(showMap)
 helpButton.Activated:Connect(showHelp)
 UserInputService.InputBegan:Connect(function(input,processed)
+    if not processed and input.KeyCode==Enum.KeyCode.E and nearbyId and not shade.Visible and not UserInputService:GetFocusedTextBox() then remote:FireServer({kind='open',stage=nearbyId}) end
     if not processed and input.KeyCode==Enum.KeyCode.M and not UserInputService:GetFocusedTextBox() then showMap() end
 end)
 remote.OnClientEvent:Connect(function(packet)
+    local ok,err=xpcall(function()
     if packet.kind=='welcome' then
         stages=packet.stages
         updateHud(packet.snapshot)
@@ -321,6 +350,7 @@ remote.OnClientEvent:Connect(function(packet)
     elseif packet.kind=='state' then
         updateHud(packet.snapshot)
     elseif packet.kind=='question' then
+        nearbyButton.Visible=false
         renderQuestion(packet.question,packet.token)
     elseif packet.kind=='result' then
         if shade.Visible then renderResult(packet) end
@@ -334,9 +364,17 @@ remote.OnClientEvent:Connect(function(packet)
     elseif packet.kind=='notice' then
         notify(packet.text)
     end
+    end,debug.traceback)
+    if not ok then close(false) notify('화면을 여는 중 오류가 발생했어요. 부스의 미션 시작을 다시 눌러주세요.') warn('[SIRIAI UI] '..tostring(err)) end
 end)
-for attempt=1,4 do
+task.spawn(function()
+for attempt=1,12 do
     remote:FireServer({kind='hello'})
     task.wait(3)
     if welcomed then break end
 end
+if not welcomed then notify('서버 연결을 기다리고 있어요. 단말기에서 E를 누르거나 미션지도를 열어주세요.') end
+end)
+
+end
+return Client

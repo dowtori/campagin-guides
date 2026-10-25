@@ -13,6 +13,10 @@ local function event()
     return e
 end
 local Methods={}
+function Methods:FindFirstChild(name)for _,c in ipairs(self.children)do if c.Name==name then return c end end end
+function Methods:WaitForChild(name)return assert(self:FindFirstChild(name),'Missing mocked child '..name)end
+function Methods:SetAttribute(key,value)self.props[key]=value end
+function Methods:GetDescendants()local r={} for _,c in ipairs(self.children)do table.insert(r,c)for _,d in ipairs(c:GetDescendants())do table.insert(r,d)end end return r end
 function Methods:GetChildren() return table.clone(self.children) end
 function Methods:IsA(name) return self.props.ClassName==name or (name=='GuiObject' and table.find({'Frame','TextButton','TextLabel','TextBox'},self.props.ClassName)~=nil) end
 function Methods:GetPropertyChangedSignal(key)
@@ -31,19 +35,22 @@ end
 local MT={
  __index=function(self,k) return Methods[k] or self.events[k] or self.props[k] end,
  __newindex=function(self,k,v)
-    if k=='Parent' and v then table.insert(v.children,self) end
+    if k=='Parent' and v then table.insert(v.children,self);if v.events.ChildAdded then v.events.ChildAdded:Fire(self)end end
     local old=self.props[k];self.props[k]=v
     if old~=v and self.changes[k] then self.changes[k]:Fire() end
  end
 }
 Mock.Instance={new=function(class)
-    return setmetatable({props={ClassName=class,Name=class,AbsoluteSize={X=Mock.width,Y=300}},events={Activated=event(),Destroying=event()},children={},changes={}},MT)
+    return setmetatable({props={ClassName=class,Name=class,AbsoluteSize={X=Mock.width,Y=300}},events={Activated=event(),Destroying=event(),ChildAdded=event()},children={},changes={}},MT)
 end}
 Mock.Color3={fromRGB=function(r,g,b)return {r,g,b}end,fromHex=function(s)return s end,new=function(r,g,b)return {r,g,b}end}
 Mock.UDim={new=function(s,o)return {Scale=s,Offset=o}end}
 Mock.UDim2={new=function(xs,xo,ys,yo)return {X={Scale=xs or 0,Offset=xo or 0},Y={Scale=ys or 0,Offset=yo or 0}}end}
-function Mock.UDim2.fromOffset(x,y)return Mock.UDim2.new(0,x,0,y)end
-function Mock.UDim2.fromScale(x,y)return Mock.UDim2.new(x,0,y,0)end
+function Mock.UDim2.fromOffset(x,y)Mock.event=event
+return Mock.UDim2.new(0,x,0,y)end
+function Mock.UDim2.fromScale(x,y)Mock.event=event
+return Mock.UDim2.new(x,0,y,0)end
 Mock.Enum=setmetatable({},{__index=function(_,k)return setmetatable({},{__index=function(_,v)return k..'.'..v end})end})
 Mock.game={GetService=function()return {}end}
+Mock.event=event
 return Mock
