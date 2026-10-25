@@ -32,8 +32,11 @@ function Session.new(Engine,data,Reward,env)
   elseif p.kind=='answer' then changed=Engine.answer(s,p.token,p.slot,data,env.clock())
   elseif p.kind=='retry' and run.status~='active' then changed=Engine.enter(s,run.id,data,env.rotation()) end
   if changed then
+   if not wasKing and Reward.summary(s).king and env.kingReward then
+    Engine.leave(s);active[player]=nil;env.kingReward(player)
+   end
    emit(player)
-   if not wasKing and Reward.summary(s).king then env.notice(player,'왕따봉 해금! 폰에서 따봉 보러 가기를 눌러봐요.') end
+   if not wasKing and Reward.summary(s).king and env.showKing then env.showKing(player)end
   end
  end
  function S.tick()
@@ -42,6 +45,7 @@ function Session.new(Engine,data,Reward,env)
    elseif Engine.tick(env.state(player),env.clock()) then emit(player) end
   end
  end
+ function S.reset(player)active[player]=nil;emit(player)end
  function S.remove(player)active[player]=nil end
  return S
 end

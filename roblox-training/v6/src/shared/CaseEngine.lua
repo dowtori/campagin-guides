@@ -13,6 +13,37 @@ local function collectionValid(p,data)
  return true
 end
 function Engine.new()return {phase=1,revision=0,complete=false,record={},completed={}}end
+function Engine.reset(state,id,data,advancedData)
+ local index,advancedId
+ if id~='all' then
+  for i,q in ipairs(data.phases)do if q.id==id then index=i end end
+  for _,q in ipairs((advancedData or {}).challenges or {})do if q.id==id then advancedId=id end end
+  if not index and not advancedId then return false end
+ end
+ local revision=state.revision+1
+ local serial=(state.advanced and state.advanced.serial or 0)+1
+ if id=='all' then
+  for k in pairs(state)do state[k]=nil end
+  for k,v in pairs(Engine.new())do state[k]=v end
+  state.advanced={completed={},attempts={},serial=serial}
+ else
+  if state.advanced then state.advanced.run=nil;state.advanced.serial=serial end
+  if index then
+   state.completed[id]=nil;state.phase=index;state.complete=false
+   state.exampleRecord=index>=6 and {sent=1,applied=index>=7} or nil
+   local r=state.record
+   if id=='profile' or id=='connect' then if r.setup then r.setup[id]=nil end
+   elseif id=='discover' then r.collected=nil;r.handle=nil
+   elseif id=='send' then r.sent=nil;r.status='연락전'
+   elseif id=='reply' then r.applied=nil;r.reaction=nil
+   elseif id=='settle' then r.selected=nil;r.selection=nil;r.total=nil end
+  elseif state.advanced then
+   state.advanced.completed[advancedId]=nil;state.advanced.attempts[advancedId]=nil
+  end
+ end
+ state.revision=revision
+ return true,index~=nil or id=='all'
+end
 function Engine.choose(state,id,data)
     if type(id)~='string' then return false,'챕터를 선택해주세요.' end
     local index=nil

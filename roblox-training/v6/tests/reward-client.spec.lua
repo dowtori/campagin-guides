@@ -25,8 +25,8 @@ for _,v in ipairs(fixture)do
  local p=H.Instance.new('Part');p.Name=v.name;p.Position=H.Vector3.new(unpack(v.position));p.Size=H.Vector3.new(unpack(v.size));p.Color=v.color;p.CFrame=H.CFrame.new(p.Position);p.Parent=model
  local tag=H.Instance.new('IntValue');tag.Name='ThumbStage';tag.Value=v.level;tag.Parent=p
 end
-local notifications={}
-local reward=require('./RewardClient').start(H.gui,function(t)table.insert(notifications,t)end)
+local notifications={};local calls=0;local panelOpen=false
+local reward=require('./RewardClient').start(H.gui,function()calls+=1 end,function()return not panelOpen end)
 local state={completed={}};local n=0
 local function check(v,m)n+=1;assert(v,m)end
 reward.sync(state)
@@ -65,6 +65,17 @@ for i,id in ipairs({'brief','profile','connect','discover','send','reply','settl
  checkPose(i)
  check(#notifications==0,'growth does not add detached toasts')
 end
+local prompt=base:FindFirstChild('ThumbChallengePrompt')
+check(prompt and prompt.Enabled and prompt.ActionText=='도전하기','earned thumb exposes native E/touch action')
+local visibleClick
+for _,p in ipairs(model:GetChildren())do
+ local cd=p:FindFirstChild('ThumbChallengeClick')
+ check(cd and cd.MaxActivationDistance==(p.Transparency==0 and 26 or 0),'hidden stages cannot receive clicks')
+ if p.Transparency==0 and p:FindFirstChild('ThumbStage').Value>0 then visibleClick=cd end
+end
+visibleClick.MouseClick:Fire(H.player);prompt.Triggered:Fire(H.player);check(calls==2,'hand click and native E both enter challenge')
+panelOpen=true;H.run.Heartbeat:Fire(.1);prompt.Triggered:Fire(H.player);check(not prompt.Enabled and calls==2,'work panel blocks background entry')
+panelOpen=false;H.run.Heartbeat:Fire(.1)
 local count=#notifications;reward.sync(state);check(#notifications==count,'same phase no duplicate')
 state.advanced={completed={}}
 for i,id in ipairs({'scout','fee','conditions'})do
@@ -77,7 +88,7 @@ for _,p in ipairs(model:GetChildren())do
  check(p.Transparency==(table.find(config.stages[11].groups,level) and 0 or 1),'king only shows one unadorned hand and its fixed pedestal')
  check(type(p.Material)=='string','valid enum material')
 end
-check(#notifications==0,'no separate king toast')
+check(#notifications==0,'no separate king toast');check(not prompt.Enabled,'king reward disables basic challenge prompt')
 for _,value in ipairs(notifications)do check(not value:find('점'),'reward notice excludes game points')end
 check(H.gui:FindFirstChild('ThumbEvolution')==nil,'detached 3D thumbnail removed')
 local root=H.player.Character:FindFirstChild('HumanoidRootPart')

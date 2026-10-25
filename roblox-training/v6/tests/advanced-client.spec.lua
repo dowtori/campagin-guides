@@ -58,4 +58,7 @@ check(state.advanced.run.status=='passed' and R.summary(state).bonus==1,'world b
 for _,o in ipairs(pg:GetDescendants())do if o.Text then check(not o.Text:find('%+%d+점'),'world results do not advertise game points')end end
 click('다시 도전');check(state.advanced.run.status=='brief','success replay available')
 session.leave('me');npcState(false);check(find('도전하기')~=nil,'room returns to idle after leaving')
+state.advanced.completed.scout=true;state.advanced.completed.fee=true
+client.sync(R.summary(state),state.advanced);client.enter()
+check(state.advanced.run.id=='conditions','thumb resume skips completed challenges')
 print('PASS: '..checks..' actual advanced-client callback checks; world surfaces, timers, NPC choices and retry')

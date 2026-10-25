@@ -30,5 +30,5 @@ local before=#H.clients;tool.Activated:Fire();expect(#H.clients==before,'click c
 tool.Equipped:Fire();expect(H.last().kind=='phone','equip opens phone')
 expect(H.last().state.complete and H.last().state.record.total==2300,'basic course completes')
 H.send({kind='apply',revision=#data.phases,action='settle',payload={reviewed=true,selectionRead=true}});expect(H.last().kind=='state','no duplicate settlement')
-H.send({kind='restart'});expect(H.root.Position.X==-34 and H.root.Position.Z==100 and H.last().state.phase==1,'replay returns to beginning, not across the island')
+H.send({kind='restart',scope='all',revision=H.last().state.revision});expect(H.root.Position.X==H.targets.Manager.Position.X and H.root.Position.Z==H.targets.Manager.Position.Z+7 and H.last().state.phase==1,'replay returns to beginning, not across the island')
 print('PASS: '..n..' native server checks; current destinations, three visits, continuous work, restart')

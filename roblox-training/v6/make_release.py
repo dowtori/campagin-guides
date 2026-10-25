@@ -1,10 +1,10 @@
-"""Package the already-built v6.16 place and its exact editable sources."""
+"""Package the already-built v6.17 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.16'
-BINARY='SIRIAI_Recruiter_Island_v6_16.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_16_Source.zip'
+VERSION='6.17'
+BINARY='SIRIAI_Recruiter_Island_v6_17.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_17_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,13 +14,16 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_16')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_17')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_16/downloads/'+BINARY)==place.read_bytes()
+ assert archive.read('SIRIAI_Recruiter_Island_v6_17/downloads/'+BINARY)==place.read_bytes()
 release={'version':VERSION,'date':'2026-10-26','status':'review-build','verification':{
- 'pavilionAndCompletion':'v6.16: existing 1.5s header check and centered finish card retained; pavilion turned toward main boardwalk, centerline branch 106 to 42 studs; boards, NPCs, arrival and room boundaries moved together; approach and full pier route sampled clear; Studio unavailable',
- 'sunsetLookoutKing':'v6.16: native coral atmosphere/light/clouds; connected ridge deck with physical rails, seats and scope; final king hand exactly 10x previous linear dimensions at offshore plinth; geometry and exported callback checks passed; browser shape preview inspected; Studio unavailable',
+ 'v617Flow':'single DM-status action and visible sheet result; direct native thumb ClickDetector plus E/touch prompt to first unfinished advanced challenge; last first-clear returns to clear pier and looks at existing 10x king',
+ 'v617Reset':'phone confirmation for basic chapter, advanced challenge or all progress; other completed chapters retained; draft and owned record cleared; monotonic revision/attempt serial; reward recomputed',
+ 'v617Checks':'15 reset/camera, 18 exported server integration, 60 advanced client, 9320 reward checks; complete workflow regression suite; 164 native-property UI screens at four sizes had no browser layout audit failures; Studio unavailable',
+ 'pavilionAndCompletion':'v6.17: existing 1.5s header check and centered finish card retained; pavilion turned toward main boardwalk, centerline branch 106 to 42 studs; boards, NPCs, arrival and room boundaries moved together; approach and full pier route sampled clear; Studio unavailable',
+ 'sunsetLookoutKing':'v6.17: native coral atmosphere/light/clouds; connected ridge deck with physical rails, seats and scope; final king hand exactly 10x previous linear dimensions at offshore plinth; geometry and exported callback checks passed; browser shape preview inspected; Studio unavailable',
  'collectionChecks':'35 screenshot/order/sheet/DM/no-reply/HUD/criteria checks plus full workflow regressions; 156 work UI and 32 HUD property snapshots; Studio unavailable',
  'collectionFlow':'user-supplied oddtype first two rows, exact four-column order, native save overlays; explicitly synthetic author metadata; actual blank sheet capture and status selection; full multiline DM; like/read-only application acknowledgement; invented contact-history condition removed',
  'celebrationChecks':'12 lifecycle checks; 160 native-property screens at four sizes, no browser-approximation overflow; Studio rendering not verified',
@@ -39,7 +42,7 @@ release={'version':VERSION,'date':'2026-10-26','status':'review-build','verifica
  'coreFlow':'seven phases at three forward stops including a collection PC; ordinary reply and separate selection notice',
  'advancedGames':'three optional world-space games; explicit start, server-owned 30s scout deadline, untimed NPC answers; immediate retry, stale attempt and outside-room rejection',
  'advancedRewards':'100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming',
- 'rewardEvolution':'11 plain extruded hand silhouettes; final king hand enlarged 10x in v6.16; stage-specific offshore pedestal; visible-stage collision; detached model preview removed in v6.12',
+ 'rewardEvolution':'11 plain extruded hand silhouettes; final king hand enlarged 10x in v6.17; stage-specific offshore pedestal; visible-stage collision; detached model preview removed in v6.12',
  'advancedChecks':'exported engine/session, client, server and reward adapter checks; compact room bounds and world-panel aspect ratios checked',
  'optionalAppendix':'nine completion-only read-only topics; no new mandatory stages or tests',
  'requiredRoute':'133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry',

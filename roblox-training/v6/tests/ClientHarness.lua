@@ -28,6 +28,10 @@ function H.remote:FireServer(packet)
   assert(packet.revision==H.state.revision,'valid chapter revision')
   local ok,changed=Engine.choose(H.state,packet.chapter,data);assert(ok)
   self.OnClientEvent:Fire({kind='open',state=H.state,profile=data.phases[H.state.phase].target,resetDraft=changed and H.state.completed[packet.chapter]==true})
+ elseif packet.kind=='restart'then
+  assert(packet.revision==H.state.revision)
+  local ok,open=Engine.reset(H.state,packet.scope,data,require('./AdvancedData'));assert(ok)
+  self.OnClientEvent:Fire({kind='reset',state=H.state,scope=packet.scope,open=open,profile=data.phases[H.state.phase].target})
  elseif packet.kind=='apply'then
   assert(packet.revision==H.state.revision,'valid client revision')
   local q=data.phases[H.state.phase]

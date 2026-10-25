@@ -1,7 +1,7 @@
 -- Each player sees and collides with only their earned, visible sculpture.
 -- Celebration belongs to CampusClient's existing header, not another overlay.
 local Client={}
-function Client.start(gui)
+function Client.start(gui,onChallenge,canInteract)
  local config=require(script.Parent:WaitForChild('ThumbData'))
  local Policy=require(script.Parent:WaitForChild('RewardPolicy'))
  local model=workspace:WaitForChild('TrainingMap'):FindFirstChild('PierThumbsUp',true)
@@ -9,6 +9,22 @@ function Client.start(gui)
  local origin=Vector3.new(unpack(config.origin));local parts={};local stage=-1;local desired=0
  for _,p in ipairs(model:GetChildren())do
   if p:IsA('BasePart') then table.insert(parts,{part=p,offset=p.Position-origin,rotation=p.CFrame.Rotation,size=p.Size,color=p.Color,level=p:WaitForChild('ThumbStage').Value}) end
+ end
+ local eligible=false;local detectors={};local prompt
+ local function allowed()return eligible and (not canInteract or canInteract())end
+ local function challenge()if allowed() and onChallenge then onChallenge()end end
+ for _,v in ipairs(parts)do
+  local detector=Instance.new('ClickDetector');detector.Name='ThumbChallengeClick';detector.MaxActivationDistance=0;detector.Parent=v.part
+  detector.MouseClick:Connect(challenge);table.insert(detectors,{detector=detector,part=v.part})
+  if v.level==0 then
+   prompt=Instance.new('ProximityPrompt');prompt.Name='ThumbChallengePrompt';prompt.ActionText='도전하기';prompt.ObjectText='따봉 챌린지';prompt.KeyboardKeyCode=Enum.KeyCode.E
+   prompt.HoldDuration=0;prompt.MaxActivationDistance=20;prompt.RequiresLineOfSight=false;prompt.Enabled=false;prompt.Parent=v.part;prompt.Triggered:Connect(challenge)
+  end
+ end
+ local function interaction()
+  local enabled=allowed()
+  if prompt then prompt.Enabled=enabled end
+  for _,v in ipairs(detectors)do v.detector.MaxActivationDistance=enabled and v.part.Transparency==0 and 26 or 0 end
  end
  local function pose(target)
   local item=config.stages[target+1]
@@ -43,11 +59,12 @@ function Client.start(gui)
  end
  local function applyPending()
   if desired~=stage and clearForGrowth() then pose(desired)end
+  interaction()
  end
  pose(0)
  game:GetService('RunService').Heartbeat:Connect(applyPending)
  return {sync=function(s)
-  local r=Policy.summary(s);desired=r.stage;applyPending();return r
+  local r=Policy.summary(s);desired=r.stage;eligible=r.unlocked and not r.king;applyPending();return r
  end}
 end
 return Client

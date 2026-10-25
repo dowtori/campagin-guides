@@ -5,6 +5,7 @@ local Debris=game:GetService('Debris')
 local Shared=RS:WaitForChild('CampusShared')
 local data=require(Shared:WaitForChild('CaseData'))
 local Engine=require(Shared:WaitForChild('CaseEngine'))
+local advancedData=require(Shared:WaitForChild('AdvancedData'))
 local remote=RS:WaitForChild('CampusEvent')
 local objects=workspace:WaitForChild('TrainingMap'):WaitForChild('Architecture'):WaitForChild('QuestObjects')
 -- Complete classic rigs with native joints. The anchored root holds each quest NPC
@@ -58,6 +59,12 @@ if RS:FindFirstChild('AdvancedEvent') then
   end,
   send=function(p,packet)channel:FireClient(p,packet)end,
   sync=function(p)send(p,'state')end,
+  kingReward=function(p)
+   local root=rootOf(p);if not root then return end
+   p.Character:PivotTo(CFrame.lookAt(Vector3.new(0,5,-326),Vector3.new(-165,5,-470)))
+   root.AssemblyLinearVelocity=Vector3.zero;root.AssemblyAngularVelocity=Vector3.zero
+  end,
+  showKing=function(p)send(p,'kingReward')end,
   notice=function(p,t)send(p,'notice',{text=t})end
  })
  channel.OnServerEvent:Connect(advanced.handle)
@@ -139,15 +146,23 @@ remote.OnServerEvent:Connect(function(player,packet)
         if advanced then advanced.leave(player)end
         local character=player.Character
         if character then character:PivotTo(CFrame.lookAt(Vector3.new(-17,5,-321),Vector3.new(-29,5,-328)));send(player,'state')end
-    elseif packet.kind=='restart' and s.complete then
-        if advanced then advanced.leave(player)end
-        states[player]=Engine.new()
-        if player.Character then player.Character:PivotTo(CFrame.new(-34,5,100))end
-        send(player,'state')
+    elseif packet.kind=='restart' then
+        if packet.revision~=s.revision then send(player,'state');return end
+        local character=player.Character;local root=character and character:FindFirstChild('HumanoidRootPart')
+        local humanoid=character and character:FindFirstChildOfClass('Humanoid')
+        if not root or (humanoid and humanoid.Health<=0) then return end
+        local ok,open=Engine.reset(s,packet.scope,data,advancedData)
+        if not ok then return end
+        if advanced then advanced.reset(player)end
+        local phase=data.phases[s.phase]
+        local target=open and targets[phase.target] or targets.Manager
+        character:PivotTo(CFrame.lookAt(target.Position+Vector3.new(0,0,7),target.Position))
+        root.AssemblyLinearVelocity=Vector3.new(0,0,0);root.AssemblyAngularVelocity=Vector3.new(0,0,0)
+        send(player,'reset',{scope=packet.scope,open=open,profile=phase.target})
     end
 end)
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()if advanced then advanced.leave(player)end;task.wait(1);if state(player).phase>1 then phone(player)end;send(player,'state')end)
 end)
 Players.PlayerRemoving:Connect(function(player)if advanced then advanced.remove(player)end;states[player]=nil end)
-print('[SIRIAI v6.16] Recruiter Island ready: NPC quests, phone tool, one campaign')
+print('[SIRIAI v6.17] Recruiter Island ready: NPC quests, phone tool, one campaign')

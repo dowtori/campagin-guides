@@ -112,7 +112,7 @@ local function visibility(show)
  panel.Visible=show;hud.Visible=not show;phoneButton.Visible=not show;helpButton.Visible=not show;prompts()
 end
 local function closePanel()cancelAcknowledgement();visibility(false);mode=nil end
-if world and world:FindFirstChild('PierThumbsUp',true) then rewardView=require(script.Parent:WaitForChild('RewardClient')).start(gui)end
+if world and world:FindFirstChild('PierThumbsUp',true) then rewardView=require(script.Parent:WaitForChild('RewardClient')).start(gui,function()if advancedView then advancedView.enter()end end,function()return not panel.Visible and not pending end)end
 if world and world:FindFirstChild('AdvancedRoom',true) then advancedView=require(script.Parent:WaitForChild('AdvancedClient')).start(gui,closePanel,notice,function()closePanel();remote:FireServer({kind='rest'})end)end
 local close=btn(panel,'×',closePanel);close.Name='ClosePanel';close.Position=UDim2.new(1,-56,0,12);close.Size=UDim2.fromOffset(44,44);close.TextSize=26
 local function action(caption,fn,enabled)
@@ -278,7 +278,9 @@ render=function(profileId)
    Sheet.render({make=make,txt=txt,btn=btn,body=body,colors=C,raster=Raster,UDim2=UDim2,Vector2=Vector2,Enum=Enum,width=gui.AbsoluteSize.X,
     render=function()render()end,configure=function(width,footer)dialogWidth=width;centeredDialog=true;panelLimit.MaxSize=Vector2.new(width,780);primary.Visible=footer;requestLayout()end},data,lead,d)
    note('발송 1건 · 특이사항 없음')
-   action('발송 기록 완료',function()submit({handle=leadHandle,fee=data.lead.fee,sent=true,status='DM 발송'})end,d.status=='DM 발송')
+   if d.status=='DM 발송' then
+    action('발송 기록 완료',function()submit({handle=leadHandle,fee=data.lead.fee,sent=true,status='DM 발송'})end)
+   else action('DM 발송으로 변경',function()d.status='DM 발송';render()end)end
   end
  elseif q.id=='reply'then
   screen('도착한 회신')
@@ -298,7 +300,7 @@ local marker,highlight=nil,nil
 local function update()
  cancelAcknowledgement()
  if rewardView then rewardView.sync(state)end
- if advancedView then advancedView.sync(Reward.summary(state))end
+ if advancedView then advancedView.sync(Reward.summary(state),state.advanced)end
  local q=data.phases[state.phase]
  phaseText.Text=state.complete and '첫 캠페인 완료' or q.title
  objective.Text=state.complete and '나루터로 이동 →' or q.place..'로 이동 →'
@@ -375,7 +377,8 @@ local function chapterArt(parent,id)
   bar(.34,.27,.32,.06);bar(.34,.42,.22,.06);check(.30,.68)
  end
 end
-local function phone(refresh)
+local phone,resetMenu
+phone=function(refresh)
  -- Neither a tool equip nor a late packet can interrupt an active work screen.
  if (panel.Visible and not (refresh==true and mode=='phone')) or pending then return end
  local completed=state.completed or {}
@@ -426,11 +429,34 @@ local function phone(refresh)
   local row=make('Frame',body,{Name='PhoneExtras',Size=UDim2.new(1,0,0,52),BackgroundTransparency=1})
   for i,item in ipairs(extras)do local b=btn(row,item.text,item.fn);b.Position=UDim2.new((i-1)/#extras,(i-1)*6,0,0);b.Size=UDim2.new(1/#extras,#extras>1 and -6 or 0,1,0)end
  end
+ local reset=btn(body,'진행 초기화',function()resetMenu()end);reset.Name='ResetProgress';reset.TextSize=20
  if state.complete then
   action('따봉 보기',function()navigation('rest')end)
  else
   action('이어서 하기',function()navigation('resume')end)
  end
+end
+resetMenu=function(selection,label)
+ mode='reset';clear(selection and '다시 시작할까요?' or '초기화할 챕터')
+ centeredDialog=true
+ if selection then
+  card(label,selection=='all' and '모든 완료 기록과 따봉 보상이 초기화됩니다.' or '다른 챕터의 완료 기록은 유지됩니다.')
+  action(selection=='all' and '전체 초기화' or '이 챕터 초기화',function()
+   pending=true;closePanel();remote:FireServer({kind='restart',scope=selection,revision=state.revision})
+  end)
+  alternate('취소',function()resetMenu()end)
+ else
+  for _,q in ipairs(data.phases)do
+   if state.completed[q.id] then local id,name=q.id,q.title;local b=btn(body,name,function()resetMenu(id,name)end);b.Name='Reset_'..id end
+  end
+  local a=state.advanced
+  for _,item in ipairs({{'scout','크리에이터 선택'},{'fee','고료 문의'},{'conditions','진행 문의'}})do
+   if a and a.completed[item[1]] then local id,name=item[1],item[2];local b=btn(body,'심화 · '..name,function()resetMenu(id,name)end);b.Name='Reset_'..id end
+  end
+  local all=btn(body,'전체 초기화',function()resetMenu('all','모든 챕터')end);all.Name='ResetAll'
+  action('챕터 선택으로',function()closePanel();phone()end)
+ end
+ requestLayout();fitDialog()
 end
 -- Completion occupies the existing header; it never obscures the next action.
 local completedNames={brief='캠페인 확인 완료',profile='프로필 준비 완료',connect='시트 연결 완료',discover='계정 저장 완료',send='DM 발송 완료',reply='회신 응대 완료',settle='정산 확인 완료'}
@@ -483,7 +509,11 @@ remote.OnClientEvent:Connect(function(packet)
   state=packet.state;update()
   completedSnapshot={};for id,done in pairs(state.completed or {})do completedSnapshot[id]=done end
  end
- if packet.kind=='open'then
+ if packet.kind=='reset'then
+  pending=false;closePanel()
+  if packet.scope=='all' then drafts={} else drafts[packet.scope]=nil end
+  if packet.open then render(packet.profile)else phone()end
+ elseif packet.kind=='open'then
   if mode=='work' and panel.Visible then return end
   if packet.resetDraft then drafts[data.phases[state.phase].id]=nil end
   render(packet.profile)
@@ -492,6 +522,10 @@ remote.OnClientEvent:Connect(function(packet)
   if packet.continueHere then render(data.phases[state.phase].target)
   elseif state.complete then if freshCompletion then finished()else phone()end end
   if freshCompletion and not state.complete then acknowledge(freshCompletion)end
+ elseif packet.kind=='kingReward'then
+  pending=false;closePanel()
+  local camera=workspace.CurrentCamera
+  if camera then camera.CFrame=CFrame.lookAt(Vector3.new(12,17,-314),Vector3.new(-165,90,-470))end
  elseif packet.kind=='phone' or packet.kind=='finished'then phone()
  elseif packet.kind=='arrived'then closePanel()
  elseif packet.kind=='notice'then pending=false;notice(packet.text)

@@ -100,6 +100,14 @@ function Client.start(gui,closeWork,notice,viewThumb)
   if timer and run and run.status=='active' and run.deadline then timer.Text=tostring(math.max(0,math.ceil(run.deadline-workspace:GetServerTimeNow())))..'초' end
  end)
  render()
- return {enter=function()closeWork();remote:FireServer({kind='enter',id='scout'})end,sync=function(r)local changed=reward.unlocked~=r.unlocked;reward=r;if changed and not run then render()end end}
+ return {enter=function()
+  local id=data.challenges[1].id
+  for _,c in ipairs(data.challenges)do if not cleared[c.id] then id=c.id;break end end
+  closeWork();remote:FireServer({kind='enter',id=id})
+ end,sync=function(r,progress)
+  local changed=reward.unlocked~=r.unlocked;reward=r
+  if progress then cleared=progress.completed or {};run=progress.run end
+  if changed and not run then render()end
+ end}
 end
 return Client
