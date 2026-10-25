@@ -8,6 +8,7 @@ ROOT=Path(__file__).resolve().parent
 random.seed(23)
 PAPER='F7F5EF'; INK='252420'; PINK='FF234B'; SOFT='E7E3D9'; GREY='A6A39B'; GREEN='83B09A'; GOLD='EAC27B'
 scene=[]
+part_records={}
 def rgb(h): return [int(h[i:i+2],16)/255 for i in (0,2,4)]
 def rotation(x=0,y=0,z=0):
     a,b,c=map(math.radians,(x,y,z)); sx,cx=math.sin(a),math.cos(a); sy,cy=math.sin(b),math.cos(b); sz,cz=math.sin(c),math.cos(c)
@@ -19,6 +20,7 @@ def part(parent,name,pos,size,color=PAPER,material='SmoothPlastic',shape='Block'
     props={'Anchored':True,'CanCollide':collide,'CanTouch':False,'CanQuery':True,'Size':list(size),'CFrame':cf(pos,rot),'Color':rgb(color),'Material':material,'Transparency':trans,'TopSurface':'Smooth','BottomSurface':'Smooth','Shape':shape,'CastShadow':material!='Neon'}
     p=obj(name,'Part',props); parent.append(p)
     scene.append({'name':name,'position':list(pos),'size':list(size),'rotation':list(rot),'color':'#'+color,'shape':shape,'material':material,'transparency':trans})
+    part_records[id(p)]=scene[-1]
     return p
 
 def sign(parent,name,pos,size,title,color=INK,bg=PAPER,scale=1):
@@ -183,16 +185,39 @@ for stage,station,key in zip(curriculum['stages'],station_models,['brand','brand
         picture['Children'].append(v)
     gui=obj('VisualGuide','SurfaceGui',{'Face':'Back','SizingMode':'PixelsPerStud','PixelsPerStud':35,'LightInfluence':0},[picture,obj('Instruction','TextLabel',{'Position':{'UDim2':[[.06,0],[.73,0]]},'Size':{'UDim2':[[.88,0],[.22,0]]},'BackgroundTransparency':1,'Text':'보고 · 직접 해보고\n결과 확인하기','TextColor3':rgb(INK),'TextScaled':True,'TextWrapped':True,'Font':'GothamBold'})])
     panel['Children'].append(gui);scene[-1]['art']=key;scene[-1]['label']='보고 · 직접 해보기'
+# Apply the sunset wetland to the native map, then export the same parts for the web.
+from meadow_environment import build_environment
+environment=build_environment(world,station_models,part,obj,rgb,cf,curriculum)
+scene=[]
+def collect_preview(nodes):
+    for node in nodes:
+        v=node['Properties']
+        if node['ClassName'] in ('Part','Seat','SpawnLocation') and v.get('Transparency',0)<1:
+            original=part_records.get(id(node),{})
+            scene.append({**original,'name':node['Name'],'position':v['CFrame'][:3],'size':v['Size'],
+                'rotation':original.get('rotation',[0,0,0]),'color':'#'+''.join(f'{round(c*255):02x}' for c in v['Color']),
+                'shape':v.get('Shape','Block'),'material':v.get('Material','SmoothPlastic'),
+                'transparency':v.get('Transparency',0),'shadow':v.get('CastShadow',True),
+                'wind':node['Name'].startswith('Reed ')})
+        collect_preview(node['Children'])
+collect_preview(world)
+for station in station_models:collect_preview(station['Children'])
+(ROOT/'environment.json').write_text(json.dumps(environment,ensure_ascii=False,indent=2),encoding='utf-8')
 model=obj('TrainingMap','Model',children=[obj('Architecture','Folder',children=world),obj('Stations','Folder',children=station_models)])
 model.pop('Name',None)
 (ROOT/'map/TrainingMap.model.json').write_text(json.dumps(model,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 (ROOT/'scene.json').write_text(json.dumps(scene,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 project={'name':'SIRIAI Training Campus','tree':{'$className':'DataModel',
- 'Workspace':{'$properties':{'Gravity':196.2,'FallenPartsDestroyHeight':-35},'TrainingMap':{'$path':'map/TrainingMap.model.json'}},
- 'Lighting':{'$properties':{'Ambient':rgb('B9B5AE'),'OutdoorAmbient':rgb('D4D7D9'),'Brightness':2.3,'ClockTime':14,'GlobalShadows':True,'ShadowSoftness':.25},'Atmosphere':{'$className':'Atmosphere','$properties':{'Density':.18,'Offset':.1,'Color':rgb('D7E2E5'),'Decay':rgb('A9C0D0'),'Haze':.7}},'Bloom':{'$className':'BloomEffect','$properties':{'Intensity':.15,'Size':24,'Threshold':1.25}}},
+ 'Workspace':{'$properties':{'Gravity':196.2,'FallenPartsDestroyHeight':-35},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','Clouds':{'$className':'Clouds','$properties':{'Cover':.28,'Density':.3,'Color':rgb('F4D5C5')}}}},
+ 'Lighting':{'$properties':{'Ambient':rgb('8B7883'),'OutdoorAmbient':rgb('BC9B88'),'Brightness':2,'ClockTime':17.7,'GeographicLatitude':28,'GlobalShadows':True,'ShadowSoftness':.65,'ColorShift_Top':rgb('F3BA85'),'EnvironmentDiffuseScale':.65,'EnvironmentSpecularScale':.8},
+  'Atmosphere':{'$className':'Atmosphere','$properties':{'Density':.28,'Offset':.05,'Color':rgb('F2C4A9'),'Decay':rgb('A293AE'),'Haze':2.1,'Glare':1.3}},
+  'Sky':{'$className':'Sky','$properties':{'CelestialBodiesShown':False,'StarCount':0}},
+  'Bloom':{'$className':'BloomEffect','$properties':{'Intensity':.28,'Size':38,'Threshold':1.35}},
+  'SunRays':{'$className':'SunRaysEffect','$properties':{'Intensity':.07,'Spread':.75}},
+  'WarmGrade':{'$className':'ColorCorrectionEffect','$properties':{'Brightness':.015,'Contrast':.06,'Saturation':-.07,'TintColor':rgb('FFF1DE')}}},
  'ReplicatedStorage':{'TrainingEvent':{'$className':'RemoteEvent'}},
  'ServerScriptService':{'$path':'src/server'},
- 'StarterPlayer':{'$properties':{'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5,'CharacterWalkSpeed':20,'CharacterJumpPower':50},'StarterPlayerScripts':{'$path':'src/client'}},
+ 'StarterPlayer':{'$properties':{'CameraMaxZoomDistance':90,'CameraMinZoomDistance':5,'CharacterWalkSpeed':20,'CharacterJumpPower':50},'StarterPlayerScripts':{'$path':'src/client'}},
  'SoundService':{'$properties':{'RespectFilteringEnabled':True}}
 }}
 (ROOT/'default.project.json').write_text(json.dumps(project,ensure_ascii=False,indent=2),encoding='utf-8')

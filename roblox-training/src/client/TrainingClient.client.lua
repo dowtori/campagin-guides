@@ -15,6 +15,7 @@ local stages, snapshot = {}, {progress=1,completed=0,flags={},total=6,finished=f
 local token, question, pending, welcomed = '', nil, false, false
 local order, choiceButtons, footerAction, secondaryAction = {}, {}, nil, nil
 local nextHighlight, waypoint, celebrated
+local relaxing=false
 
 local function make(class, parent, props)
     local object = Instance.new(class)
@@ -71,6 +72,15 @@ local secondary = button(footer,'닫기',{Size=UDim2.new(.3,-5,0,54),Position=UD
 local primary = button(footer,'시작하기',{Size=UDim2.new(.7,-5,0,54),Position=UDim2.new(.3,5,0,4),BackgroundColor3=C.pink,TextColor3=Color3.new(1,1,1),TextSize=16})
 local toast = make('TextLabel',gui,{AnchorPoint=Vector2.new(.5,0),Position=UDim2.new(.5,0,0,112),Size=UDim2.new(.9,0,0,65),BackgroundColor3=C.ink,BorderSizePixel=0,TextColor3=Color3.new(1,1,1),TextSize=15,Font=Enum.Font.Gotham,TextWrapped=true,Visible=false,ZIndex=5})
 round(toast,12) padding(toast,12) make('UISizeConstraint',toast,{MaxSize=Vector2.new(700,80)})
+local relaxButton = button(gui,'노을 산책  ↗',{AnchorPoint=Vector2.new(1,0),Position=UDim2.new(.97,0,0,112),Size=UDim2.fromOffset(144,36),TextSize=12,BackgroundColor3=Color3.fromRGB(241,222,187),BackgroundTransparency=.12})
+local function setRelaxing(value)
+    relaxing=value
+    hud.Visible=not value
+    hint.Visible=not value
+    relaxButton.Text=value and '교육으로 돌아가기  ↩' or '노을 산책  ↗'
+    if waypoint then waypoint.Enabled=not value end
+    if nextHighlight then nextHighlight.Enabled=not value end
+end
 local bodyOrder=0
 body.ChildAdded:Connect(function(child)
     if child:IsA('GuiObject') then bodyOrder+=1 child.LayoutOrder=bodyOrder end
@@ -91,13 +101,16 @@ local function clearBody()
     bodyOrder=0
 end
 local function show(tag,title)
+    setRelaxing(false)
     clearBody()
     headerTag.Text,headerTitle.Text=tag,title
     shade.Visible=true
+    relaxButton.Visible=false
     Prompts.Enabled=false
 end
 local function close(send)
     shade.Visible=false
+    relaxButton.Visible=true
     Prompts.Enabled=true
     pending=false
     if send then remote:FireServer({kind='close'}) end
@@ -248,6 +261,7 @@ local function updateHud(value)
             marker.Active=false
         end
     end
+    if relaxing then setRelaxing(true) end
 end
 
 showMap=function()
@@ -272,7 +286,7 @@ local function showHelp()
     remote:FireServer({kind='close'})
     show('HOW TO PLAY','천천히, 직접 해보면서 배워요.')
     card('이동: PC는 WASD · 모바일은 화면 조이스틱\n점프: 스페이스 · 모바일 점프 버튼\n미션: 단말기 가까이에서 E · 모바일은 표시된 버튼 터치\n빠른 이동: 오른쪽 위 ‘미션지도’',false)
-    text(body,'분홍색 표식을 따라가세요.',22,C.ink,true)
+    text(body,'갈대밭을 걷거나, 분홍 표식에서 미션을 시작해요.',22,C.ink,true)
     text(body,'미션은 순서대로 열려요. 틀린 답에는 설명이 나오고 다시 선택할 수 있습니다. 캐릭터가 다시 생성되어도 이번 접속 중 완료한 단계는 유지돼요.',16,C.muted)
     card('이곳은 모의 교육 공간이에요. 실제 확장프로그램 설치는 PC 크롬에서, 실제 발송과 정산은 별도로 받은 업무 안내에 따라 진행해주세요. 재접속하면 새 연습으로 시작합니다.',true)
     local restart=button(body,'처음부터 새로 연습하기',{TextSize=14})
@@ -286,11 +300,14 @@ local function showWelcome()
     text(body,'인플루언서 모집을\n플레이하면서 배워봐요.',30,C.ink,true)
     card('프로필 준비 → 확장프로그램 연결 → 인원 선별 → DM 발송 → 문의 응대 → 정산\n\n그림 카드를 고르고, 화면을 직접 눌러 18개 활동을 완료하면 교육 수료!',false)
     text(body,'분홍색 표식의 단말기 가까이 가서 E를 누르세요. 모바일에서는 표시된 버튼을 터치하면 됩니다. 미션지도에서 빠르게 이동할 수도 있어요.',16,C.muted)
-    text(body,'실제 계정·시트와 연결되지 않는 교육용 시뮬레이션입니다.',14,C.muted)
+    text(body,'‘노을 산책’을 누르면 진행 내용을 유지한 채 물가에서 쉬어갈 수 있어요.\n실제 계정·시트와 연결되지 않는 교육용 시뮬레이션입니다.',14,C.muted)
     setSecondary('둘러보기',function() close(true) end)
     setPrimary('첫 미션으로 이동',function() remote:FireServer({kind='jump',stage=1}) end)
 end
 
+relaxButton.Activated:Connect(function()
+    remote:FireServer({kind=relaxing and 'return' or 'relax'})
+end)
 mapButton.Activated:Connect(showMap)
 helpButton.Activated:Connect(showHelp)
 UserInputService.InputBegan:Connect(function(input,processed)
@@ -307,7 +324,11 @@ remote.OnClientEvent:Connect(function(packet)
         renderQuestion(packet.question,packet.token)
     elseif packet.kind=='result' then
         if shade.Visible then renderResult(packet) end
+    elseif packet.kind=='relax' then
+        close(false)
+        setRelaxing(true)
     elseif packet.kind=='close' then
+        setRelaxing(false)
         close(false)
         if packet.text then notify(packet.text) end
     elseif packet.kind=='notice' then

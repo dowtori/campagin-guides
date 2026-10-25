@@ -19,7 +19,7 @@ for item in items: classes[item.attrib['class']]=classes.get(item.attrib['class'
 assert classes.get('SpawnLocation')==1
 assert classes.get('ProximityPrompt')==6
 assert classes.get('RemoteEvent')==1
-assert classes.get('Script')==1 and classes.get('LocalScript')==1
+assert classes.get('Script')==2 and classes.get('LocalScript')==2
 assert classes.get('ModuleScript')==4
 for item in items:
     if item.attrib['class']=='Part':
@@ -45,7 +45,12 @@ with tempfile.TemporaryDirectory(prefix='siriai-roblox-tests-', dir=ROOT/'tests'
     visual=modules['VisualTutorials'].replace('require(script.Parent.VisualAssets)',"require('./VisualAssets')")
     prefix="local Mock=require('./NativeUiMock')\nlocal Instance,Color3,UDim,UDim2,Enum,game=Mock.Instance,Mock.Color3,Mock.UDim,Mock.UDim2,Mock.Enum,Mock.game\n"
     (tmp/'VisualTutorials.lua').write_text(prefix+visual,encoding='utf-8')
-    for test in ['engine.spec.lua','visual-ui.spec.lua']:
+    for name in ['ServerHarness.lua','relax.spec.lua']:
+        shutil.copyfile(ROOT/'tests'/name,tmp/name)
+    server=next(it.find("Properties/*[@name='Source']").text for it in items if it.attrib['class']=='Script' and it.find("Properties/string[@name='Name']").text=='TrainingServer')
+    header="local H=require('./ServerHarness')\nlocal game,workspace,Instance,Vector3,CFrame,task,os=H.game,H.workspace,H.Instance,H.Vector3,H.CFrame,H.task,H.os\nlocal script={Parent={Curriculum='./Curriculum',TrainingEngine='./TrainingEngine'}}\n"
+    (tmp/'TrainingServer.lua').write_text(header+server+'\nreturn true',encoding='utf-8')
+    for test in ['engine.spec.lua','visual-ui.spec.lua','relax.spec.lua']:
         subprocess.run([str(Path(args.luau).resolve()),str(tmp/test)],check=True,cwd=tmp)
 print(f"PASS: exported place structure / {classes.get('Part',0)+classes.get('SpawnLocation',0)} original parts / 6 prompts / no external asset IDs or network calls")
 print('Roblox Studio runtime and account publishing have not been tested here.')

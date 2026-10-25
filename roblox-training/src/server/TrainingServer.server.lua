@@ -46,9 +46,18 @@ local function teleport(player, id)
     local character = player.Character
     local root = character and character:FindFirstChild('HumanoidRootPart')
     if not root then return end
+    local humanoid=character:FindFirstChildOfClass('Humanoid')
+    if humanoid and humanoid.SeatPart then
+        local seat=humanoid.SeatPart
+        humanoid.Sit=false
+        local weld=seat:FindFirstChild('SeatWeld')
+        if weld and weld:IsA('Weld') and weld.Part1 and weld.Part1:IsDescendantOf(character) then weld:Destroy() end
+    end
     local position, focus
     if id == 0 then
         position, focus = Vector3.new(0, 4, 42), Vector3.new(0, 4, -30)
+    elseif id == 8 then
+        position, focus = Vector3.new(0,4,-263), Vector3.new(-200,40,-615)
     elseif id == 7 then
         position, focus = Vector3.new(0, 4, -143), Vector3.new(0, 7, -158)
     else
@@ -107,6 +116,18 @@ remote.OnServerEvent:Connect(function(player, packet)
         result.kind, result.token = 'result', session.token
         remote:FireClient(player, result)
         sync(player)
+    elseif packet.kind == 'relax' then
+        if os.clock() - session.lastJump < 0.8 then return end
+        session.lastJump = os.clock()
+        session.token, session.state.active = '', nil
+        remote:FireClient(player, {kind='relax'})
+        teleport(player, 8)
+    elseif packet.kind == 'return' then
+        if os.clock() - session.lastJump < 0.8 then return end
+        session.lastJump = os.clock()
+        session.token, session.state.active = '', nil
+        remote:FireClient(player, {kind='close'})
+        teleport(player, session.checkpoint)
     elseif packet.kind == 'jump' then
         local id = packet.stage
         if type(id) ~= 'number' or id % 1 ~= 0 or id < 0 or id > 7 then return end
