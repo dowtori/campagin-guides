@@ -1,10 +1,10 @@
-"""Package the already-built v6.10 place and its exact editable sources."""
+"""Package the already-built v6.11 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.10'
-BINARY='SIRIAI_Recruiter_Island_v6_10.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_10_Source.zip'
+VERSION='6.11'
+BINARY='SIRIAI_Recruiter_Island_v6_11.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_11_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,11 +14,14 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_10')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_11')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_10/downloads/'+BINARY)==place.read_bytes()
+ assert archive.read('SIRIAI_Recruiter_Island_v6_11/downloads/'+BINARY)==place.read_bytes()
 release={'version':VERSION,'date':'2026-10-26','status':'review-build','verification':{
+ 'dialogUX':'content-measured native dialogs; 30/22/18/16/20 type roles; four ambiguous disclosures removed; labeled inbound/outbound messages; fixed footer with body-only scrolling; all dialog states reviewed using native-property approximation',
+ 'dialogPropertyReview':'144 work/help/appendix/phone states at four sizes, 110 world-space condition/choice/console states and 32 HUD/notice states; no detected text overflow in browser approximation; first dialog 324px, empty setup choice 252px at 1280x720',
+ 'dialogLayoutTests':'459 layout/resize/callback assertions plus existing workflow tests; browser geometry checks do not replace Studio font/engine verification',
  'chapterMenu':'seven native icon tiles; grouped number/title; 44–54px completion stamps; direct entry and replay; three-size native-property render checks; reference screenshot inspected, game not directly played',
  'chapterProgress':'arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout',
  'copyAudit':'removed visible game scores, duplicate arrival/completion notices, repeated setup and challenge instructions; retained campaign conditions, actionable errors and actual compensation',

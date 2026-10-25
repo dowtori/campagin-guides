@@ -19,7 +19,7 @@ function Methods:WaitForChild(name)return assert(self:FindFirstChild(name),'Miss
 function Methods:SetAttribute(key,value)self.props[key]=value end
 function Methods:GetDescendants()local r={} for _,c in ipairs(self.children)do table.insert(r,c)for _,d in ipairs(c:GetDescendants())do table.insert(r,d)end end return r end
 function Methods:GetChildren() return table.clone(self.children) end
-function Methods:IsA(name) return self.props.ClassName==name or (name=='GuiObject' and table.find({'Frame','TextButton','TextLabel','TextBox'},self.props.ClassName)~=nil) end
+function Methods:IsA(name) return self.props.ClassName==name or (name=='GuiObject' and table.find({'Frame','ScrollingFrame','TextButton','TextLabel','TextBox'},self.props.ClassName)~=nil) end
 function Methods:GetPropertyChangedSignal(key)
     if not self.changes[key] then self.changes[key]=event() end
     return self.changes[key]

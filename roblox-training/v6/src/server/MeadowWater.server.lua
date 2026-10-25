@@ -7,7 +7,7 @@ local terrain=workspace.Terrain
 local map=workspace:WaitForChild('TrainingMap')
 local previews=map:WaitForChild('Architecture'):WaitForChild('CoastPreview')
 local oceanPreviews=map:WaitForChild('Architecture'):WaitForChild('OceanPreview')
-workspace:SetAttribute('SiriaiWorldVersion','6.10')
+workspace:SetAttribute('SiriaiWorldVersion','6.11')
 workspace:SetAttribute('SiriaiOceanReady',false)
 workspace:SetAttribute('SiriaiTerrainReady',false)
 workspace:SetAttribute('SiriaiTerrainChunks',0)

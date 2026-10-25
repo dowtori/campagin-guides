@@ -8,13 +8,13 @@ function Client.start(gui,closeWork,notice,viewThumb)
  local player=game:GetService('Players').LocalPlayer
  local map=workspace:WaitForChild('TrainingMap')
  local room=map:FindFirstChild('AdvancedRoom',true)
- local paper=Color3.fromRGB(249,246,238);local ink=Color3.fromRGB(37,33,45);local pink=Color3.fromRGB(223,25,64)
+ local paper=Color3.fromRGB(250,249,247);local ink=Color3.fromRGB(29,27,34);local pink=Color3.fromRGB(223,25,64)
  local run=nil;local cleared={};local reward={unlocked=false};local choices={};local prompts={};local timer
  local function make(class,parent,props)
   local o=Instance.new(class);for k,v in pairs(props or {})do o[k]=v end;o.Parent=parent;return o
  end
  local function text(parent,value,x,y,w,h,size,color)
-  return make('TextLabel',parent,{Text=value,Position=UDim2.fromScale(x,y),Size=UDim2.fromScale(w,h),TextSize=size,Font=Enum.Font.GothamBold,TextWrapped=true,BackgroundTransparency=1,TextColor3=color or ink})
+  return make('TextLabel',parent,{Text=value,Position=UDim2.fromScale(x,y),Size=UDim2.fromScale(w,h),TextSize=size,Font=Enum.Font.Gotham,LineHeight=1.2,TextWrapped=true,BackgroundTransparency=1,TextColor3=color or ink})
  end
  local function surface(name,w,h)
   return make('SurfaceGui',player:WaitForChild('PlayerGui'),{Name='Challenge_'..name,Adornee=room:WaitForChild(name),Face=Enum.NormalId.Back,SizingMode=Enum.SurfaceGuiSizingMode.FixedSize,CanvasSize=Vector2.new(w,h),LightInfluence=0,AlwaysOnTop=false,Active=true,MaxDistance=130,ZOffset=.05,ResetOnSpawn=false})
@@ -55,11 +55,11 @@ function Client.start(gui,closeWork,notice,viewThumb)
    if run and run.status~='brief' then
     local option=round.options[run.order[i]]
     local bg=make('Frame',s,{Size=UDim2.fromScale(1,1),BackgroundColor3=paper,BorderSizePixel=0})
-    text(bg,tostring(i)..'  '..option.name,.04,.025,.92,.14,38)
+    local heading=text(bg,tostring(i)..'  '..option.name,.04,.025,.92,.14,38);heading.Font=Enum.Font.GothamBold
     if challenge.timed then
      local im=Raster.draw(bg,option.image,UDim2.fromScale(.04,.20),UDim2.fromScale(.44,.56));make('UIAspectRatioConstraint',im,{AspectRatio=1,AspectType=Enum.AspectType.FitWithinMaxSize})
-     text(bg,option.facts,.50,.19,.46,.57,44)
-    else text(bg,option.answer,.06,.19,.88,.52,44) end
+     local facts=text(bg,option.facts,.50,.19,.46,.57,38);facts.TextXAlignment=Enum.TextXAlignment.Left
+    else local answer=text(bg,option.answer,.06,.22,.88,.52,36);answer.TextXAlignment=Enum.TextXAlignment.Left;answer.TextYAlignment=Enum.TextYAlignment.Top end
     if run.status=='active' then button(bg,challenge.timed and '이 크리에이터 선택' or '이 답변 선택',.04,.80,.92,.16,function()pick(i)end)
     else button(bg,'다시 도전',.04,.80,.92,.16,function()send('retry')end) end
    else

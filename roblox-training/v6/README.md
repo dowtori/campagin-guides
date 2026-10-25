@@ -1,8 +1,8 @@
-# Siriai Recruiter Island v6.10
+# Siriai Recruiter Island v6.11
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_10.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_11.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
@@ -24,6 +24,15 @@
 실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
+
+## v6.11: 대화창 높이·정보 위계·버튼 정리
+
+- 제목 30 / 본문 22 / 보조 설명 18 / 라벨 16 / 버튼 20px로 역할을 통일했습니다. 본문은 기본 굵기, 제목·행동·정산 합계만 강조합니다.
+- 대화창은 실제 텍스트와 콘텐츠 높이를 측정합니다. 짧은 안내·완료 선택은 짧게, 긴 내용은 본문만 스크롤합니다. 화면 회전·크기 변경에도 제목과 하단 버튼은 고정됩니다.
+- ‘실제 업무 시작할 때’ 등 네 개의 투명 설명 버튼을 없앴습니다. 필요한 설명은 짧은 본문 또는 기존 부록으로 옮겼습니다.
+- 프로필·연결 예시의 작은 필드 글자를 키웠습니다. 회신은 받은 메시지와 보낼 답장으로 구분하고, 정산 합계를 가장 크게 표시합니다.
+- 도움말·부록·HUD·알림·심화 NPC 답변판도 검토했습니다. 폰의 큰 챕터 카드와 완료 도장은 유지합니다.
+- [수정 전 기준과 검증 범위](design-review-v6.11.md). **브라우저 속성 재현은 Roblox 엔진 스크린샷이 아닙니다. Studio 플레이 검증은 미완료입니다.**
 
 ## v6.10: 연결된 산 표면 · 풀 군락 · 네이티브 노을
 
@@ -123,8 +132,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_10.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_10.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_11.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_11.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py

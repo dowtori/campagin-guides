@@ -1,8 +1,11 @@
 {
-  "version": "6.10",
+  "version": "6.11",
   "date": "2026-10-26",
   "status": "review-build",
   "verification": {
+    "dialogUX": "content-measured native dialogs; 30/22/18/16/20 type roles; four ambiguous disclosures removed; labeled inbound/outbound messages; fixed footer with body-only scrolling; all dialog states reviewed using native-property approximation",
+    "dialogPropertyReview": "144 work/help/appendix/phone states at four sizes, 110 world-space condition/choice/console states and 32 HUD/notice states; no detected text overflow in browser approximation; first dialog 324px, empty setup choice 252px at 1280x720",
+    "dialogLayoutTests": "459 layout/resize/callback assertions plus existing workflow tests; browser geometry checks do not replace Studio font/engine verification",
     "chapterMenu": "seven native icon tiles; grouped number/title; 44–54px completion stamps; direct entry and replay; three-size native-property render checks; reference screenshot inspected, game not directly played",
     "chapterProgress": "arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout",
     "copyAudit": "removed visible game scores, duplicate arrival/completion notices, repeated setup and challenge instructions; retained campaign conditions, actionable errors and actual compensation",
@@ -30,13 +33,13 @@
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_10.rbxl": {
-      "bytes": 4520686,
-      "sha256": "55067cea6ce9ddf2fa98e73a262de17381ed01773a81afa652cc0a0aff205e9e"
+    "SIRIAI_Recruiter_Island_v6_11.rbxl": {
+      "bytes": 4522127,
+      "sha256": "e4bcf84cc8b615fe447d22524dbd8dd6690a526275d6f3bd1f56e4eb48113f40"
     },
-    "SIRIAI_Recruiter_Island_v6_10_Source.zip": {
-      "bytes": 21467100,
-      "sha256": "ddc5e4720d77422be4c65df427bb6b5d4b1b2d1f937fd951a3b2790acf7ba054"
+    "SIRIAI_Recruiter_Island_v6_11_Source.zip": {
+      "bytes": 21475591,
+      "sha256": "61d17ca4ef6bcbbd11a841f212a3d703a6549caf5b1a5bfd77bad1b02b87fc2f"
     }
   }
 }
