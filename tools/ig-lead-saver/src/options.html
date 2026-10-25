@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>IG Lead Saver 설정</title>
+  <link rel="stylesheet" href="ui.css" />
+</head>
+<body class="options">
+  <div class="wrap">
+    <header class="head">
+      <h1>IG Lead Saver</h1>
+      <p class="sub">인스타그램 프로필을 원버튼으로 구글시트에 적립합니다.</p>
+    </header>
+
+    <section class="card">
+      <h2>1. 구글시트 연결</h2>
+      <label class="field">
+        <span class="label">Apps Script 웹앱 URL</span>
+        <input id="webAppUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" spellcheck="false" />
+        <span class="help">
+          구글시트 → 확장 프로그램 → Apps Script에 <code>apps-script/Code.gs</code>를 붙여넣고,
+          <b>배포 → 웹 앱 → 액세스 권한: 모든 사용자</b>로 배포한 뒤 나오는 <code>/exec</code> 주소입니다.
+        </span>
+      </label>
+
+      <label class="field">
+        <span class="label">저장자 이름</span>
+        <input id="savedBy" type="text" placeholder="예: 김민수" spellcheck="false" maxlength="20" />
+        <span class="help">
+          시트의 <b>저장자</b> 열에 이 이름이 들어갑니다. 나중에 누가 발굴했는지 보고 업무를 나눌 때 씁니다.
+          로그인은 필요 없고, 팀원마다 각자 자기 이름을 넣으면 됩니다.
+          인스타 화면의 플로팅 창에서도 바로 바꿀 수 있습니다.
+        </span>
+      </label>
+
+      <div class="field">
+        <span class="label">진행 중인 캠페인 (시트 탭)</span>
+        <div class="inline">
+          <select id="sheetName"></select>
+          <button id="reloadSheets" class="btn btn--icon" title="탭 목록 새로고침">↻</button>
+        </div>
+        <div class="inline inline--new">
+          <input id="newSheetName" type="text" placeholder="새 캠페인 이름" spellcheck="false" />
+          <button id="createSheet" class="btn">탭 만들기</button>
+        </div>
+        <span class="help">
+          시트에 이미 있는 탭을 불러와 고르거나, 여기서 바로 새 탭을 만들 수 있습니다.
+          저장은 선택한 탭에 쌓입니다.
+        </span>
+      </div>
+
+      <div class="row">
+        <button id="test" class="btn btn--primary">연결 테스트</button>
+        <button id="sync" class="btn">시트에서 저장목록 불러오기</button>
+        <span id="testResult" class="result"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. 저장 기본값</h2>
+      <label class="field">
+        <span class="label">기본 상태</span>
+        <select id="defaultStatus">
+          <option>연락전</option>
+          <option>DM 발송</option>
+          <option>회신 옴</option>
+          <option>협업 진행</option>
+          <option>보류</option>
+        </select>
+        <span class="help">DM 발송 속도를 조절하며 시트에서 상태만 바꿔가며 관리하세요.</span>
+      </label>
+
+      <label class="field">
+        <span class="label">기본 비고 (선택)</span>
+        <input id="defaultTag" type="text" placeholder="예: 26년3분기_뷰티" spellcheck="false" />
+        <span class="help">
+          시트의 <b>비고</b> 열에 자동으로 채워집니다. 수집 배치를 구분할 때 쓰고, 비워두면 빈칸으로 들어갑니다.
+        </span>
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>3. 버튼 노출 위치</h2>
+      <label class="check">
+        <input id="enableGridButtons" type="checkbox" />
+        <span>그리드 썸네일에 저장 버튼 표시 <b>(태그됨 · 탐색)</b></span>
+      </label>
+      <label class="check check--sub">
+        <input id="gridAutoResolve" type="checkbox" />
+        <span>썸네일에 팔로워 수 자동 표시 <b>(끄면 마우스를 올릴 때만)</b></span>
+      </label>
+      <label class="check">
+        <input id="enableFeedButtons" type="checkbox" />
+        <span>피드 · 게시물 헤더에 저장 버튼 표시</span>
+      </label>
+      <label class="check">
+        <input id="enableListButtons" type="checkbox" />
+        <span>팔로워 / 팔로잉 / 추천 목록에 저장 버튼 표시</span>
+      </label>
+      <p class="help help--block">
+        플로팅 버튼은 <b>헤더를 잡고 끌어 옮길 수 있고</b>, <kbd>−</kbd> 버튼으로 접을 수 있습니다.
+        옮긴 위치와 접힘 상태는 그대로 유지됩니다. 단축키는 <kbd>Alt</kbd> + <kbd>S</kbd>.<br />
+        팔로워 자동 표시는 <b>화면에 보이는 썸네일만</b> 순차적으로 조회하며, 한 번 조회한 계정은
+        7일간 저장해 다시 요청하지 않습니다.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>최근 저장</h2>
+      <div id="recent" class="recent"><p class="empty">아직 저장한 프로필이 없습니다.</p></div>
+    </section>
+
+    <footer class="foot">
+      <button id="save" class="btn btn--primary btn--wide">설정 저장</button>
+      <span id="saveResult" class="result"></span>
+    </footer>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
