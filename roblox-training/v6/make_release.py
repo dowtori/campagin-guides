@@ -1,10 +1,10 @@
-"""Package the already-built v6.7 place and its exact editable sources."""
+"""Package the already-built v6.8 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.7'
-BINARY='SIRIAI_Recruiter_Island_v6_7.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_7_Source.zip'
+VERSION='6.8'
+BINARY='SIRIAI_Recruiter_Island_v6_8.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_8_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,14 +14,14 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_7')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_8')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_7/downloads/'+BINARY)==place.read_bytes()
-release={'version':VERSION,'date':'2026-10-25','status':'review-build','verification':{
- 'chapterMenu':'seven illustrated native tiles; direct teleport/start, progress and replay; responsive menu; reference screenshots inspected, game not directly played',
+ assert archive.read('SIRIAI_Recruiter_Island_v6_8/downloads/'+BINARY)==place.read_bytes()
+release={'version':VERSION,'date':'2026-10-26','status':'review-build','verification':{
+ 'chapterMenu':'seven native icon tiles; grouped number/title; 44–54px completion stamps; direct entry and replay; three-size native-property render checks; reference screenshot inspected, game not directly played',
  'chapterProgress':'arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout',
- 'copyAudit':'removed repeated setup summaries, redundant send instructions, phone travel duplication and implementation explanations',
+ 'copyAudit':'removed visible game scores, duplicate arrival/completion notices, repeated setup and challenge instructions; retained campaign conditions, actionable errors and actual compensation',
  'pierSculpture':'original solid thumbs-up; old pier logo removed; front/side geometry preview inspected; center path and water steps clear',
  'setupFlow':'progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance',
  'guideHandoff':'native instructions with web/email anchors; no external URLs or browser API calls in native setup UI',
@@ -37,7 +37,7 @@ release={'version':VERSION,'date':'2026-10-25','status':'review-build','verifica
  'nativeClientAndServerCallbacks':'passed desktop and touch adapters, full campaign and partial task resume',
  'nativeWaterServer':'passed API/compatibility/failure/rescue adapters',
  'terrainAndGeometry':'passed original geometry bounds, clear paths, continuous seabed',
- 'visualCriteria':'pre-implementation silhouette criteria and results in design-review-v6.7.md; small reward preview and pier comparisons; Roblox engine rendering remains unverified',
+ 'visualCriteria':'pre-implementation phone hierarchy/copy criteria and results in design-review-v6.8.md; 1440x900, 390x844 and 844x390 native-property renders; Roblox engine rendering remains unverified',
  'webViewsAndMobilePage':'desktop world views inspected with browser; no new real-device play verification',
  'robloxStudioPlay':'not tested; Studio unavailable'},'files':{}}
 for name in [BINARY,ZIP]:

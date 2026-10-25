@@ -65,5 +65,6 @@ for _,p in ipairs(model:GetChildren())do
  check(type(p.Material)=='string','valid enum material')
 end
 check(notifications[#notifications]:find('왕따봉',1,true),'king notification')
+for _,value in ipairs(notifications)do check(not value:find('점'),'reward notice excludes game points')end
 check(H.gui:FindFirstChild('ThumbEvolution'):FindFirstChild('RewardModel')~=nil,'actual 3D clone preview')
 print('PASS: '..n..' exported reward-client checks; all growth stages, silhouettes, fixed pedestal, names, materials and 3D reward preview')

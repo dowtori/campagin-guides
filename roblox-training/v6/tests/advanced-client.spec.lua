@@ -41,6 +41,7 @@ for i,j in ipairs(run.order)do if c.rounds[run.round].options[j].correct then co
 local chosen=pg:FindFirstChild('Challenge_ChoiceBoard'..correct)
 for _,o in ipairs(chosen:GetDescendants())do if o.ClassName=='TextButton' then o.Activated:Fire();break end end
 check(state.advanced.run.status=='passed' and R.summary(state).bonus==1,'world button grants one clear')
+for _,o in ipairs(pg:GetDescendants())do if o.Text then check(not o.Text:find('%+%d+점'),'world results do not advertise game points')end end
 click('다시 도전');check(state.advanced.run.status=='brief','success replay available')
 session.leave('me');check(find('도전하기')~=nil,'room returns to idle after leaving')
 print('PASS: '..checks..' actual advanced-client callback checks; world surfaces, timers, NPC choices and retry')

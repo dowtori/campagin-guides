@@ -42,7 +42,7 @@ function Client.start(gui,notice)
    if t>=1 then connection:Disconnect();showPreview(token)end
   end)
   -- Let the normal chapter transition finish before placing a short reward line.
-  task.delay(.75,function()if serial==token then notice(config.stages[stage+1].title..'!  ·  게임 점수 '..r.score..'점')end end)
+  task.delay(.75,function()if serial==token then notice(config.stages[stage+1].title..'!')end end)
   return r
  end
  return {sync=sync}

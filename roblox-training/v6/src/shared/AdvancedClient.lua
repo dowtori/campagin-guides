@@ -46,7 +46,7 @@ function Client.start(gui,closeWork,notice,viewThumb)
   local challenge,round
   if run then for _,c in ipairs(data.challenges)do if c.id==run.id then challenge=c;round=c.rounds[run.round] end end end
   text(condition,run and ((run.status=='passed' or run.status=='failed' or run.status=='timeout') and run.feedback or round.conditions) or '따봉 챌린지',.025,.02,.79,.96,44,paper)
-  timer=text(condition,run and (run.status=='passed' and (run.firstClear and '+100점' or '클리어') or (run.status=='failed' or run.status=='timeout') and '재도전' or (challenge.timed and '30초' or '시간제한 없음')) or '심화 과정',.83,.1,.16,.8,32,paper)
+  timer=text(condition,run and (run.status=='passed' and '완료' or (run.status=='failed' or run.status=='timeout') and '재도전' or (challenge.timed and '30초' or '')) or '심화 과정',.83,.1,.16,.8,32,paper)
   for i,p in ipairs(prompts)do p.Enabled=run~=nil;p.ActionText=run and (run.status=='brief' and '시작' or run.status=='active' and '선택') or '다시 도전' end
   for i=1,3 do
    local npc=map:FindFirstChild('AnswerNPC'..i,true)
@@ -64,11 +64,11 @@ function Client.start(gui,closeWork,notice,viewThumb)
     else button(bg,'다시 도전',.04,.80,.92,.16,function()send('retry')end) end
    else
     text(s,tostring(i),.1,.20,.8,.45,100,ink)
-    if run then button(s,challenge.timed and '조건 읽었어요 · 시작' or 'NPC 답변 보기',.04,.80,.92,.16,function()send('start')end)end
+    if run then button(s,challenge.timed and '시작' or 'NPC 답변 보기',.04,.80,.92,.16,function()send('start')end)end
    end
   end
   if not run then
-   text(console,reward.unlocked and '준비됐다면 도전해봐요' or '기본 챕터를 마치면 열려요',.04,.06,.92,.36,38,paper)
+   text(console,reward.unlocked and '따봉 챌린지' or '기본 챕터를 마치면 열려요',.04,.06,.92,.36,38,paper)
    button(console,'도전하기',.04,.50,.92,.40,function()remote:FireServer({kind='enter',id='scout'})end)
    return
   end
@@ -76,17 +76,15 @@ function Client.start(gui,closeWork,notice,viewThumb)
    button(console,c.title..(cleared[c.id] and ' ✓' or ''),(i-1)/3+.012,.025,.309,.22,function()remote:FireServer({kind='enter',id=c.id})end,c.id==run.id and pink or Color3.fromRGB(83,75,92))
   end
   if run.status=='brief' then
-   text(console,challenge.timed and '벽 위 조건을 읽고 시작하세요.' or '벽 위 문의를 읽고 답변을 들어봐요.',.03,.30,.94,.25,33,paper)
    button(console,challenge.timed and '시작 · 30초' or 'NPC 답변 보기',.03,.62,.94,.32,function()send('start')end)
   elseif run.status=='active' then
-   text(console,challenge.timed and '벽면에서 한 명을 선택!' or 'NPC의 답변 중 하나를 선택!',.03,.31,.94,.46,40,paper)
+   text(console,challenge.timed and '한 명 선택' or '답변 선택',.03,.31,.94,.46,40,paper)
   else
-   text(console,run.feedback or '',.035,.29,.93,.32,30,paper)
    button(console,'다시 도전',.03,.66,.44,.29,function()send('retry')end)
    local nextId
    for i,c in ipairs(data.challenges)do if c.id==run.id then nextId=data.challenges[i%3+1].id end end
    if reward.king and viewThumb then button(console,'왕따봉 보러 가기',.50,.66,.47,.29,viewThumb)
-   else button(console,run.status=='passed' and (run.firstClear and '+100점 · 다음 도전' or '다음 도전') or '다른 도전',.50,.66,.47,.29,function()remote:FireServer({kind='enter',id=nextId})end)end
+   else button(console,run.status=='passed' and '다음 도전' or '다른 도전',.50,.66,.47,.29,function()remote:FireServer({kind='enter',id=nextId})end)end
   end
  end
  remote.OnClientEvent:Connect(function(packet)

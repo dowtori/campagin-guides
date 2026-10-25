@@ -1,4 +1,4 @@
--- SIRIAI v6.7: one visible action, deliberate phone access, resumable work.
+-- SIRIAI v6.8: one visible action, deliberate phone access, resumable work.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
@@ -80,6 +80,7 @@ primary.Activated:Connect(function()if primary.Active and not pending and doPrim
 body.ChildAdded:Connect(function(o)if o:IsA('GuiObject')then order+=1;o.LayoutOrder=order end end)
 local function clear(heading,step)
  panel.AnchorPoint=Vector2.new(1,.5);panel.Position=UDim2.new(.97,0,.52,0);panel.Size=UDim2.new(.94,0,.84,0);panelLimit.MaxSize=Vector2.new(510,660)
+ panel.BackgroundColor3=C.paper;tag.Visible=true;title.TextSize=26;title.TextColor3=C.ink;primary.TextSize=17
  tag.Position=UDim2.fromOffset(22,20);title.Position=UDim2.fromOffset(22,47);title.Size=UDim2.new(1,-44,0,64)
  body.Position=UDim2.fromOffset(22,124)
  for _,o in ipairs(body:GetChildren())do if o:IsA('GuiObject')then o:Destroy()end end
@@ -145,13 +146,11 @@ local function setupLesson(q,d)
  local function complete(source)submit({assembled=true,understood=true,completion=source})end
  if d.view=='handoff' then
   clear('안내서로 설정하기',q.title)
-  card('받은 안내서',section)
-  txt(body,'설정을 마치면 돌아와 계속해주세요.',18)
+  txt(body,'메일의 안내서로 '..section..'을 마친 뒤 돌아오세요.',18)
   alternate('선택으로 돌아가기',function()d.view='choice';render()end)
   action('설정했습니다 · 계속',function()complete('guide_done')end)
  elseif d.view=='choice' then
   clear(profile and '실제 계정도 준비됐나요?' or '실제 연결도 마쳤나요?',q.title)
-  txt(body,'아직이라면 받은 안내서에서 설정해요.',18)
   alternate('이미 완료했습니다',function()complete('already_done')end)
   action('지금 하기',function()d.view='handoff';render()end)
  else
@@ -183,7 +182,6 @@ render=function(profileId)
  local function screen(heading,step,total)clear(heading,q.title..(total and ('  ·  '..step..' / '..total) or ''))end
  if q.id=='brief'then
   screen('인플루언서 모집을\n로블록스에서!')
-  txt(body,'크리에이터를 찾고, 협업 DM을 보내요.',18)
   card('오늘 찾을 크리에이터','뷰티 릴스\n팔로워 5천~3만')
   action('첫 캠페인 맡기',function()submit({reviewed=true})end)
  elseif q.id=='profile' or q.id=='connect'then
@@ -205,26 +203,26 @@ render=function(profileId)
   end
  elseif q.id=='send'then
   if d.step==1 then
-   screen('제안을 보낼 대상이에요',1,3)
+   screen('DM 보낼 계정',1,3)
    card('진행 시트','@beauty_sample\n팔로워 1.8만 · 연락전')
    action('1만~3만 구간 문구 열기',function()d.step=2;render()end)
   elseif d.step==2 then
-   screen('기본 고료가 담겨 있어요',2,3)
+   screen('DM 미리보기',2,3)
    card('@beauty_sample에게','안녕하세요, 시리아이입니다 :)\n뷰티 릴스 캠페인 협업을 제안드립니다.\n제안 고료 10만 원\n관심 있으시면 지원 부탁드립니다.')
    action('DM 보내기',function()d.step=3;render()end)
   else
-   screen('시트에도 남겨요',3,3)
+   screen('발송 기록',3,3)
    card('DM을 보냈어요','@beauty_sample',C.green)
    card('변경할 상태','연락전 → DM 발송')
    action('DM 발송으로 저장',function()submit({handle=data.lead.handle,fee=data.lead.fee,sent=true,status='DM 발송'})end)
   end
  elseif q.id=='reply'then
-  screen('지원 완료 소식이 왔어요')
+  screen('도착한 회신')
   card('@beauty_sample','안내해주신 캠페인에 지원했어요!')
   txt(body,'감사합니다. 선정되면 안내드릴게요 :)',18)
   action('이렇게 답장하기',function()submit({replied=true,applicationRead=true})end)
  elseif q.id=='settle'then
-  screen('이번 모집을 마무리해요')
+  screen('정산 확인')
   txt(body,'브랜드 최종 선정: @beauty_sample',17,C.green)
   card('유효 DM 1건 + 최종 선정 1명','300원 + 2,000원')
   card('세전 보수 예시','2,300원',C.pink)
@@ -259,110 +257,107 @@ appendix=function(item)
  if not Reward.summary(state).unlocked then return end
  mode='appendix'
  if item then
-  clear(item.title,'부록 / 필요할 때만')
+  clear(item.title,'부록')
   card('이런 문의가 오면',item.question)
   card('답장 예시',item.reply)
   txt(body,item.note,18)
   action('부록 목록으로',function()appendix()end)
  else
-  clear('필요할 때 보는 부록','기본 과정 완료')
+  clear('부록','기본 과정 완료')
   for _,topic in ipairs(data.appendix)do
    local item=topic;btn(body,item.title,function()appendix(item)end)
   end
   action('닫고 쉬기',closePanel)
  end
 end
--- Original native illustrations: a profile, sheet, creator, envelope, reply and receipt.
--- Menu composition references Conveyor Sushi Restaurant's large picture tiles.
+-- One original icon family: the same ink, accent and six-pixel stroke on every card.
+-- The large menu-name / object pairing references Conveyor Sushi Restaurant's order screen.
 local function chapterArt(parent,id)
- local function box(x,y,w,h,color,r)
-  local f=make('Frame',parent,{Position=UDim2.fromScale(x,y),Size=UDim2.fromScale(w,h),BackgroundColor3=color,BorderSizePixel=0})
-  round(f,r or 6);return f
+ local function box(x,y,w,h,color,r,outline,angle)
+  local f=make('Frame',parent,{Position=UDim2.fromScale(x,y),Size=UDim2.fromScale(w,h),BackgroundColor3=color or C.ink,BorderSizePixel=0,Rotation=angle or 0,Active=false})
+  round(f,r or 4)
+  if outline then make('UIStroke',f,{Color=C.ink,Thickness=6,ApplyStrokeMode=Enum.ApplyStrokeMode.Border})end
+  return f
  end
- local function label(p,value,size)
-  local t=txt(p,value,size or 18,C.ink);t.Size=UDim2.fromScale(1,1);t.AutomaticSize=Enum.AutomaticSize.None;t.TextXAlignment=Enum.TextXAlignment.Center;t.TextYAlignment=Enum.TextYAlignment.Center;t.Font=Enum.Font.GothamBold;return t
- end
- local function line(p,x,y,w,color)
-  make('Frame',p,{Position=UDim2.fromScale(x,y),Size=UDim2.fromScale(w,.06),BackgroundColor3=color or C.line,BorderSizePixel=0})
+ local function bar(x,y,w,h,color,angle)return box(x,y,w,h,color,3,false,angle)end
+ local function check(x,y)
+  bar(x,y,.20,.065,C.pink,42);bar(x+.12,y-.08,.34,.065,C.pink,-46)
  end
  if id=='brief' then
-  local f=box(.12,.02,.76,.96,C.white)
-  local logo=make('Frame',f,{Position=UDim2.fromScale(.07,.13),Size=UDim2.fromScale(.22,.36),BackgroundTransparency=1});Raster.draw(logo,'logo');make('UIAspectRatioConstraint',logo,{AspectRatio=1,AspectType=Enum.AspectType.FitWithinMaxSize})
-  local t=label(f,'BEAUTY',22);t.Position=UDim2.fromScale(.28,.1);t.Size=UDim2.fromScale(.66,.32)
-  line(f,.08,.61,.83);line(f,.08,.78,.56,C.pink)
+  box(.22,.15,.56,.72,C.paper,8,true);box(.36,.06,.28,.18,C.pink,4)
+  bar(.33,.40,.34,.06);bar(.33,.57,.24,.06);bar(.33,.73,.34,.06)
  elseif id=='profile' then
-  local f=box(.16,.01,.68,.98,C.white)
-  local im=Raster.draw(f,'logo',UDim2.fromScale(.09,.09),UDim2.fromScale(.28,.30));make('UIAspectRatioConstraint',im,{AspectRatio=1})
-  line(f,.46,.15,.40,C.ink);line(f,.46,.29,.31)
-  for i=1,3 do local post=Raster.draw(f,'brand'..i,UDim2.fromScale(.08+(i-1)*.29,.49),UDim2.fromScale(.26,.43));make('UIAspectRatioConstraint',post,{AspectRatio=.8,AspectType=Enum.AspectType.FitWithinMaxSize})end
+  box(.10,.16,.80,.68,C.paper,8,true)
+  box(.23,.31,.21,.21,C.pink,50);box(.18,.59,.31,.13,C.ink,12)
+  bar(.58,.36,.19,.06);bar(.58,.52,.19,.06);bar(.58,.68,.13,.06)
  elseif id=='connect' then
-  local f=box(.08,.08,.84,.84,C.white);line(f,.08,.12,.5,C.green)
-  for y=1,3 do for x=1,3 do make('Frame',f,{Position=UDim2.fromScale(.08+(x-1)*.29,.31+(y-1)*.19),Size=UDim2.fromScale(.26,.14),BackgroundColor3=y==1 and Color3.fromRGB(191,219,206) or C.soft,BorderSizePixel=0})end end
+  bar(.34,.09,.07,.25);bar(.59,.09,.07,.25)
+  box(.25,.32,.50,.30,C.paper,8,true)
+  bar(.46,.65,.08,.24,C.pink);bar(.46,.82,.31,.08,C.pink)
  elseif id=='discover' then
-  local f=box(.19,.01,.62,.98,C.white)
-  Raster.draw(f,'creator1',UDim2.fromScale(.08,.06),UDim2.fromScale(.84,.71))
-  local t=label(f,'1.8만',14);t.Position=UDim2.fromScale(0,.79);t.Size=UDim2.fromScale(1,.17)
+  box(.15,.10,.53,.53,C.paper,50,true)
+  bar(.60,.67,.34,.12,C.pink,46)
  elseif id=='send' then
-  local f=box(.10,.20,.80,.62,C.white);f.ClipsDescendants=true
-  for _,edge in ipairs({{.25,20},{.75,-20}})do make('Frame',f,{AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(edge[1],.30),Size=UDim2.new(.58,0,0,3),Rotation=edge[2],BackgroundColor3=Color3.fromRGB(214,175,131),BorderSizePixel=0})end
-  local seal=make('Frame',f,{AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(.5,.52),Size=UDim2.fromOffset(18,18),BackgroundColor3=C.pink,BorderSizePixel=0});round(seal,9)
+  box(.08,.24,.84,.55,C.paper,6,true)
+  bar(.13,.40,.43,.065,C.ink,32);bar(.44,.40,.43,.065,C.ink,-32)
+  box(.44,.46,.12,.12,C.pink,50)
  elseif id=='reply' then
-  local incoming=box(.03,.05,.70,.45,C.white);label(incoming,'···',28)
-  local outgoing=box(.27,.52,.70,.44,C.pink);label(outgoing,'✓',22).TextColor3=C.white
+  box(.10,.16,.59,.41,C.paper,8,true);bar(.16,.51,.08,.17)
+  box(.47,.59,.41,.24,C.pink,6);bar(.76,.77,.08,.13,C.pink)
+  bar(.23,.33,.33,.06)
  else
-  local f=box(.14,.01,.72,.98,C.white)
-  local t=label(f,'300 + 2,000',14);t.Position=UDim2.fromScale(.02,.07);t.Size=UDim2.fromScale(.96,.26)
-  line(f,.12,.43,.76)
-  local v=label(f,'2,300',24);v.Position=UDim2.fromScale(0,.52);v.Size=UDim2.fromScale(1,.37);v.TextColor3=C.pink
+  box(.23,.08,.54,.80,C.paper,6,true)
+  bar(.34,.27,.32,.06);bar(.34,.42,.22,.06);check(.30,.68)
  end
 end
 local function phone(refresh)
  -- Neither a tool equip nor a late packet can interrupt an active work screen.
  if (panel.Visible and not (refresh==true and mode=='phone')) or pending then return end
- local completed=state.completed or {};local count=0
- for _,q in ipairs(data.phases)do if completed[q.id]then count+=1 end end
- mode='phone';clear('챕터 선택','리크루터 폰  ·  '..count..' / '..#data.phases..' 완료')
- panel.AnchorPoint=Vector2.new(.5,.5);panel.Position=UDim2.fromScale(.5,.52);panel.Size=UDim2.fromScale(.94,.88);panelLimit.MaxSize=Vector2.new(980,gui.AbsoluteSize.X<700 and 720 or (state.complete and 680 or 620))
- tag.Position=UDim2.fromOffset(22,16);title.Position=UDim2.fromOffset(22,40);title.Size=UDim2.new(1,-80,0,38)
- body.Position=UDim2.fromOffset(22,94);body.Size=UDim2.new(1,-44,1,-184)
- local narrow=gui.AbsoluteSize.X<700;local short=gui.AbsoluteSize.Y<500
- local topHeight=short and 140 or 214;local bottomHeight=short and 140 or 178
- local grid=make('Frame',body,{Name='ChapterMenu',Size=UDim2.new(1,0,0,narrow and 676 or topHeight+12+bottomHeight),BackgroundTransparency=1})
- local captions={'캠페인 받기','프로필 세팅','확장프로그램','크리에이터 찾기','DM 발송','회신 응대','정산 확인'}
- local colors={Color3.fromRGB(238,222,189),Color3.fromRGB(231,222,237),Color3.fromRGB(213,230,220),Color3.fromRGB(222,230,234),Color3.fromRGB(240,224,206),Color3.fromRGB(235,217,225),Color3.fromRGB(224,229,213)}
+ local completed=state.completed or {}
+ mode='phone';clear('챕터 선택')
+ local narrow=gui.AbsoluteSize.X<700;local short=gui.AbsoluteSize.Y<500;local compact=gui.AbsoluteSize.X<1000
+ panel.AnchorPoint=Vector2.new(.5,.5);panel.Position=UDim2.fromScale(.5,.5);panel.Size=UDim2.fromScale(.94,.90);panelLimit.MaxSize=Vector2.new(980,narrow and 740 or 680);panel.BackgroundColor3=C.ink
+ tag.Visible=false;title.Position=UDim2.fromOffset(22,22);title.Size=UDim2.new(1,-86,0,42);title.TextSize=34;title.TextColor3=C.white
+ body.Position=UDim2.fromOffset(22,84);body.Size=UDim2.new(1,-44,1,-172);primary.TextSize=22
+ local tileHeight=narrow and 196 or (short and 176 or 212)
+ local grid=make('Frame',body,{Name='ChapterMenu',Size=UDim2.new(1,0,0,narrow and tileHeight*4+36 or tileHeight*2+12),BackgroundTransparency=1})
+ local captions={'캠페인 받기','프로필 세팅','시트 연결','계정 찾기','DM 발송','회신 응대','정산 확인'}
  for i,q in ipairs(data.phases)do
-  local chapter=q;local current=not state.complete and state.phase==i
-  local tile=make('TextButton',grid,{Name='Chapter_'..q.id,Text='',AutoButtonColor=true,BackgroundColor3=colors[i],BorderSizePixel=0,ClipsDescendants=true})
-  round(tile,12)
+  local chapter=q;local current=not state.complete and state.phase==i;local done=completed[q.id]==true
+  local tile=make('TextButton',grid,{Name='Chapter_'..q.id,Text='',AutoButtonColor=true,BackgroundColor3=done and C.green or C.paper,BorderSizePixel=0,ClipsDescendants=true})
+  round(tile,10)
   if narrow then
-   if i==1 then tile.Position=UDim2.fromOffset(0,0);tile.Size=UDim2.new(1,0,0,160)
-   else local j=i-2;tile.Position=UDim2.new((j%2)*.5,(j%2)*6,0,172+math.floor(j/2)*172);tile.Size=UDim2.new(.5,-6,0,160)end
-  elseif i==1 then tile.Position=UDim2.fromOffset(0,0);tile.Size=UDim2.new(.5,-6,0,topHeight)
-  elseif i<=3 then tile.Position=UDim2.new(.5+(i-2)*.25,6+(i-2)*3,0,0);tile.Size=UDim2.new(.25,-9,0,topHeight)
-  else local j=i-4;tile.Position=UDim2.new(j*.25,j*3,0,topHeight+12);tile.Size=UDim2.new(.25,-9,0,bottomHeight)end
-  local num=txt(tile,string.format('%02d',i),12,C.gray,18);num.Position=UDim2.fromOffset(12,10);num.Size=UDim2.fromOffset(30,18)
-  if current or completed[q.id] then
-   local badge=txt(tile,current and '진행 중' or '✓ 완료',12,current and C.pink or C.green,18);badge.Position=UDim2.new(1,-76,0,10);badge.Size=UDim2.fromOffset(64,18);badge.TextXAlignment=Enum.TextXAlignment.Right;badge.Font=Enum.Font.GothamBold
+   if i==1 then tile.Position=UDim2.fromOffset(0,0);tile.Size=UDim2.new(1,0,0,tileHeight)
+   else local j=i-2;tile.Position=UDim2.new((j%2)*.5,(j%2)*6,0,(tileHeight+12)*(1+math.floor(j/2)));tile.Size=UDim2.new(.5,-6,0,tileHeight)end
+  elseif i==1 then tile.Position=UDim2.fromOffset(0,0);tile.Size=UDim2.new(.5,-6,0,tileHeight)
+  elseif i<=3 then tile.Position=UDim2.new(.5+(i-2)*.25,6+(i-2)*3,0,0);tile.Size=UDim2.new(.25,-9,0,tileHeight)
+  else local j=i-4;tile.Position=UDim2.new(j*.25,j*3,0,tileHeight+12);tile.Size=UDim2.new(.25,-9,0,tileHeight)end
+  local caption=(compact and i==2) and '프로필\n세팅' or captions[i]
+  local name=txt(tile,string.format('%02d ',i)..caption,compact and 22 or 26,done and C.white or C.ink,56)
+  name.Name='ChapterTitle';name.Position=UDim2.fromOffset(12,12);name.Size=UDim2.new(1,-24,0,56);name.Font=Enum.Font.GothamBold;name.Active=false
+  if current then make('UIStroke',tile,{Color=C.pink,Thickness=4,ApplyStrokeMode=Enum.ApplyStrokeMode.Border})end
+  if done then
+   local stamp=make('Frame',tile,{Name='CompletionStamp',AnchorPoint=Vector2.new(.5,.5),Position=UDim2.new(.5,0,0,short and 119 or 136),Size=UDim2.new(.80,0,0,short and 66 or 76),BackgroundTransparency=1,Rotation=-7,Active=false})
+   round(stamp,8);make('UIStroke',stamp,{Color=C.white,Thickness=4,ApplyStrokeMode=Enum.ApplyStrokeMode.Border})
+   local mark=txt(stamp,'완료',compact and 44 or 54,C.white,76);mark.Name='CompletionText';mark.Size=UDim2.fromScale(1,1);mark.Font=Enum.Font.GothamBold;mark.TextXAlignment=Enum.TextXAlignment.Center;mark.TextYAlignment=Enum.TextYAlignment.Center;mark.Active=false
+  else
+   local size=short and 92 or (narrow and 108 or 128)
+   local art=make('Frame',tile,{Name='ChapterArt',AnchorPoint=Vector2.new(.5,0),Position=UDim2.new(.5,0,0,short and 74 or 72),Size=UDim2.fromOffset(size,size),BackgroundTransparency=1,Active=false});chapterArt(art,q.id)
   end
-  if current then make('UIStroke',tile,{Color=C.pink,Thickness=2,ApplyStrokeMode=Enum.ApplyStrokeMode.Border})end
-  local art=make('Frame',tile,{Name='ChapterArt',Position=UDim2.fromOffset(12,34),Size=UDim2.new(1,-24,1,-80),BackgroundTransparency=1});chapterArt(art,q.id)
-  local name=txt(tile,captions[i],narrow and 16 or 18,C.ink,36);name.Position=UDim2.new(0,8,1,-40);name.Size=UDim2.new(1,-16,0,36);name.Font=Enum.Font.GothamBold;name.TextXAlignment=Enum.TextXAlignment.Center;name.TextYAlignment=Enum.TextYAlignment.Center
   tile.Activated:Connect(function()
    if pending then return end
    pending=true;closePanel();remote:FireServer({kind='chapter',revision=state.revision,chapter=chapter.id})
   end)
  end
  local earned=Reward.summary(state)
- if earned.unlocked then
-  if advancedView then btn(body,earned.king and '왕따봉 해금! · 심화 다시 도전' or '심화 도전 · 왕따봉 해금  '..earned.bonus..'/3',advancedView.enter)end
- end
- if earned.basic>0 then
-  btn(body,'따봉 보러 가기  ·  '..earned.score..'점',function()navigation('rest')end)
- end
+ if earned.unlocked and advancedView then btn(body,'심화 도전',advancedView.enter)end
  if state.complete then
-  btn(body,'필요할 때 보는 부록',function()appendix()end)
-  action('노을 바다로 가기',function()navigation('rest')end)
- else action('이어서 하기',function()navigation('resume')end)end
+  btn(body,'부록',function()appendix()end)
+  action('따봉 보기',function()navigation('rest')end)
+ else
+  if earned.basic>0 then btn(body,'따봉 보기',function()navigation('rest')end)end
+  action('이어서 하기',function()navigation('resume')end)
+ end
 end
 phoneButton.Activated:Connect(phone)
 gui:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()if mode=='phone' and panel.Visible then phone(true)end end)
@@ -392,10 +387,9 @@ remote.OnClientEvent:Connect(function(packet)
  elseif packet.kind=='done'then
   pending=false;closePanel()
   if packet.continueHere then render(data.phases[state.phase].target)
-  elseif state.complete then phone()
-  else notice('✓ '..packet.text)end
+  elseif state.complete then phone()end
  elseif packet.kind=='phone' or packet.kind=='finished'then phone()
- elseif packet.kind=='arrived'then closePanel();notice(packet.text)
+ elseif packet.kind=='arrived'then closePanel()
  elseif packet.kind=='notice'then pending=false;notice(packet.text)
  elseif packet.kind=='state'then pending=false end
 end)

@@ -1,11 +1,11 @@
 {
-  "version": "6.7",
-  "date": "2026-10-25",
+  "version": "6.8",
+  "date": "2026-10-26",
   "status": "review-build",
   "verification": {
-    "chapterMenu": "seven illustrated native tiles; direct teleport/start, progress and replay; responsive menu; reference screenshots inspected, game not directly played",
+    "chapterMenu": "seven native icon tiles; grouped number/title; 44–54px completion stamps; direct entry and replay; three-size native-property render checks; reference screenshot inspected, game not directly played",
     "chapterProgress": "arbitrary order does not fabricate skipped completion; unfinished drafts preserved; replay does not duplicate example payout",
-    "copyAudit": "removed repeated setup summaries, redundant send instructions, phone travel duplication and implementation explanations",
+    "copyAudit": "removed visible game scores, duplicate arrival/completion notices, repeated setup and challenge instructions; retained campaign conditions, actionable errors and actual compensation",
     "pierSculpture": "original solid thumbs-up; old pier logo removed; front/side geometry preview inspected; center path and water steps clear",
     "setupFlow": "progressive original-asset previews, self-confirmed understanding, two completion paths; opening guide does not advance",
     "guideHandoff": "native instructions with web/email anchors; no external URLs or browser API calls in native setup UI",
@@ -21,18 +21,18 @@
     "nativeClientAndServerCallbacks": "passed desktop and touch adapters, full campaign and partial task resume",
     "nativeWaterServer": "passed API/compatibility/failure/rescue adapters",
     "terrainAndGeometry": "passed original geometry bounds, clear paths, continuous seabed",
-    "visualCriteria": "pre-implementation silhouette criteria and results in design-review-v6.7.md; small reward preview and pier comparisons; Roblox engine rendering remains unverified",
+    "visualCriteria": "pre-implementation phone hierarchy/copy criteria and results in design-review-v6.8.md; 1440x900, 390x844 and 844x390 native-property renders; Roblox engine rendering remains unverified",
     "webViewsAndMobilePage": "desktop world views inspected with browser; no new real-device play verification",
     "robloxStudioPlay": "not tested; Studio unavailable"
   },
   "files": {
-    "SIRIAI_Recruiter_Island_v6_7.rbxl": {
-      "bytes": 3457564,
-      "sha256": "39f84d941774814b59a5f6f3ceb481a44970363e1d856b39cc674cb3d896a50c"
+    "SIRIAI_Recruiter_Island_v6_8.rbxl": {
+      "bytes": 3456748,
+      "sha256": "2708f686f7ee3aba3bdfa634572bd0095153b23ca26ffcedba7c47bc0a0085c1"
     },
-    "SIRIAI_Recruiter_Island_v6_7_Source.zip": {
-      "bytes": 15649377,
-      "sha256": "88a97fb106aca32ad81123c8fba48b5a4e87b55b3a5099b2142021894b54e367"
+    "SIRIAI_Recruiter_Island_v6_8_Source.zip": {
+      "bytes": 15651181,
+      "sha256": "30ba4c3548d03b9fdc6673aa58537c91c883248bb99d2a7da3988e434c7b6fb3"
     }
   }
 }
