@@ -673,14 +673,16 @@ local function onPlayer(player)
     local stamps = Instance.new('IntValue')
     stamps.Name, stamps.Parent = '스탬프', stats
     player.CharacterAdded:Connect(function(character)
+        local session = getSession(player)
+        local returning = session.characterSeen == true
+        session.characterSeen = true
         local root = character:WaitForChild('HumanoidRootPart', 15)
         if not root then return end
         task.wait(0.15)
         if not player.Parent then return end
-        local session = getSession(player)
-        session.state.active, session.token = nil, ''
+        if returning then session.state.active, session.token = nil, '' end
         teleport(player, session.checkpoint)
-        remote:FireClient(player, {kind = 'close'})
+        if returning then remote:FireClient(player, {kind = 'close'}) end
         sync(player)
     end)
 end
