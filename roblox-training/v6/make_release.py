@@ -1,10 +1,10 @@
-"""Package the already-built v6.11 place and its exact editable sources."""
+"""Package the already-built v6.12 place and its exact editable sources."""
 from pathlib import Path
 import hashlib,json,zipfile
 ROOT=Path(__file__).resolve().parent
-VERSION='6.11'
-BINARY='SIRIAI_Recruiter_Island_v6_11.rbxl'
-ZIP='SIRIAI_Recruiter_Island_v6_11_Source.zip'
+VERSION='6.12'
+BINARY='SIRIAI_Recruiter_Island_v6_12.rbxl'
+ZIP='SIRIAI_Recruiter_Island_v6_12_Source.zip'
 place=ROOT/'downloads'/BINARY
 assert place.read_bytes().startswith(b'<roblox!')
 with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
@@ -14,11 +14,15 @@ with zipfile.ZipFile(ROOT/'downloads'/ZIP,'w',zipfile.ZIP_DEFLATED,compresslevel
   if '__pycache__' in relative.parts or any(x.startswith('native-') for x in relative.parts):continue
   if p.suffix in {'.pyc','.rbxlx','.zip'} or p.name=='release.json':continue
   if relative.parts[0]=='downloads' and p.name!=BINARY:continue
-  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_11')/relative)
+  archive.write(p,Path('SIRIAI_Recruiter_Island_v6_12')/relative)
 with zipfile.ZipFile(ROOT/'downloads'/ZIP) as archive:
  assert archive.testzip() is None
- assert archive.read('SIRIAI_Recruiter_Island_v6_11/downloads/'+BINARY)==place.read_bytes()
+ assert archive.read('SIRIAI_Recruiter_Island_v6_12/downloads/'+BINARY)==place.read_bytes()
 release={'version':VERSION,'date':'2026-10-26','status':'review-build','verification':{
+ 'celebrationChecks':'12 lifecycle checks; 152 native-property screens at four sizes, no browser-approximation overflow; Studio rendering not verified',
+ 'collisionChecks':'129746 source/export checks; 46 original solid nature models and clear required route; 8694 reward client checks; engine solver and mobile performance unverified',
+ 'celebration':'single 1.5s existing-header acknowledgement; centered finish card; no floating thumb, stage-name toast or duplicate replay celebration',
+ 'solidCollision':'visible thumb stage only; defer growth near local avatar; original rock/bark faces and physical fixtures collidable; soft foliage, water and hidden stages passable; native engine not verified',
  'dialogUX':'content-measured native dialogs; 30/22/18/16/20 type roles; four ambiguous disclosures removed; labeled inbound/outbound messages; fixed footer with body-only scrolling; all dialog states reviewed using native-property approximation',
  'dialogPropertyReview':'144 work/help/appendix/phone states at four sizes, 110 world-space condition/choice/console states and 32 HUD/notice states; no detected text overflow in browser approximation; first dialog 324px, empty setup choice 252px at 1280x720',
  'dialogLayoutTests':'459 layout/resize/callback assertions plus existing workflow tests; browser geometry checks do not replace Studio font/engine verification',
@@ -31,7 +35,7 @@ release={'version':VERSION,'date':'2026-10-26','status':'review-build','verifica
  'coreFlow':'seven phases at three forward stops; ordinary reply and separate selection notice',
  'advancedGames':'three optional world-space games; explicit start, server-owned 30s scout deadline, untimed NPC answers; immediate retry, stale attempt and outside-room rejection',
  'advancedRewards':'100 first-clear game points per challenge; three clears unlock king; independent of compensation example; no replay farming',
- 'rewardEvolution':'11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal and exaggerated growth; 160x190 model preview',
+ 'rewardEvolution':'11 plain extruded hand silhouettes; no segmented fingers, face or costumes; fixed pedestal; visible-stage collision; detached model preview removed in v6.12',
  'advancedChecks':'exported engine/session, client, server and reward adapter checks; compact room bounds and world-panel aspect ratios checked',
  'optionalAppendix':'ten completion-only read-only topics; no new mandatory stages or tests',
  'requiredRoute':'133 studs to final arrival; no obstruction in sampled avatar corridor of exported geometry',

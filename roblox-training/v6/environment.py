@@ -42,7 +42,7 @@ def build_environment(world,part,obj,rgb,cf,raster,curriculum):
         for dx in [-2.3,2.3]:part(world,'Seat feet',(x+dx,1.2,-332),(.4,1.3,1.9),'876D51','Wood')
     for x,z in [(cx+s,z) for cx,z in [(-34,43),(-34,-15),(-34,-60),(0,-101),(0,-140),(0,-179),(0,-218),(0,-259),(0,-298),(0,-337)] for s in [-8,8]]:
         part(world,'Path lantern post',(x,1.55,z),(.22,1.2,.22),'8F7655','Wood')
-        lamp=part(world,'Path lantern',(x,2.35,z),(.7,.85,.7),'FFDC98','Neon',collide=False)
+        lamp=part(world,'Path lantern',(x,2.35,z),(.7,.85,.7),'FFDC98','Neon')
         lamp['Children'].append(obj('Glow','PointLight',{'Color':rgb('FFD598'),'Brightness':.5,'Range':13,'Shadows':False}))
     reeds=obj('MeadowReeds','Folder');world.append(reeds)
     centers=[(s['position'][0],s['position'][2]) for s in curriculum['stages']]

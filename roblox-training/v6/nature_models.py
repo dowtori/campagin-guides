@@ -74,7 +74,10 @@ def add_nature(world,part,obj,cf,height_at,distance_to_path,curriculum):
             elif r>g*1.15:color='78614E'
             elif r>235 and g>235 and b>235:color='B3AE95'
             else:color=foliage
+            first=len(children)
             wedges+=triangle(children,*[transform(v) for v in face],color,part,'Kenney '+name)
+            solid=name.startswith('stone') or (name.startswith('tree') and r>g*1.15)
+            for p in children[first:]:p['Properties'].update(CanCollide=solid,CanQuery=solid)
         children.append(obj('OriginalSource','StringValue',{'Value':'Kenney Nature Kit / CC0 / '+name+'.obj'}))
         instances.append({'model':name,'position':[x,ground,z],'scale':scale,'rotation':angle,'tint':foliage,'faces':len(cache[name])})
     # Three layered groves frame work areas. The centre stays open to the sea.

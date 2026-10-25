@@ -1,8 +1,8 @@
-# Siriai Recruiter Island v6.11
+# Siriai Recruiter Island v6.12
 
 인플루언서 모집 업무를 NPC 의뢰와 도구 사용으로 익히는 Roblox 검토용 맵입니다. 이전 버전의 퀴즈 엔진·부스 구조와 독립된 프로젝트로 다시 만들었습니다.
 
-1. `downloads/SIRIAI_Recruiter_Island_v6_11.rbxl`을 Roblox Studio에서 엽니다.
+1. `downloads/SIRIAI_Recruiter_Island_v6_12.rbxl`을 Roblox Studio에서 엽니다.
 2. **플레이**를 누르고 시작 부두 앞쪽의 매니저에게 다가갑니다.
 3. **E / 화면 터치**로 첫 캠페인을 받습니다. 폰 버튼·P 키·도구 장착으로 리크루터 폰을 엽니다. 들고 있는 동안 좌클릭은 폰을 열지 않습니다.
 4. 준비 테라스 → 크리에이터 정원 → DM 데스크 순서로 길을 따라 이동합니다. 같은 장소의 작업은 창에서 바로 이어집니다.
@@ -24,6 +24,14 @@
 실제 DM·시트·단톡으로 발송하는 기능은 없습니다. 게임 안의 사람과 캠페인은 연습 사례입니다. 실제 조건·양식·지급일은 별도 업무 안내와 계약서를 따릅니다. 실제 발송 계정이나 시트로 연결하지 않습니다.
 
 [비판적 평가와 참고한 맵](design-review.md) · [원본 자료·공개 소스 출처](licenses/README.md)
+
+## v6.12: 완료 표시와 고체 충돌
+
+- 작은 따봉 미리보기와 성장 이름 알림을 제거했습니다. 단계 완료는 현재 제목 영역에서 1.5초간 표시합니다.
+- 전체 수료는 중앙 완료 카드에서 나루터 이동 또는 챕터 선택으로 이어집니다. 재진행은 수료를 중복 축하하지 않습니다.
+- 따봉 외형은 유지합니다. 현재 보이는 단계와 받침대만 충돌하며, 플레이어가 성장 범위에 있으면 벗어난 뒤 변경합니다.
+- 바위·나무줄기·모니터·실물 안내판·등에는 충돌을 켰습니다. 풀·잎·물·바닥 표시·숨겨진 NPC는 막지 않습니다.
+- [수정 전 판정 기준](design-review-v6.12.md). 충돌 설정과 콜백 검증이며 **실제 Studio 물리·멀티플레이 검증은 미완료**입니다.
 
 ## v6.11: 대화창 높이·정보 위계·버튼 정리
 
@@ -132,8 +140,8 @@ Python과 Pillow, Rojo 7.7.1을 사용했습니다.
 ```sh
 python build_images.py
 python build_world.py
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_11.rbxl
-rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_11.rbxlx
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_12.rbxl
+rojo build default.project.json -o downloads/SIRIAI_Recruiter_Island_v6_12.rbxlx
 python tests/run.py --luau /path/to/luau
 python tests/geometry.py
 python tests/route.py

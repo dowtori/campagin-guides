@@ -35,7 +35,9 @@ local function checkPose(index)
  local item=config.stages[index+1];local visible=0;local top=-math.huge;local bottom=math.huge
  for _,p in ipairs(model:GetChildren())do
   local level=p:FindFirstChild('ThumbStage').Value
-  check(p.Transparency==(table.find(item.groups,level) and 0 or 1),'exactly current silhouette visible')
+  local active=table.find(item.groups,level)~=nil
+  check(p.Transparency==(active and 0 or 1),'exactly current silhouette visible')
+  check(p.CanCollide==active and p.CanQuery==active and p.CanTouch==false,'only visible physical silhouette collides and can be queried')
   if level>0 and p.Transparency==0 then
    visible+=1;check(level==index+1,'no old-stage overlap')
   end
@@ -50,7 +52,7 @@ for i,id in ipairs({'brief','profile','connect','discover','send','reply','settl
  state.completed[id]=true;reward.sync(state);H.now+=1;H.run.RenderStepped:Fire()
  for _,fn in ipairs(H.delayed)do fn()end;H.delayed={}
  checkPose(i)
- check(notifications[#notifications]:find(config.stages[i+1].title,1,true),'correct title')
+ check(#notifications==0,'growth does not add detached toasts')
 end
 local count=#notifications;reward.sync(state);check(#notifications==count,'same phase no duplicate')
 state.advanced={completed={}}
@@ -64,7 +66,25 @@ for _,p in ipairs(model:GetChildren())do
  check(p.Transparency==(table.find(config.stages[11].groups,level) and 0 or 1),'king only shows one unadorned hand and its fixed pedestal')
  check(type(p.Material)=='string','valid enum material')
 end
-check(notifications[#notifications]:find('왕따봉',1,true),'king notification')
+check(#notifications==0,'no separate king toast')
 for _,value in ipairs(notifications)do check(not value:find('점'),'reward notice excludes game points')end
-check(H.gui:FindFirstChild('ThumbEvolution'):FindFirstChild('RewardModel')~=nil,'actual 3D clone preview')
-print('PASS: '..n..' exported reward-client checks; all growth stages, silhouettes, fixed pedestal, names, materials and 3D reward preview')
+check(H.gui:FindFirstChild('ThumbEvolution')==nil,'detached 3D thumbnail removed')
+local root=H.player.Character:FindFirstChild('HumanoidRootPart')
+root.Position=H.Vector3.new(unpack(config.origin))
+reward.sync({completed={}});H.run.Heartbeat:Fire(.1)
+for _,p in ipairs(model:GetChildren())do
+ local level=p:FindFirstChild('ThumbStage').Value
+ check(p.CanCollide==(level==0 or level==11),'pose stays solid while avatar occupies growth area')
+end
+root.Position=H.Vector3.new(0,4,0);H.run.Heartbeat:Fire(.1)
+for _,p in ipairs(model:GetChildren())do
+ local level=p:FindFirstChild('ThumbStage').Value
+ check(p.CanCollide==(level==0 or level==1),'pending pose applied after leaving; old pose cannot block')
+end
+local independent={completed={brief=true}}
+reward.sync(independent);H.run.Heartbeat:Fire(.1)
+for _,p in ipairs(model:GetChildren())do
+ local level=p:FindFirstChild('ThumbStage').Value
+ check(p.CanCollide==(level==0 or level==2),'visible stage remains solid on another progression')
+end
+print('PASS: '..n..' exported reward-client checks; all growth stages, silhouettes, fixed pedestal, materials, visible collision, hidden-stage clearance and safe pending growth')

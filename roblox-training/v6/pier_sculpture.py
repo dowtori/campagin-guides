@@ -40,17 +40,19 @@ def add_thumbs_up(world,part,obj,cf):
     def point(p):
         x,y=p
         return (origin[0]+base_scale*x*co,origin[1]+base_scale*y,origin[2]-base_scale*x*si)
-    pedestal=part(parts,'ThumbsUp pedestal',(origin[0],origin[1]+.27*base_scale,origin[2]),(.54*base_scale,5.7*base_scale,5.7*base_scale),'444547','SmoothPlastic','Cylinder',rot=(0,0,90),collide=False)
+    pedestal=part(parts,'ThumbsUp pedestal',(origin[0],origin[1]+.27*base_scale,origin[2]),(.54*base_scale,5.7*base_scale,5.7*base_scale),'444547','SmoothPlastic','Cylinder',rot=(0,0,90))
     pedestal['Children'].append(obj('ThumbStage','IntValue',{'Value':0}))
     stages=json.loads((Path(__file__).parent/'src/shared/ThumbData.json').read_text(encoding='utf-8'))['stages']
     for stage,item in enumerate(stages):
         level=stage+1
         def prism(parent,name,center,size,color,material,shape,rot,collide):
-            p=part(parent,name,center,(2.18*base_scale,size[1],size[2]),color,material,shape,rot=rot,collide=False)
-            p['Properties'].update(Transparency=0 if stage==0 else 1,CanTouch=False,CanQuery=False,CastShadow=True)
+            p=part(parent,name,center,(2.18*base_scale,size[1],size[2]),color,material,shape,rot=rot,collide=stage==0)
+            p['Properties'].update(Transparency=0 if stage==0 else 1,CanTouch=False,CanQuery=stage==0,CastShadow=True)
             p['Children'].append(obj('ThumbStage','IntValue',{'Value':level}))
             return p
         for i,tri in enumerate(triangulate(outline(item['thumbHeight']))):
             triangle(parts,*(point(v) for v in tri),'E5E4DE',prism,f'ThumbsUp silhouette {stage:02d} prism {i:02d}')
-    for p in parts:p["Properties"]["CastShadow"]=True
+    for p in parts:
+        props=p['Properties'];level=p['Children'][-1]['Properties']['Value']
+        props.update(CastShadow=True,CanCollide=level in (0,1),CanQuery=level in (0,1))
     return model

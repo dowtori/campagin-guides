@@ -1,4 +1,4 @@
--- SIRIAI v6.11: measured dialogs, explicit actions and consistent type roles.
+-- SIRIAI v6.12: measured dialogs, explicit actions and consistent type roles.
 local Client={}
 function Client.start(gui)
 local Players=game:GetService('Players')
@@ -16,6 +16,11 @@ local status=gui:FindFirstChild('Status');if status then status:Destroy()end
 local C={paper=Color3.fromRGB(250,249,247),ink=Color3.fromRGB(29,27,34),pink=Color3.fromRGB(223,25,64),gray=Color3.fromRGB(99,94,106),line=Color3.fromRGB(230,227,232),soft=Color3.fromRGB(239,236,240),white=Color3.new(1,1,1),green=Color3.fromRGB(60,105,80)}
 local state={phase=1,revision=0,record={},complete=false}
 local pending=false;local drafts={};local mode=nil;local order=0
+local completionSerial=0;local completedSnapshot={};local restoreAcknowledgement
+local function cancelAcknowledgement()
+ completionSerial+=1
+ if restoreAcknowledgement then restoreAcknowledgement();restoreAcknowledgement=nil end
+end
 local function make(class,parent,props)
  local o=Instance.new(class);for k,v in pairs(props or {})do o[k]=v end;o.Parent=parent;return o
 end
@@ -29,7 +34,7 @@ local function btn(parent,value,fn)
 end
 local hud=make('Frame',gui,{Name='ObjectiveHUD',Position=UDim2.new(.035,0,0,74),Size=UDim2.new(1,-126,0,112),BackgroundColor3=C.ink,BackgroundTransparency=.06,BorderSizePixel=0});round(hud,14)
 make('UISizeConstraint',hud,{MaxSize=Vector2.new(360,112)})
-local phaseText=txt(hud,'첫 캠페인 받기',20,C.white,28);phaseText.Position=UDim2.fromOffset(14,12);phaseText.Size=UDim2.new(1,-28,0,28);phaseText.Font=Enum.Font.GothamBold
+local phaseText=txt(hud,'첫 캠페인 받기',22,C.white,28);phaseText.Name='ObjectiveTitle';phaseText.Position=UDim2.fromOffset(14,12);phaseText.Size=UDim2.new(1,-28,0,28);phaseText.Font=Enum.Font.GothamBold
 local objective=make('TextButton',hud,{Text='준비 테라스로 이동 →',TextSize=18,TextColor3=C.white,Font=Enum.Font.Gotham,LineHeight=1.2,TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,BackgroundColor3=C.white,BackgroundTransparency=.88,BorderSizePixel=0});round(objective,8);objective.Position=UDim2.fromOffset(14,47);objective.Size=UDim2.new(1,-28,0,52)
 local phoneButton=btn(gui,'폰  [P]');phoneButton.Name='PhoneButton';phoneButton.Size=UDim2.fromOffset(90,44);phoneButton.AnchorPoint=Vector2.new(1,0);phoneButton.Position=UDim2.new(.965,0,0,74)
 local helpButton=btn(gui,'?');helpButton.Size=UDim2.fromOffset(44,44);helpButton.AnchorPoint=Vector2.new(1,0);helpButton.Position=UDim2.new(.965,0,0,126)
@@ -58,6 +63,7 @@ local function fitDialog()
  local content=bodyLayout.AbsoluteContentSize and bodyLayout.AbsoluteContentSize.Y or 0
  if content>0 then content+=4 end
  local m=DialogLayout.measure(gui.AbsoluteSize.X,gui.AbsoluteSize.Y,titleHeight,content,secondary.Visible)
+ if mode=='complete' then m.centered=true end
  panel.Size=UDim2.fromOffset(m.width,m.height)
  panel.AnchorPoint=Vector2.new(m.centered and .5 or 1,.5)
  panel.Position=m.centered and UDim2.fromScale(.5,.5) or UDim2.new(1,-16,.5,0)
@@ -89,10 +95,9 @@ local function prompts()
 end
 local function visibility(show)
  panel.Visible=show;hud.Visible=not show;phoneButton.Visible=not show;helpButton.Visible=not show;prompts()
- if show then local preview=gui:FindFirstChild('ThumbEvolution');if preview then preview.Visible=false end end
 end
-local function closePanel()visibility(false);mode=nil end
-if world and world:FindFirstChild('PierThumbsUp',true) then rewardView=require(script.Parent:WaitForChild('RewardClient')).start(gui,notice)end
+local function closePanel()cancelAcknowledgement();visibility(false);mode=nil end
+if world and world:FindFirstChild('PierThumbsUp',true) then rewardView=require(script.Parent:WaitForChild('RewardClient')).start(gui)end
 if world and world:FindFirstChild('AdvancedRoom',true) then advancedView=require(script.Parent:WaitForChild('AdvancedClient')).start(gui,closePanel,notice,function()closePanel();remote:FireServer({kind='rest'})end)end
 local close=btn(panel,'×',closePanel);close.Name='ClosePanel';close.Position=UDim2.new(1,-56,0,12);close.Size=UDim2.fromOffset(44,44);close.TextSize=26
 local function action(caption,fn,enabled)
@@ -101,6 +106,8 @@ end
 primary.Activated:Connect(function()if primary.Active and not pending and doPrimary then doPrimary()end end)
 body.ChildAdded:Connect(function(o)if o:IsA('GuiObject')then order+=1;o.LayoutOrder=order end end)
 local function clear(heading,step)
+ cancelAcknowledgement()
+ tag.TextSize=T.label;tag.TextColor3=C.gray
  panelLimit.MaxSize=Vector2.new(560,780);panel.BackgroundColor3=C.paper
  tag.Visible=true;title.TextSize=T.title;title.TextColor3=C.ink;primary.TextSize=T.action
  tag.Position=UDim2.fromOffset(24,24);title.Position=UDim2.fromOffset(24,56);title.Size=UDim2.new(1,-48,0,0);title.AutomaticSize=Enum.AutomaticSize.Y
@@ -252,11 +259,12 @@ render=function(profileId)
 end
 local marker,highlight=nil,nil
 local function update()
+ cancelAcknowledgement()
  if rewardView then rewardView.sync(state)end
  if advancedView then advancedView.sync(Reward.summary(state))end
  local q=data.phases[state.phase]
- phaseText.Text=state.complete and '첫 캠페인 완료!' or q.title
- objective.Text=state.complete and '바다로 이동 →' or q.place..' · 바로 이동 →'
+ phaseText.Text=state.complete and '첫 캠페인 완료' or q.title
+ objective.Text=state.complete and '나루터로 이동 →' or q.place..' · 바로 이동 →'
  if marker then marker:Destroy()end;if highlight then highlight:Destroy()end
  if not state.complete then
   local world=workspace:FindFirstChild('TrainingMap');local p=world and world:FindFirstChild('Target_'..q.target,true)
@@ -387,6 +395,31 @@ local function phone(refresh)
   action('이어서 하기',function()navigation('resume')end)
  end
 end
+-- Completion occupies the existing header; it never obscures the next action.
+local completedNames={brief='캠페인 확인 완료',profile='프로필 준비 완료',connect='시트 연결 완료',discover='계정 저장 완료',send='DM 발송 완료',reply='회신 응대 완료',settle='정산 확인 완료'}
+local function acknowledge(id)
+ completionSerial+=1;local token=completionSerial
+ local label=panel.Visible and tag or phaseText
+ local oldText,oldSize,oldColor=label.Text,label.TextSize,label.TextColor3
+ restoreAcknowledgement=function()label.Text=oldText;label.TextSize=oldSize;label.TextColor3=oldColor end
+ label.Text='✓ '..completedNames[id];label.TextSize=panel.Visible and 20 or 22
+ label.TextColor3=panel.Visible and C.green or C.white
+ task.delay(1.5,function()
+  if completionSerial==token then cancelAcknowledgement()end
+ end)
+end
+local function finished()
+ mode='complete';clear('첫 캠페인 완료','수료')
+ title.TextSize=34
+ local checkRow=make('Frame',body,{Name='FinishCheck',Size=UDim2.new(1,0,0,100),BackgroundTransparency=1,Active=false})
+ local circle=make('Frame',checkRow,{AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(.5,.5),Size=UDim2.fromOffset(88,88),BackgroundColor3=C.green,BorderSizePixel=0,Active=false});round(circle,44)
+ for _,b in ipairs({{25,49,25,7,43},{42,40,35,7,-48}})do
+  local stroke=make('Frame',circle,{Position=UDim2.fromOffset(b[1],b[2]),Size=UDim2.fromOffset(b[3],b[4]),Rotation=b[5],BackgroundColor3=C.white,BorderSizePixel=0,Active=false});round(stroke,3)
+ end
+ action('나루터로 가기',function()navigation('rest')end)
+ alternate('챕터 선택',function()closePanel();phone()end)
+ requestLayout();fitDialog()
+end
 phoneButton.Activated:Connect(phone)
 gui:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()if mode=='phone' and panel.Visible then phone(true)else requestLayout()end end)
 helpButton.Activated:Connect(function()
@@ -404,9 +437,14 @@ UIS.InputBegan:Connect(function(input,processed)
  end
 end)
 remote.OnClientEvent:Connect(function(packet)
+ local freshCompletion
+ if packet.kind=='done' and packet.state then
+  for _,q in ipairs(data.phases)do if packet.state.completed and packet.state.completed[q.id] and not completedSnapshot[q.id] then freshCompletion=q.id end end
+ end
  if packet.state then
   if packet.state.revision<state.revision then drafts={}end
   state=packet.state;update()
+  completedSnapshot={};for id,done in pairs(state.completed or {})do completedSnapshot[id]=done end
  end
  if packet.kind=='open'then
   if mode=='work' and panel.Visible then return end
@@ -415,7 +453,8 @@ remote.OnClientEvent:Connect(function(packet)
  elseif packet.kind=='done'then
   pending=false;closePanel()
   if packet.continueHere then render(data.phases[state.phase].target)
-  elseif state.complete then phone()end
+  elseif state.complete then if freshCompletion then finished()else phone()end end
+  if freshCompletion and not state.complete then acknowledge(freshCompletion)end
  elseif packet.kind=='phone' or packet.kind=='finished'then phone()
  elseif packet.kind=='arrived'then closePanel()
  elseif packet.kind=='notice'then pending=false;notice(packet.text)

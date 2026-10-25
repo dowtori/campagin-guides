@@ -19,7 +19,8 @@ candidates=[]
 for p in parts:
  f=p['Properties'];m=f['CFrame'][3:];h=[v/2 for v in f['Size']];y=f['CFrame'][1]
  ey=sum(abs(m[3+i])*h[i] for i in range(3))
- if f['CanCollide'] and y+ey>1.6 and y-ey<7.0:candidates.append(p)
+ ex=sum(abs(m[i])*h[i] for i in range(3));ez=sum(abs(m[6+i])*h[i] for i in range(3))
+ if f['CanCollide'] and y+ey>1.6 and y-ey<7.0 and f['CFrame'][0]+ex>-35.3 and f['CFrame'][0]-ex< -32.7 and f['CFrame'][2]+ez> -40 and f['CFrame'][2]-ez<101:candidates.append(p)
 collisions=[]
 # Independent capsule samples through the entire required walking corridor.
 for z in range(-40,101):

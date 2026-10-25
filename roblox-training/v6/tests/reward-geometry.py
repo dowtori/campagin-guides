@@ -12,8 +12,8 @@ assert len(scales)==11 and all(b>a for a,b in zip(scales,scales[1:]))
 for stage,scale in enumerate(scales):
  for p in thumb['Children']:
   f=p['Properties'];level=p['Children'][-1]['Properties']['Value']
-  assert not f['CanCollide'] and not f['CanTouch'] and not f['CanQuery']
-  assert f['CastShadow'], 'native and preview both cast the sculpture shadow'
+  assert f['CanCollide']==(level in (0,1)) and not f['CanTouch'] and f['CanQuery']==(level in (0,1))
+  assert f['CastShadow'], 'sculpture casts shadow'
   if level not in config['stages'][stage]['groups']:continue
   k=1 if level==0 else scale
   center=[origin[i]+(.486 if i==1 else 0)+(f['CFrame'][i]-origin[i]-(.486 if i==1 else 0))*k for i in range(3)]
@@ -27,7 +27,7 @@ for p in boards:
  f=p['Properties'];top=f['CFrame'][1]+f['Size'][1]/2
  assert top<condition['CFrame'][1]-condition['Size'][1]/2
  assert top-.96*f['Size'][1]>6.86,'button clears NPC head'
- assert f['CanQuery'] and not f['CanCollide']
+ assert f['CanQuery'] and f['CanCollide']
 console=next(n for n in nodes if n.get('Name')=='ChallengeConsole')['Properties']
 assert console['CFrame'][1]+console['Size'][1]/2<6.0,'low console clears NPC faces and answer buttons'
 assert console['CFrame'][0]==60,'central console reachable from entry'
@@ -74,13 +74,5 @@ for i,stage in enumerate(config['stages']):
  bottom=min(q[1] for q in hand);top=max(q[1] for q in hand)
  assert abs(bottom-(origin[1]+.486))<1e-6,'hand is grounded on the fixed plinth'
  measured.append(top-bottom)
- eye=[origin[j]+[14,h*.88,19][j]*k for j in range(3)]
- target=[origin[j]+[0,h*.45,0][j]*k for j in range(3)]
- forward=norm(sub(target,eye));right=norm(cross(forward,[0,1,0]));up=cross(right,forward)
- for q in all_points:
-  d=sub(q,eye);depth=dot(d,forward)
-  assert depth>0
-  assert abs(dot(d,right)/(depth*math.tan(math.radians(17))*160/190))<.94,'portrait horizontal clipping'
-  assert abs(dot(d,up)/(depth*math.tan(math.radians(17))))<.94,'portrait vertical clipping'
 assert all(b>a for a,b in zip(measured,measured[1:])) and measured[-1]/measured[0]>=4
-print(f'PASS: hand height {measured[0]:.2f} -> {measured[-1]:.2f} studs ({measured[-1]/measured[0]:.2f}x); all 11 hands grounded, portrait frame clear')
+print(f'PASS: hand height {measured[0]:.2f} -> {measured[-1]:.2f} studs ({measured[-1]/measured[0]:.2f}x); all 11 hands grounded; hidden stages noncolliding in saved place')

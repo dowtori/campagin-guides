@@ -50,7 +50,10 @@ function Client.start(gui,closeWork,notice,viewThumb)
   for i,p in ipairs(prompts)do p.Enabled=run~=nil;p.ActionText=run and (run.status=='brief' and '시작' or run.status=='active' and '선택') or '다시 도전' end
   for i=1,3 do
    local npc=map:FindFirstChild('AnswerNPC'..i,true)
-   if npc then for _,p in ipairs(npc:GetDescendants())do if p:IsA('BasePart') and p.Name~='HumanoidRootPart' then p.LocalTransparencyModifier=(not run or challenge.timed) and 1 or 0 end end end
+   if npc then for _,p in ipairs(npc:GetDescendants())do if p:IsA('BasePart') and p.Name~='HumanoidRootPart' then local visible=run~=nil and not challenge.timed
+    p.Transparency=visible and 0 or 1;p.LocalTransparencyModifier=0
+    local solid=visible and table.find({'Torso','Head','Left Arm','Right Arm','Left Leg','Right Leg'},p.Name)~=nil
+    p.CanCollide=solid;p.CanQuery=solid end end end
    local s=choices[i]
    if run and run.status~='brief' then
     local option=round.options[run.order[i]]

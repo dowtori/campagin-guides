@@ -1,4 +1,4 @@
-"""Build v6.11: native coastal terrain, clustered nature and original company visuals."""
+"""Build v6.12: native coastal terrain, clustered nature and original company visuals."""
 import json,math,random
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
@@ -16,8 +16,8 @@ def part(parent,name,pos,size,color=PAPER,material='SmoothPlastic',shape='Block'
     if shape=='Wedge':p['ClassName']='WedgePart';p['Properties'].pop('Shape',None)
     parent.append(p);record={'name':name,'position':list(pos),'size':list(size),'rotation':list(rot),'color':'#'+color,'shape':shape,'material':material,'transparency':trans,'shadow':material!='Neon' and not name.startswith(('Reed ','Meadow ','Kenney grass')),'wind':name=='Meadow blade'};scene.append(record);part_records[id(p)]=record
     return p
-def sign(parent,name,pos,size,title,color=INK,bg=PAPER,rot=(0,0,0)):
-    p=part(parent,name,pos,size,bg,rot=rot,collide=False)
+def sign(parent,name,pos,size,title,color=INK,bg=PAPER,rot=(0,0,0),collide=True):
+    p=part(parent,name,pos,size,bg,rot=rot,collide=collide)
     label=obj('Text','TextLabel',{'Size':{'UDim2':[[.9,0],[.86,0]]},'Position':{'UDim2':[[.05,0],[.07,0]]},'BackgroundTransparency':1,'Text':title,'TextColor3':rgb(color),'Font':'GothamBold','TextScaled':True,'TextWrapped':True,'RichText':False},[obj('ReadableSize','UITextSizeConstraint',{'MinTextSize':12,'MaxTextSize':72})])
     p['Children'].append(obj('Lettering','SurfaceGui',{'Face':'Back','SizingMode':'PixelsPerStud','PixelsPerStud':42,'LightInfluence':0,'MaxDistance':135},[label]));part_records[id(p)]['label']=title;part_records[id(p)]['labelColor']='#'+color
     return p
@@ -56,7 +56,8 @@ for x in [-53,-15]:part(world,'Agency back wing',(x,6.3,22),(18,11,.6),PAPER)
 for x in [-61,-7]:part(world,'Agency side',(x,6.3,36),(.65,11,27),PAPER)
 for x,angle in [(-48,16),(-20,-16)]:part(world,'Agency roof',(x,16.6,36),(30,1,34),'494653','Slate',rot=(0,0,angle))
 part(world,'Agency ridge',(-34,20.75,36),(1.3,1.2,35),'494653','Slate')
-raster(world,'Agency wordmark',(-34,10.8,22.5),(20,5.83,.15),'wordmark',bg=INK)
+wordmark=raster(world,'Agency wordmark',(-34,10.8,22.5),(20,5.83,.15),'wordmark',bg=INK)
+wordmark['Properties'].update(CanCollide=True,CanQuery=True)
 # Timber framing, siding, roof ribs and planters give the agency a village silhouette.
 for x in [-61,-7]:
     for z in [22,52]:part(world,'Agency timber post',(x,6.7,z),(1,12,1),'6E6262','Wood')
@@ -67,7 +68,7 @@ for x,angle in [(-48,16),(-20,-16)]:
 for x in [-54,-14]:
     part(world,'Agency planter',(x,1.8,56),(3,2.3,3),'A48A72','WoodPlanks')
     for k in [-1,0,1]:part(world,'Planter leaf',(x+k*.65,3.2,56),(.7,2.5,.7),'9EAE86','SmoothPlastic','Ball',rot=(0,0,k*20),collide=False)
-part(world,'Agency light',(-34,12.1,51),(20,.15,.25),'FFE3AF','Neon',collide=False)
+part(world,'Agency light',(-34,12.1,51),(20,.15,.25),'FFE3AF','Neon')
 # Workbench props use a proper computer silhouette rather than a wall of screenshots.
 for x,z,title in [(-48,32,'프로필 준비'),(-19,32,'시트 연결')]:
     part(world,'Work desk',(x,3.0,z),(12,.55,5),'B6A18B','Wood')
@@ -85,7 +86,7 @@ for x,z in [(-46,20),(-73,2),(-52,-13)]:
 part(world,'Ring light stand',(-52,3.7,17),(.22,6,.22),'494653')
 for i in range(16):
     angle=i*math.pi/8
-    part(world,'Ring light',(-52+1.3*math.cos(angle),7.2+1.3*math.sin(angle),17),(.55,.18,.16),'F7E6C9','Neon',rot=(0,0,math.degrees(angle)+90),collide=False)
+    part(world,'Ring light',(-52+1.3*math.cos(angle),7.2+1.3*math.sin(angle),17),(.55,.18,.16),'F7E6C9','Neon',rot=(0,0,math.degrees(angle)+90))
 part(world,'Creator camera',(-51,4.3,23),(1.2,.9,.7),'37333F')
 part(world,'Camera tripod',(-51,2.4,23),(.2,3.1,.2),'494653')
 part(world,'Travel camera',(-49,3,-12),(1.3,1,.7),'59505A')
@@ -142,7 +143,7 @@ for primitive in thumb['Children']:
     record['thumbStage']=primitive['Children'][-1]['Properties']['Value'];record['thumb']=True
 from advanced_room import add_room
 add_room(world,part,obj,sign,actor)
-sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.11','FFFFFF',INK)
+sign(world,'Version plate',(-47,2.2,110),(8,1.4,.2),'SIRIAI v6.12','FFFFFF',INK)
 # Short inset chevrons mark forward travel without a screen-size route diagram.
 for z in [92,43,35,0,-19,-60]:
     for side in [-1,1]:part(world,'Forward route arrow',(-34+side*.5,1.03,z),(1.5,.055,.18),PINK,'SmoothPlastic',rot=(0,side*38,0),collide=False)
@@ -155,6 +156,6 @@ model=obj('TrainingMap','Model',children=[obj('Architecture','Folder',children=w
 for name,value in [('map/TrainingMap.model.json',model),('scene.json',scene),('environment.json',env)]:
     (ROOT/name).write_text(json.dumps(value,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 from sunset import lighting
-project={'name':'SIRIAI Recruiter Island v6.11','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True,'GrassLength':.7,'WaterColor':rgb('688F9C'),'WaterTransparency':.28,'WaterReflectance':.72,'WaterWaveSize':.22,'WaterWaveSpeed':6},'Clouds':{'$className':'Clouds','$properties':{'Cover':.36,'Density':.28,'Color':rgb('F3CEAD')}}}},'Lighting':lighting(rgb),'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'AdvancedEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
+project={'name':'SIRIAI Recruiter Island v6.12','tree':{'$className':'DataModel','Workspace':{'$properties':{'FallenPartsDestroyHeight':-4096,'GlobalWind':[4,0,1.5]},'TrainingMap':{'$path':'map/TrainingMap.model.json'},'Terrain':{'$className':'Terrain','$properties':{'Decoration':True,'GrassLength':.7,'WaterColor':rgb('688F9C'),'WaterTransparency':.28,'WaterReflectance':.72,'WaterWaveSize':.22,'WaterWaveSpeed':6},'Clouds':{'$className':'Clouds','$properties':{'Cover':.36,'Density':.28,'Color':rgb('F3CEAD')}}}},'Lighting':lighting(rgb),'StarterGui':{'$className':'StarterGui','$path':'src/gui'},'ReplicatedStorage':{'CampusEvent':{'$className':'RemoteEvent'},'AdvancedEvent':{'$className':'RemoteEvent'},'CampusShared':{'$path':'src/shared'}},'ServerScriptService':{'$path':'src/server'},'StarterPlayer':{'$properties':{'CharacterWalkSpeed':20,'CameraMaxZoomDistance':65,'CameraMinZoomDistance':5},'StarterPlayerScripts':{'$className':'StarterPlayerScripts','$path':'src/client'}}}}
 (ROOT/'default.project.json').write_text(json.dumps(project,indent=2),encoding='utf-8')
 print('v6 fresh world:',len(scene),'parts, 3 job locations, 7 NPCs, 3 shared work targets; no scenery images')

@@ -5,6 +5,12 @@ local room=H.Instance.new('Model');room.Name='AdvancedRoom';room.Parent=map
 for _,name in ipairs({'ConditionBoard','ChallengeConsole','ChoiceBoard1','ChoiceBoard2','ChoiceBoard3'})do
  local p=H.Instance.new('Part');p.Name=name;p.Parent=room
 end
+for i=1,3 do
+ local npc=H.Instance.new('Model');npc.Name='AnswerNPC'..i;npc.Parent=map
+ for _,name in ipairs({'Torso','Head','Left Arm','Right Arm','Left Leg','Right Leg','Eye','HumanoidRootPart'})do
+  local p=H.Instance.new('Part');p.Name=name;p.Parent=npc
+ end
+end
 local pg=H.Instance.new('PlayerGui');pg.Name='PlayerGui';pg.Parent=H.player
 local rs=H.game:GetService('ReplicatedStorage')
 local remote=H.Instance.new('RemoteEvent');remote.Name='AdvancedEvent';remote.OnClientEvent=H.Mock.event();remote.Parent=rs
@@ -22,7 +28,15 @@ local function find(value)
  for _,o in ipairs(pg:GetDescendants())do if o.ClassName=='TextButton' and o.Text:find(value,1,true)then return o end end
 end
 local function click(value)local b=find(value);assert(b,'missing '..value);b.Activated:Fire()end
-client.enter()
+local function npcState(visible)
+ for i=1,3 do
+  local npc=map:FindFirstChild('AnswerNPC'..i)
+  check(npc:FindFirstChild('Torso').CanCollide==visible and npc:FindFirstChild('Torso').Transparency==(visible and 0 or 1),'NPC solid only while visible')
+  check(npc:FindFirstChild('Eye').CanCollide==false,'face details never add collision')
+ end
+end
+npcState(false)
+client.enter();npcState(false)
 check(state.advanced.run.status=='brief' and closed>0,'entry closes work panel')
 local surfaces=0;for _,o in ipairs(pg:GetChildren())do if o.ClassName=='SurfaceGui'then surfaces+=1;check(o.Adornee and o.AlwaysOnTop==false,'physical board')end end
 check(surfaces==5,'five world surfaces')
@@ -33,7 +47,7 @@ check(find('이 크리에이터 선택')~=nil,'candidate buttons available')
 check(#H.gui:GetChildren()==0,'no ScreenGui popup')
 now+=30;session.tick();check(state.advanced.run.status=='timeout','timeout shown')
 click('다시 도전');check(state.advanced.run.status=='brief','wall retry returns to reading')
-click('고료 조정 문의');click('NPC 답변 보기')
+click('고료 조정 문의');click('NPC 답변 보기');npcState(true)
 check(state.advanced.run.deadline==nil and find('이 답변 선택')~=nil,'NPC choices untimed')
 now+=999999;H.run.Heartbeat:Fire(.2);session.tick();check(state.advanced.run.status=='active','no NPC timeout')
 local run=state.advanced.run;local c=E.challenge(D,run.id);local correct
@@ -43,5 +57,5 @@ for _,o in ipairs(chosen:GetDescendants())do if o.ClassName=='TextButton' then o
 check(state.advanced.run.status=='passed' and R.summary(state).bonus==1,'world button grants one clear')
 for _,o in ipairs(pg:GetDescendants())do if o.Text then check(not o.Text:find('%+%d+점'),'world results do not advertise game points')end end
 click('다시 도전');check(state.advanced.run.status=='brief','success replay available')
-session.leave('me');check(find('도전하기')~=nil,'room returns to idle after leaving')
+session.leave('me');npcState(false);check(find('도전하기')~=nil,'room returns to idle after leaving')
 print('PASS: '..checks..' actual advanced-client callback checks; world surfaces, timers, NPC choices and retry')
